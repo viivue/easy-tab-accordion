@@ -1,8 +1,6 @@
-# gulp-boilerplate
+# Easy Tab & Accordion v1.0.0
 
-A simple boilerplate for building web projects with Gulp.js.
-
-See more gulp setup at 👉 https://github.com/phucbm/gulp-cheatsheet
+Pure Javascript API to create switchable tabs or accordion with fully support of events and methods.
 
 ## Deployment
 
