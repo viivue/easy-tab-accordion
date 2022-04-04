@@ -1,6 +1,7 @@
-/**
+/**!
  * Easy Tab & Accordion v1.0.0
- * @param options
+ * https://github.com/viivue/easy-tab-accordion
+ * MIT license - 2022
  */
 class EasyTabAccordion{
     constructor(options){
@@ -12,18 +13,24 @@ class EasyTabAccordion{
         };
         this.config = {
             ...{
-                el: document.querySelector(`[${this._attr.container}]`), // string selector
+                el: document.querySelector(`[${this._attr.container}]`), // DOM element
                 trigger: `[${this._attr.trigger}]`, // string selector
                 triggerAttr: this._attr.trigger, // attribute name
                 receiver: `[${this._attr.receiver}]`, // string selector
                 receiverAttr: this._attr.receiver, // attribute name
                 activeClass: this._class.active, animation: 'slide', // slide, fade
-                duration: 600, hash: false, liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+                duration: 600,
+                hash: false,
+                liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
                 onBeforeOpen: (data, el) => {
-                }, onBeforeClose: (data, el) => {
-                }, onAfterOpen: (data, el) => {
-                }, onAfterClose: (data, el) => {
-                }, onAfterDestroy: (data, el) => {
+                },
+                onBeforeClose: (data, el) => {
+                },
+                onAfterOpen: (data, el) => {
+                },
+                onAfterClose: (data, el) => {
+                },
+                onAfterDestroy: (data, el) => {
                 },
             }, ...options
         }
