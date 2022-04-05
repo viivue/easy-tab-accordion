@@ -6,10 +6,15 @@
 class EasyTabAccordion{
     constructor(options){
         this._class = {
-            enabled: 'easy-tab-accordion-enabled', active: 'active'
+            enabled: 'easy-tab-accordion-enabled',
+            active: 'active'
         };
         this._attr = {
-            container: 'data-eta', trigger: 'data-eta-trigger', receiver: 'data-eta-receiver',
+            container: 'data-eta',
+            trigger: 'data-eta-trigger',
+            receiver: 'data-eta-receiver',
+            hash: 'data-eta-hash',
+            animation: 'data-eta-animation'
         };
         this.config = {
             ...{
@@ -18,7 +23,8 @@ class EasyTabAccordion{
                 triggerAttr: this._attr.trigger, // attribute name
                 receiver: `[${this._attr.receiver}]`, // string selector
                 receiverAttr: this._attr.receiver, // attribute name
-                activeClass: this._class.active, animation: 'slide', // slide, fade
+                activeClass: this._class.active,
+                animation: 'slide', // slide, fade
                 duration: 600,
                 hash: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
@@ -40,6 +46,14 @@ class EasyTabAccordion{
         this.type = '';
         this.hasInit = false;
         this.enabled = this.hasLiveBreakpoint() ? this.isLive() : true;
+
+        // update hash from attribute
+        const hashValue = this.config.el.getAttribute(this._attr.hash);
+        this.config.hash = hashValue !== null ? hashValue === 'true' : this.config.hash;
+
+        // update animation from attribute
+        const animationValue = this.config.el.getAttribute(this._attr.animation);
+        this.config.animation = animationValue !== null ? animationValue : this.config.animation;
 
         // init
         if(this.enabled && !this.hasInit) this.init();
