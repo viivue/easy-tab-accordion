@@ -62,11 +62,11 @@ Init via JS. You're free to use your own HTML and attributes.
 
 ```js
 const eta = new EasyTabAccordion({
-    el: document.querySelector('data-eta'),
-    trigger: '[data-eta-trigger]',
-    triggerAttr: 'data-eta-trigger',
-    receiver: '[data-eta-receiver]',
-    receiverAttr: 'data-eta-receiver',
+    el: document.querySelector('.wrapper'), // DOM element
+    trigger: 'button.trigger', // string selector
+    triggerAttr: 'data-trigger', // attribute name
+    receiver: '.content', // string selector
+    receiverAttr: 'id', // attribute name
 });
 ```
 
@@ -74,15 +74,15 @@ const eta = new EasyTabAccordion({
 
 ```js
 const eta = new EasyTabAccordion({
-    el: document.querySelector(`[${this._attr.container}]`), // DOM element
-    trigger: `[${this._attr.trigger}]`, // string selector
-    triggerAttr: this._attr.trigger, // attribute name
-    receiver: `[${this._attr.receiver}]`, // string selector
-    receiverAttr: this._attr.receiver, // attribute name
-    activeClass: this._class.active,
+    el: document.querySelector('.wrapper'), // DOM element
+    trigger: 'button.trigger', // string selector
+    triggerAttr: 'data-trigger', // attribute name
+    receiver: '.content', // string selector
+    receiverAttr: 'id', // attribute name
+    activeClass: 'active',
     animation: 'slide', // slide, fade
-    duration: 600,
-    hash: false,
+    duration: 600, // animation duration
+    hash: false, // update hash on URL, open tab/accordion via hash
     liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
     onBeforeOpen: (data, el) => {
     },
@@ -95,6 +95,14 @@ const eta = new EasyTabAccordion({
     onAfterDestroy: (data, el) => {
     },
 });
+```
+
+Hash and animation could be set via attributes.
+
+```html
+<div data-eta data-eta-hash="true" data-eta-animation="fade">
+    ...
+</div>
 ```
 
 ## Methods
