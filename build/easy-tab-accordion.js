@@ -123,10 +123,9 @@ class EasyTabAccordion{
             // setup CSS for fade animation
             if(this.config.animation === 'fade'){
                 el.style.position = getComputedStyle(el).position !== 'absolute' ? 'absolute' : '';
-                el.style.top = '0';
-                el.style.left = '0';
-                el.style.right = '0';
+                el.style.inset = '0';
                 el.style.transition = `opacity ${this.config.duration}ms ease`;
+                el.style.overflow = 'hidden';
 
                 el.parentElement.style.position = getComputedStyle(el).position !== 'relative' ? 'relative' : '';
                 el.parentElement.style.transition = `height ${this.config.duration}ms ease`;
@@ -152,9 +151,7 @@ class EasyTabAccordion{
                 el.style.opacity = '';
                 el.style.visibility = '';
                 el.style.position = '';
-                el.style.top = '';
-                el.style.left = '';
-                el.style.right = '';
+                el.style.inset = '';
                 el.style.transition = '';
 
                 el.parentElement.style.height = '';
@@ -205,11 +202,13 @@ class EasyTabAccordion{
 
             // fade animation
             if(this.config.animation === 'fade'){
+                el.style.bottom = '';
                 el.style.opacity = '1';
                 el.style.visibility = 'visible';
 
                 // update parent height
                 el.parentElement.style.height = `${el.offsetHeight}px`;
+                el.style.bottom = '0';
 
                 // event: onAfterOpen
                 setTimeout(() => this.config.onAfterOpen(this, el), this.config.duration);
