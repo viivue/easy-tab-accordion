@@ -1,4 +1,4 @@
-/**
+/**!
  * Easy Tab & Accordion v1.0.0
  * https://github.com/viivue/easy-tab-accordion
  * MIT license - 2022
