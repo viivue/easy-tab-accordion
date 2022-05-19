@@ -198,6 +198,7 @@ class EasyTabAccordion{
         this.config.onAfterDestroy(this);
     }
 
+    // close receiver
     close(element){
         // event: onBeforeClose
         this.config.onBeforeClose(this);
@@ -218,6 +219,7 @@ class EasyTabAccordion{
         }
     }
 
+    // open receiver
     open(element){
         // event: onBeforeOpen
         this.config.onBeforeOpen(this, element);
