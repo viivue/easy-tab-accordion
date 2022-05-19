@@ -28,7 +28,7 @@ class EasyTabAccordion{
                 duration: 600,
                 hash: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-                activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
+                activeSection: 2, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
                 allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
@@ -201,47 +201,50 @@ class EasyTabAccordion{
     }
 
     // close receiver
-    close(element){
+    close(idReceiver){
+        const receiverClose = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
         // event: onBeforeClose
         this.config.onBeforeClose(this);
 
         // slide animation
         if(this.config.animation === 'slide'){
             // event: onAfterOpen
-            this.slideUp(element, this.config.duration, () => this.config.onAfterClose(this, element));
+            this.slideUp(receiverClose, this.config.duration, () => this.config.onAfterClose(this, receiverClose));
         }
 
         // fade animation
         if(this.config.animation === 'fade'){
-            element.style.opacity = '0';
-            element.style.visibility = 'hidden';
+            receiverClose.style.opacity = '0';
+            receiverClose.style.visibility = 'hidden';
 
             // event: onAfterOpen
-            setTimeout(() => this.config.onAfterClose(this, element), this.config.duration);
+            setTimeout(() => this.config.onAfterClose(this, receiverClose), this.config.duration);
         }
     }
 
     // open receiver
-    open(element){
+    open(idReceiver){
+        const receiverOpen = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
+
         // event: onBeforeOpen
-        this.config.onBeforeOpen(this, element);
+        this.config.onBeforeOpen(this, receiverOpen);
 
         // slide animation
         if(this.config.animation === 'slide'){
             // event: onAfterOpen
-            this.slideDown(element, this.config.duration, () => this.config.onAfterOpen(this, element));
+            this.slideDown(receiverOpen, this.config.duration, () => this.config.onAfterOpen(this, receiverOpen));
         }
 
         // fade animation
         if(this.config.animation === 'fade'){
-            element.style.opacity = '1';
-            element.style.visibility = 'visible';
+            receiverOpen.style.opacity = '1';
+            receiverOpen.style.visibility = 'visible';
 
             // update parent height
-            element.parentElement.style.height = `${el.offsetHeight}px`;
+            receiverOpen.parentElement.style.height = `${receiverOpen.offsetHeight}px`;
 
             // event: onAfterOpen
-            setTimeout(() => this.config.onAfterOpen(this, element), this.config.duration);
+            setTimeout(() => this.config.onAfterOpen(this, receiverOpen), this.config.duration);
         }
     }
 
@@ -250,15 +253,15 @@ class EasyTabAccordion{
         if((!force && id === this.current_id) || !id.length){
             // if allow collapse all
             if(this.config.allowCollapseAll){
-                const receiverElement = document.querySelector(`[${this.config.receiverAttr}="${id}"]`);
+                const receiverElement = this.wrapper.querySelector(`[${this.config.receiverAttr}="${id}"]`);
                 if(receiverElement.classList.contains(this._class.active)){
                     // close
-                    this.close(receiverElement);
+                    this.close(id);
                     receiverElement.classList.remove(this._class.active);
                     receiverElement.previousElementSibling.classList.remove(this._class.active);
                 }else{
                     // open when click again
-                    this.open(receiverElement);
+                    this.open(id);
                     receiverElement.classList.add(this._class.active);
                     receiverElement.previousElementSibling.classList.add(this._class.active);
                 }
@@ -282,12 +285,12 @@ class EasyTabAccordion{
 
         // show
         newReceivers.forEach(el => {
-            this.open(el);
+            this.open(el.getAttribute(`${this.config.receiverAttr}`));
         });
 
         // close
         prevReceivers.forEach(el => {
-            this.close(el);
+            this.close(el.getAttribute(`${this.config.receiverAttr}`));
         });
 
 
