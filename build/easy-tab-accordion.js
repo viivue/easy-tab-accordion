@@ -28,6 +28,8 @@ class EasyTabAccordion{
                 duration: 600,
                 hash: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+                activeSection: 1, // will show order of item show, close all if activeSection <= 0 or activeSection > length item
+                allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
                 onBeforeClose: (data, el) => {
@@ -68,8 +70,14 @@ class EasyTabAccordion{
             if(isValidHash){
                 this.activate(hashID, 'hash');
             }else{
-                // activate the first one
-                this.activate(this.receiver_ids[0].id, 'auto');
+                // activate index active
+                if(this.config.activeSection > 0 && this.config.activeSection <= this.wrapper.querySelectorAll(this.config.trigger).length){
+                    this.activate(this.receiver_ids[this.config.activeSection - 1].id, 'auto');
+                }else{
+                    this.wrapper.querySelectorAll(this.config.receiver).forEach(receiver => {
+                        this.close(receiver);
+                    });
+                }
             }
         }
 
@@ -154,7 +162,9 @@ class EasyTabAccordion{
 
         // loop through triggers
         this.wrapper.querySelectorAll(this.config.trigger).forEach(trigger => {
-            trigger.removeEventListener('click', this.manualTriggerFunction, true);
+            if(!this.config.allowCollapseAll){
+                trigger.removeEventListener('click', this.manualTriggerFunction, true);
+            }
         });
 
         // loop through receivers
@@ -188,9 +198,69 @@ class EasyTabAccordion{
         this.config.onAfterDestroy(this);
     }
 
+    close(element){
+        // event: onBeforeClose
+        this.config.onBeforeClose(this);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideUp(element, this.config.duration, () => this.config.onAfterClose(this, element));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            element.style.opacity = '0';
+            element.style.visibility = 'hidden';
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterClose(this, element), this.config.duration);
+        }
+    }
+
+    open(element){
+        // event: onBeforeOpen
+        this.config.onBeforeOpen(this, element);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideDown(element, this.config.duration, () => this.config.onAfterOpen(this, element));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            element.style.opacity = '1';
+            element.style.visibility = 'visible';
+
+            // update parent height
+            element.parentElement.style.height = `${el.offsetHeight}px`;
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterOpen(this, element), this.config.duration);
+        }
+    }
+
     activate(id, type = 'undefined', force = false){
-        // skip if is active already
-        if((!force && id === this.current_id) || !id.length) return;
+        // if active already
+        if((!force && id === this.current_id) || !id.length){
+            // if allow collapse all
+            if(this.config.allowCollapseAll){
+                const receiverElement = document.querySelector(`[${this.config.receiverAttr}="${id}"]`);
+                if(receiverElement.classList.contains(this._class.active)){
+                    // close
+                    this.close(receiverElement);
+                    receiverElement.classList.remove(this._class.active);
+                    receiverElement.previousElementSibling.classList.remove(this._class.active);
+                }else{
+                    // open when click again
+                    this.open(receiverElement);
+                    receiverElement.classList.add(this._class.active);
+                    receiverElement.previousElementSibling.classList.add(this._class.active);
+                }
+            }
+            return;
+        }
 
         // skip if id is not found
         if(!this.receiver_ids.filter(i => i.id === id).length) return;
@@ -208,49 +278,13 @@ class EasyTabAccordion{
 
         // show
         newReceivers.forEach(el => {
-            // event: onBeforeOpen
-            this.config.onBeforeOpen(this, el);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideDown(el, this.config.duration, () => this.config.onAfterOpen(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '1';
-                el.style.visibility = 'visible';
-
-                // update parent height
-                el.parentElement.style.height = `${el.offsetHeight}px`;
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterOpen(this, el), this.config.duration);
-            }
+            this.open(el);
         });
 
         // close
         prevReceivers.forEach(el => {
-            // event: onBeforeClose
-            this.config.onBeforeClose(this);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideUp(el, this.config.duration, () => this.config.onAfterClose(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '0';
-                el.style.visibility = 'hidden';
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterClose(this, el), this.config.duration);
-            }
+            this.close(el);
         });
-
 
         // update class
         prevTriggers.forEach(el => el.classList.remove(this._class.active));
