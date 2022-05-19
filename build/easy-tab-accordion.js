@@ -28,7 +28,7 @@ class EasyTabAccordion{
                 duration: 600,
                 hash: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-                activeSection: 1, // will show order of item show, close all if activeSection <= 0 or activeSection > length item
+                activeSection: 0, // will show order of item show, close all if activeSection <= 0 or activeSection > length item
                 allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
@@ -70,8 +70,14 @@ class EasyTabAccordion{
             if(isValidHash){
                 this.activate(hashID, 'hash');
             }else{
-                // activate the first one
-                this.activate(this.receiver_ids[0].id, 'auto');
+                // activate index active
+                if(this.config.activeSection > 0 && this.config.activeSection <= this.wrapper.querySelectorAll(this.config.trigger).length){
+                    this.activate(this.receiver_ids[this.config.activeSection - 1].id, 'auto');
+                }else{
+                    this.wrapper.querySelectorAll(this.config.receiver).forEach(receiver => {
+                        this.close(receiver);
+                    });
+                }
             }
         }
 
