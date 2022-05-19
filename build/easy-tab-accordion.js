@@ -236,8 +236,25 @@ class EasyTabAccordion{
     }
 
     activate(id, type = 'undefined', force = false){
-        // skip if is active already
-        if((!force && id === this.current_id) || !id.length) return;
+        // if active already
+        if((!force && id === this.current_id) || !id.length){
+            // if allow collapse all
+            if(this.config.allowCollapseAll){
+                const receiverElement = document.querySelector(`[${this.config.receiverAttr}="${id}"]`);
+                if(receiverElement.classList.contains(this._class.active)){
+                    // close
+                    this.close(receiverElement);
+                    receiverElement.classList.remove(this._class.active);
+                    receiverElement.previousElementSibling.classList.remove(this._class.active);
+                }else{
+                    // open when click again
+                    this.open(receiverElement);
+                    receiverElement.classList.add(this._class.active);
+                    receiverElement.previousElementSibling.classList.add(this._class.active);
+                }
+            }
+            return;
+        }
 
         // skip if id is not found
         if(!this.receiver_ids.filter(i => i.id === id).length) return;
