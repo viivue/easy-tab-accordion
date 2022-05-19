@@ -28,6 +28,8 @@ class EasyTabAccordion{
                 duration: 600,
                 hash: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+                activeSection: 1, // will show order of item show, close all if activeSection <= 0 or activeSection > length item
+                allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
                 onBeforeClose: (data, el) => {
