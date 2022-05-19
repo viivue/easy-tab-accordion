@@ -190,6 +190,51 @@ class EasyTabAccordion{
         this.config.onAfterDestroy(this);
     }
 
+    // close receiver
+    close(element){
+        // event: onBeforeClose
+        this.config.onBeforeClose(this);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideUp(element, this.config.duration, () => this.config.onAfterClose(this, element));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            element.style.opacity = '0';
+            element.style.visibility = 'hidden';
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterClose(this, element), this.config.duration);
+        }
+    }
+
+    // open receiver
+    open(element){
+        // event: onBeforeOpen
+        this.config.onBeforeOpen(this, element);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideDown(element, this.config.duration, () => this.config.onAfterOpen(this, element));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            element.style.opacity = '1';
+            element.style.visibility = 'visible';
+
+            // update parent height
+            element.parentElement.style.height = `${el.offsetHeight}px`;
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterOpen(this, element), this.config.duration);
+        }
+    }
+
     activate(id, type = 'undefined', force = false){
         // skip if is active already
         if((!force && id === this.current_id) || !id.length) return;
@@ -210,47 +255,12 @@ class EasyTabAccordion{
 
         // show
         newReceivers.forEach(el => {
-            // event: onBeforeOpen
-            this.config.onBeforeOpen(this, el);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideDown(el, this.config.duration, () => this.config.onAfterOpen(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '1';
-                el.style.visibility = 'visible';
-
-                // update parent height
-                el.parentElement.style.height = `${el.offsetHeight}px`;
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterOpen(this, el), this.config.duration);
-            }
+            this.open(el);
         });
 
         // close
         prevReceivers.forEach(el => {
-            // event: onBeforeClose
-            this.config.onBeforeClose(this);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideUp(el, this.config.duration, () => this.config.onAfterClose(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '0';
-                el.style.visibility = 'hidden';
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterClose(this, el), this.config.duration);
-            }
+            this.close(el);
         });
 
 
