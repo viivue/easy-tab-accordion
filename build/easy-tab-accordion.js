@@ -14,6 +14,7 @@ class EasyTabAccordion{
             trigger: 'data-eta-trigger',
             receiver: 'data-eta-receiver',
             hash: 'data-eta-hash',
+            hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation'
         };
         this.config = {
@@ -27,6 +28,7 @@ class EasyTabAccordion{
                 animation: 'slide', // slide, fade
                 duration: 600,
                 hash: false,
+                hashScroll: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
                 activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
                 allowCollapseAll: false,
@@ -51,11 +53,11 @@ class EasyTabAccordion{
         this.length = this.wrapper.querySelectorAll(this.config.trigger).length;
 
         // update hash from attribute
-        const hashValue = this.config.el.getAttribute(this._attr.hash);
-        this.config.hash = hashValue !== null ? hashValue === 'true' : this.config.hash;
+        this.config.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.config.hash;
+        this.config.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.config.hashScroll;
 
         // update animation from attribute
-        const animationValue = this.config.el.getAttribute(this._attr.animation);
+        const animationValue = this.wrapper.getAttribute(this._attr.animation);
         this.config.animation = animationValue !== null ? animationValue : this.config.animation;
 
         // init
@@ -64,8 +66,9 @@ class EasyTabAccordion{
 
         // activate via hash
         if(this.enabled){
-            const hash = document.location.hash;
-            const hashID = hash.slice(1);
+            const hashData = this.getHash();
+            const hash = hashData.hash;
+            const hashID = hashData.id;
             const isValidHash = this.config.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
 
             if(isValidHash){
@@ -95,6 +98,47 @@ class EasyTabAccordion{
             activateByIndex: index => this.activate(this.receiver_ids[index].id),
             destroy: () => this.destroy()
         }
+    }
+
+    getHash(url = document.location){
+        const data = new URL(url);
+
+        // trim params if any
+        const indexOfQuestionMark = data.hash.indexOf('?');
+        const hash = indexOfQuestionMark > -1 ? data.hash.slice(0, indexOfQuestionMark) : data.hash
+
+        return {
+            data,
+            hash,
+            id: hash.slice(1)
+        }
+    }
+
+    scrollIntoView(){
+        this.wrapper.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
+    // find possible trigger and assign click event
+    assignTriggerElements(){
+        document.querySelectorAll(`a[href]`).forEach(trigger => {
+            let href = trigger.getAttribute('href');
+            let id = href[0] === '#' ? href.slice(1) : this.getHash(href).id;
+
+            if(!id) return;
+
+            this.receiver_ids.forEach(i => {
+                if(i.id === id){
+                    // valid trigger
+                    trigger.addEventListener('click', e => {
+                        e.preventDefault();
+                        this.activate(id, 'manual');
+                        this.scrollIntoView();
+                    });
+                }
+            })
+        });
     }
 
     hasLiveBreakpoint(){
@@ -158,6 +202,8 @@ class EasyTabAccordion{
                 el.parentElement.style.transition = `height ${this.config.duration}ms ease`;
             }
         });
+
+        this.assignTriggerElements();
     }
 
     destroy(){
@@ -307,6 +353,11 @@ class EasyTabAccordion{
         prevReceivers.forEach(el => {
             this.close(el.getAttribute(`${this.config.receiverAttr}`));
         });
+
+        // hash scroll
+        if(type === 'hash' && this.config.hashScroll){
+            window.addEventListener('load', () => setTimeout(() => this.scrollIntoView(), 100));
+        }
     };
 
     slideUp(target, duration = 500, fn = () => {
