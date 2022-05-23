@@ -28,7 +28,7 @@ class EasyTabAccordion{
                 duration: 600,
                 hash: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-                activeSection: -1, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
+                activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
                 allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
@@ -200,6 +200,13 @@ class EasyTabAccordion{
         this.config.onAfterDestroy(this);
     }
 
+    // update url
+    updateUrl(){
+        const originalHref = document.location.origin + document.location.pathname;
+        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
+    }
+
+
     // close receiver
     close(idReceiver){
         const receiverClose = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
@@ -220,6 +227,13 @@ class EasyTabAccordion{
             // event: onAfterOpen
             setTimeout(() => this.config.onAfterClose(this, receiverClose), this.config.duration);
         }
+
+        // update class
+        this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`).classList.remove(this._class.active);
+        this.wrapper.querySelector(`[${this.config.triggerAttr}="${idReceiver}"]`).classList.remove(this._class.active);
+
+        // update url
+        this.updateUrl();
     }
 
     // open receiver
@@ -246,6 +260,13 @@ class EasyTabAccordion{
             // event: onAfterOpen
             setTimeout(() => this.config.onAfterOpen(this, receiverOpen), this.config.duration);
         }
+
+        // update class
+        this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`).classList.add(this._class.active);
+        this.wrapper.querySelector(`[${this.config.triggerAttr}="${idReceiver}"]`).classList.add(this._class.active);
+
+        // update url
+        this.updateUrl();
     }
 
     activate(id, type = 'undefined', force = false){
@@ -257,13 +278,9 @@ class EasyTabAccordion{
                 if(receiverElement.classList.contains(this._class.active)){
                     // close
                     this.close(id);
-                    receiverElement.classList.remove(this._class.active);
-                    receiverElement.previousElementSibling.classList.remove(this._class.active);
                 }else{
                     // open when click again
                     this.open(id);
-                    receiverElement.classList.add(this._class.active);
-                    receiverElement.previousElementSibling.classList.add(this._class.active);
                 }
             }
             return;
@@ -278,9 +295,7 @@ class EasyTabAccordion{
         this.current_id = id;
 
         // get related elements
-        const prevTriggers = this.wrapper.querySelectorAll(`${this.config.trigger}:not([${this.config.triggerAttr}="${this.current_id}"])`);
         const prevReceivers = this.wrapper.querySelectorAll(`${this.config.receiver}:not([${this.config.receiverAttr}="${this.current_id}"])`);
-        const newTriggers = this.wrapper.querySelectorAll(`[${this.config.triggerAttr}="${this.current_id}"]`);
         const newReceivers = this.wrapper.querySelectorAll(`[${this.config.receiverAttr}="${this.current_id}"]`);
 
         // show
@@ -292,17 +307,6 @@ class EasyTabAccordion{
         prevReceivers.forEach(el => {
             this.close(el.getAttribute(`${this.config.receiverAttr}`));
         });
-
-
-        // update class
-        prevTriggers.forEach(el => el.classList.remove(this._class.active));
-        prevReceivers.forEach(el => el.classList.remove(this._class.active));
-        newTriggers.forEach(el => el.classList.add(this._class.active));
-        newReceivers.forEach(el => el.classList.add(this._class.active));
-
-        // update url
-        const originalHref = document.location.origin + document.location.pathname;
-        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
     };
 
     slideUp(target, duration = 500, fn = () => {
