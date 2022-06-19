@@ -30,6 +30,8 @@ class EasyTabAccordion{
                 hash: false,
                 hashScroll: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+                activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
+                allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
                 onBeforeClose: (data, el) => {
@@ -48,6 +50,7 @@ class EasyTabAccordion{
         this.type = '';
         this.hasInit = false;
         this.enabled = this.hasLiveBreakpoint() ? this.isLive() : true;
+        this.length = this.wrapper.querySelectorAll(this.config.trigger).length;
 
         // update hash from attribute
         this.config.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.config.hash;
@@ -71,8 +74,17 @@ class EasyTabAccordion{
             if(isValidHash){
                 this.activate(hashID, 'hash');
             }else{
-                // activate the first one
-                this.activate(this.receiver_ids[0].id, 'auto');
+                // check activeSection exists
+                const isExists = this.config.activeSection >= 0 && this.config.activeSection < this.length;
+
+                // activate activeSection
+                if(isExists){
+                    this.activate(this.receiver_ids[this.config.activeSection].id, 'auto');
+                }else{
+                    this.wrapper.querySelectorAll(this.config.receiver).forEach(receiver => {
+                        this.close(receiver.getAttribute(`${this.config.receiverAttr}`));
+                    });
+                }
             }
         }
 
@@ -234,9 +246,91 @@ class EasyTabAccordion{
         this.config.onAfterDestroy(this);
     }
 
+    // update url
+    updateUrl(){
+        const originalHref = document.location.origin + document.location.pathname;
+        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
+    }
+
+
+    // close receiver
+    close(idReceiver){
+        const receiverClose = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
+        // event: onBeforeClose
+        this.config.onBeforeClose(this);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideUp(receiverClose, this.config.duration, () => this.config.onAfterClose(this, receiverClose));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            receiverClose.style.opacity = '0';
+            receiverClose.style.visibility = 'hidden';
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterClose(this, receiverClose), this.config.duration);
+        }
+
+        // update class
+        this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`).classList.remove(this._class.active);
+        this.wrapper.querySelector(`[${this.config.triggerAttr}="${idReceiver}"]`).classList.remove(this._class.active);
+
+        // update url
+        this.updateUrl();
+    }
+
+    // open receiver
+    open(idReceiver){
+        const receiverOpen = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
+
+        // event: onBeforeOpen
+        this.config.onBeforeOpen(this, receiverOpen);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideDown(receiverOpen, this.config.duration, () => this.config.onAfterOpen(this, receiverOpen));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            receiverOpen.style.opacity = '1';
+            receiverOpen.style.visibility = 'visible';
+
+            // update parent height
+            receiverOpen.parentElement.style.height = `${receiverOpen.offsetHeight}px`;
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterOpen(this, receiverOpen), this.config.duration);
+        }
+
+        // update class
+        this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`).classList.add(this._class.active);
+        this.wrapper.querySelector(`[${this.config.triggerAttr}="${idReceiver}"]`).classList.add(this._class.active);
+
+        // update url
+        this.updateUrl();
+    }
+
     activate(id, type = 'undefined', force = false){
-        // skip if is active already
-        if((!force && id === this.current_id) || !id.length) return;
+        // if active already
+        if((!force && id === this.current_id) || !id.length){
+            // if allow collapse all
+            if(this.config.allowCollapseAll){
+                const receiverElement = this.wrapper.querySelector(`[${this.config.receiverAttr}="${id}"]`);
+                if(receiverElement.classList.contains(this._class.active)){
+                    // close
+                    this.close(id);
+                }else{
+                    // open when click again
+                    this.open(id);
+                }
+            }
+            return;
+        }
 
         // skip if id is not found
         if(!this.receiver_ids.filter(i => i.id === id).length) return;
@@ -247,66 +341,18 @@ class EasyTabAccordion{
         this.current_id = id;
 
         // get related elements
-        const prevTriggers = this.wrapper.querySelectorAll(`${this.config.trigger}:not([${this.config.triggerAttr}="${this.current_id}"])`);
         const prevReceivers = this.wrapper.querySelectorAll(`${this.config.receiver}:not([${this.config.receiverAttr}="${this.current_id}"])`);
-        const newTriggers = this.wrapper.querySelectorAll(`[${this.config.triggerAttr}="${this.current_id}"]`);
         const newReceivers = this.wrapper.querySelectorAll(`[${this.config.receiverAttr}="${this.current_id}"]`);
 
         // show
         newReceivers.forEach(el => {
-            // event: onBeforeOpen
-            this.config.onBeforeOpen(this, el);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideDown(el, this.config.duration, () => this.config.onAfterOpen(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '1';
-                el.style.visibility = 'visible';
-
-                // update parent height
-                el.parentElement.style.height = `${el.offsetHeight}px`;
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterOpen(this, el), this.config.duration);
-            }
+            this.open(el.getAttribute(`${this.config.receiverAttr}`));
         });
 
         // close
         prevReceivers.forEach(el => {
-            // event: onBeforeClose
-            this.config.onBeforeClose(this);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideUp(el, this.config.duration, () => this.config.onAfterClose(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '0';
-                el.style.visibility = 'hidden';
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterClose(this, el), this.config.duration);
-            }
+            this.close(el.getAttribute(`${this.config.receiverAttr}`));
         });
-
-
-        // update class
-        prevTriggers.forEach(el => el.classList.remove(this._class.active));
-        prevReceivers.forEach(el => el.classList.remove(this._class.active));
-        newTriggers.forEach(el => el.classList.add(this._class.active));
-        newReceivers.forEach(el => el.classList.add(this._class.active));
-
-        // update url
-        const originalHref = document.location.origin + document.location.pathname;
-        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
 
         // hash scroll
         if(type === 'hash' && this.config.hashScroll){
