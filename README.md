@@ -1,4 +1,4 @@
-# Easy Tab & Accordion v1.0.0
+# Easy Tab & Accordion v1.0.1
 
 [![release](https://badgen.net/github/release/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/releases/latest)
 [![minified](https://badgen.net/badge/minified/7KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
@@ -84,6 +84,8 @@ const eta = new EasyTabAccordion({
     duration: 600, // animation duration
     hash: false, // update hash on URL, open tab/accordion via hash
     liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+    activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
+    allowCollapseAll: false,
     onBeforeOpen: (data, el) => {
     },
     onBeforeClose: (data, el) => {
@@ -127,4 +129,10 @@ And start server
 
 ```shell
 gulp serve
+```
+
+Release new version
+
+```shell
+gulp release
 ```
