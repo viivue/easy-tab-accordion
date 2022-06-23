@@ -23,14 +23,14 @@
 
 ```html
 <!-- JS (12KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.0/build/easy-tab-accordion.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.1/build/easy-tab-accordion.js"></script>
 ```
 
 or minified version
 
 ```html
 <!-- JS (7KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.0/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.1/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Init
