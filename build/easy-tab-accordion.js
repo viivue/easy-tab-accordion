@@ -6,10 +6,16 @@
 class EasyTabAccordion{
     constructor(options){
         this._class = {
-            enabled: 'easy-tab-accordion-enabled', active: 'active'
+            enabled: 'easy-tab-accordion-enabled',
+            active: 'active'
         };
         this._attr = {
-            container: 'data-eta', trigger: 'data-eta-trigger', receiver: 'data-eta-receiver',
+            container: 'data-eta',
+            trigger: 'data-eta-trigger',
+            receiver: 'data-eta-receiver',
+            hash: 'data-eta-hash',
+            hashScroll: 'data-eta-hash-scroll',
+            animation: 'data-eta-animation'
         };
         this.config = {
             ...{
@@ -18,10 +24,14 @@ class EasyTabAccordion{
                 triggerAttr: this._attr.trigger, // attribute name
                 receiver: `[${this._attr.receiver}]`, // string selector
                 receiverAttr: this._attr.receiver, // attribute name
-                activeClass: this._class.active, animation: 'slide', // slide, fade
+                activeClass: this._class.active,
+                animation: 'slide', // slide, fade
                 duration: 600,
                 hash: false,
+                hashScroll: false,
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+                activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
+                allowCollapseAll: false,
                 onBeforeOpen: (data, el) => {
                 },
                 onBeforeClose: (data, el) => {
@@ -40,6 +50,15 @@ class EasyTabAccordion{
         this.type = '';
         this.hasInit = false;
         this.enabled = this.hasLiveBreakpoint() ? this.isLive() : true;
+        this.length = this.wrapper.querySelectorAll(this.config.trigger).length;
+
+        // update hash from attribute
+        this.config.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.config.hash;
+        this.config.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.config.hashScroll;
+
+        // update animation from attribute
+        const animationValue = this.wrapper.getAttribute(this._attr.animation);
+        this.config.animation = animationValue !== null ? animationValue : this.config.animation;
 
         // init
         if(this.enabled && !this.hasInit) this.init();
@@ -47,15 +66,25 @@ class EasyTabAccordion{
 
         // activate via hash
         if(this.enabled){
-            const hash = document.location.hash;
-            const hashID = hash.slice(1);
+            const hashData = this.getHash();
+            const hash = hashData.hash;
+            const hashID = hashData.id;
             const isValidHash = this.config.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
 
             if(isValidHash){
                 this.activate(hashID, 'hash');
             }else{
-                // activate the first one
-                this.activate(this.receiver_ids[0].id, 'auto');
+                // check activeSection exists
+                const isExists = this.config.activeSection >= 0 && this.config.activeSection < this.length;
+
+                // activate activeSection
+                if(isExists){
+                    this.activate(this.receiver_ids[this.config.activeSection].id, 'auto');
+                }else{
+                    this.wrapper.querySelectorAll(this.config.receiver).forEach(receiver => {
+                        this.close(receiver.getAttribute(`${this.config.receiverAttr}`));
+                    });
+                }
             }
         }
 
@@ -69,6 +98,47 @@ class EasyTabAccordion{
             activateByIndex: index => this.activate(this.receiver_ids[index].id),
             destroy: () => this.destroy()
         }
+    }
+
+    getHash(url = document.location){
+        const data = new URL(url);
+
+        // trim params if any
+        const indexOfQuestionMark = data.hash.indexOf('?');
+        const hash = indexOfQuestionMark > -1 ? data.hash.slice(0, indexOfQuestionMark) : data.hash
+
+        return {
+            data,
+            hash,
+            id: hash.slice(1)
+        }
+    }
+
+    scrollIntoView(){
+        this.wrapper.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
+    // find possible trigger and assign click event
+    assignTriggerElements(){
+        document.querySelectorAll(`a[href]`).forEach(trigger => {
+            let href = trigger.getAttribute('href');
+            let id = href[0] === '#' ? href.slice(1) : this.getHash(href).id;
+
+            if(!id) return;
+
+            this.receiver_ids.forEach(i => {
+                if(i.id === id){
+                    // valid trigger
+                    trigger.addEventListener('click', e => {
+                        e.preventDefault();
+                        this.activate(id, 'manual');
+                        this.scrollIntoView();
+                    });
+                }
+            })
+        });
     }
 
     hasLiveBreakpoint(){
@@ -131,6 +201,8 @@ class EasyTabAccordion{
                 el.parentElement.style.transition = `height ${this.config.duration}ms ease`;
             }
         });
+
+        this.assignTriggerElements();
     }
 
     destroy(){
@@ -171,9 +243,91 @@ class EasyTabAccordion{
         this.config.onAfterDestroy(this);
     }
 
+    // update url
+    updateUrl(){
+        const originalHref = document.location.origin + document.location.pathname;
+        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
+    }
+
+
+    // close receiver
+    close(idReceiver){
+        const receiverClose = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
+        // event: onBeforeClose
+        this.config.onBeforeClose(this);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideUp(receiverClose, this.config.duration, () => this.config.onAfterClose(this, receiverClose));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            receiverClose.style.opacity = '0';
+            receiverClose.style.visibility = 'hidden';
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterClose(this, receiverClose), this.config.duration);
+        }
+
+        // update class
+        this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`).classList.remove(this._class.active);
+        this.wrapper.querySelector(`[${this.config.triggerAttr}="${idReceiver}"]`).classList.remove(this._class.active);
+
+        // update url
+        this.updateUrl();
+    }
+
+    // open receiver
+    open(idReceiver){
+        const receiverOpen = this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`);
+
+        // event: onBeforeOpen
+        this.config.onBeforeOpen(this, receiverOpen);
+
+        // slide animation
+        if(this.config.animation === 'slide'){
+            // event: onAfterOpen
+            this.slideDown(receiverOpen, this.config.duration, () => this.config.onAfterOpen(this, receiverOpen));
+        }
+
+        // fade animation
+        if(this.config.animation === 'fade'){
+            receiverOpen.style.opacity = '1';
+            receiverOpen.style.visibility = 'visible';
+
+            // update parent height
+            receiverOpen.parentElement.style.height = `${receiverOpen.offsetHeight}px`;
+
+            // event: onAfterOpen
+            setTimeout(() => this.config.onAfterOpen(this, receiverOpen), this.config.duration);
+        }
+
+        // update class
+        this.wrapper.querySelector(`[${this.config.receiverAttr}="${idReceiver}"]`).classList.add(this._class.active);
+        this.wrapper.querySelector(`[${this.config.triggerAttr}="${idReceiver}"]`).classList.add(this._class.active);
+
+        // update url
+        this.updateUrl();
+    }
+
     activate(id, type = 'undefined', force = false){
-        // skip if is active already
-        if((!force && id === this.current_id) || !id.length) return;
+        // if active already
+        if((!force && id === this.current_id) || !id.length){
+            // if allow collapse all
+            if(this.config.allowCollapseAll){
+                const receiverElement = this.wrapper.querySelector(`[${this.config.receiverAttr}="${id}"]`);
+                if(receiverElement.classList.contains(this._class.active)){
+                    // close
+                    this.close(id);
+                }else{
+                    // open when click again
+                    this.open(id);
+                }
+            }
+            return;
+        }
 
         // skip if id is not found
         if(!this.receiver_ids.filter(i => i.id === id).length) return;
@@ -184,13 +338,14 @@ class EasyTabAccordion{
         this.current_id = id;
 
         // get related elements
-        const prevTriggers = this.wrapper.querySelectorAll(`${this.config.trigger}:not([${this.config.triggerAttr}="${this.current_id}"])`);
         const prevReceivers = this.wrapper.querySelectorAll(`${this.config.receiver}:not([${this.config.receiverAttr}="${this.current_id}"])`);
-        const newTriggers = this.wrapper.querySelectorAll(`[${this.config.triggerAttr}="${this.current_id}"]`);
         const newReceivers = this.wrapper.querySelectorAll(`[${this.config.receiverAttr}="${this.current_id}"]`);
 
         // show
         newReceivers.forEach(el => {
+
+            this.open(el.getAttribute(`${this.config.receiverAttr}`));
+
             // event: onBeforeOpen
             this.config.onBeforeOpen(this, el);
 
@@ -213,39 +368,18 @@ class EasyTabAccordion{
                 // event: onAfterOpen
                 setTimeout(() => this.config.onAfterOpen(this, el), this.config.duration);
             }
+
         });
 
         // close
         prevReceivers.forEach(el => {
-            // event: onBeforeClose
-            this.config.onBeforeClose(this);
-
-            // slide animation
-            if(this.config.animation === 'slide'){
-                // event: onAfterOpen
-                this.slideUp(el, this.config.duration, () => this.config.onAfterClose(this, el));
-            }
-
-            // fade animation
-            if(this.config.animation === 'fade'){
-                el.style.opacity = '0';
-                el.style.visibility = 'hidden';
-
-                // event: onAfterOpen
-                setTimeout(() => this.config.onAfterClose(this, el), this.config.duration);
-            }
+            this.close(el.getAttribute(`${this.config.receiverAttr}`));
         });
 
-
-        // update class
-        prevTriggers.forEach(el => el.classList.remove(this._class.active));
-        prevReceivers.forEach(el => el.classList.remove(this._class.active));
-        newTriggers.forEach(el => el.classList.add(this._class.active));
-        newReceivers.forEach(el => el.classList.add(this._class.active));
-
-        // update url
-        const originalHref = document.location.origin + document.location.pathname;
-        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
+        // hash scroll
+        if(type === 'hash' && this.config.hashScroll){
+            window.addEventListener('load', () => setTimeout(() => this.scrollIntoView(), 100));
+        }
     };
 
     slideUp(target, duration = 500, fn = () => {
