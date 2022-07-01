@@ -5,6 +5,7 @@
  */
 class EasyTabAccordion{
     constructor(options){
+        this.dev = false;
         this._class = {
             enabled: 'easy-tab-accordion-enabled',
             active: 'active'
@@ -110,7 +111,7 @@ class EasyTabAccordion{
     }
 
     log(){
-        console.log(...arguments)
+        if(this.dev) console.log(...arguments);
     }
 
     getHash(url = document.location){
