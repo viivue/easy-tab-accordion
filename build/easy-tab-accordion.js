@@ -64,7 +64,7 @@ class EasyTabAccordion{
         if(this.enabled && !this.hasInitialized) this.init();
         if(!this.enabled && this.hasInitialized) this.destroy();
 
-        // activate via hash
+        // toggle via hash
         if(this.enabled){
             const hashData = this.getHash();
             const hash = hashData.hash;
@@ -72,14 +72,14 @@ class EasyTabAccordion{
             const isValidHash = this.config.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
 
             if(isValidHash){
-                this.activate(hashID, 'hash');
+                this.toggle(hashID, 'hash');
             }else{
                 // check valid activeSection (section index)
                 const isValid = this.config.activeSection >= 0 && this.config.activeSection < this.length;
 
-                // activate activeSection
+                // toggle activeSection
                 if(isValid){
-                    this.activate(this.receiver_ids[this.config.activeSection].id, 'auto');
+                    this.toggle(this.receiver_ids[this.config.activeSection].id, 'auto');
                 }
             }
         }
@@ -90,8 +90,8 @@ class EasyTabAccordion{
 
         // public methods
         return {
-            activate: id => this.activate(id),
-            activateByIndex: index => this.activate(this.receiver_ids[index].id),
+            toggle: id => this.toggle(id),
+            toggleByIndex: index => this.toggle(this.receiver_ids[index].id),
             destroy: () => this.destroy()
         }
     }
@@ -133,7 +133,7 @@ class EasyTabAccordion{
                     // valid trigger
                     trigger.addEventListener('click', e => {
                         e.preventDefault();
-                        this.activate(id, 'manual');
+                        this.toggle(id, 'manual');
                         this.scrollIntoView();
                     });
                 }
@@ -158,8 +158,8 @@ class EasyTabAccordion{
             if(this.enabled){
                 this.init();
 
-                // activate the current one or the first one
-                this.activate(this.current_id || this.receiver_ids[0].id, 'auto', true);
+                // toggle the current one or the first one
+                this.toggle(this.current_id || this.receiver_ids[0].id, 'auto', true);
             }else{
                 this.destroy();
             }
@@ -172,7 +172,7 @@ class EasyTabAccordion{
 
         const id = e.target.getAttribute(this.config.triggerAttr) || e.target.closest(this.config.trigger).getAttribute(this.config.triggerAttr);
         this.log('manualTriggerFunction', id);
-        this.activate(id, 'manual');
+        this.toggle(id, 'manual');
     }
 
     init(){
@@ -192,7 +192,7 @@ class EasyTabAccordion{
         this.receiver_ids = [];
         this.wrapper.querySelectorAll(this.config.receiver).forEach(el => {
             const id = el.getAttribute(this.config.receiverAttr);
-            this.receiver_ids.push({id, el});
+            this.receiver_ids.push({id, el, active: false});
 
             // setup CSS for fade animation
             if(this.config.animation === 'fade'){
@@ -250,45 +250,51 @@ class EasyTabAccordion{
     }
 
     openPanel(id = this.current_id){
+        if(!this.validID(id)) return;
+
         // event: on Before Open
         this.config.onBeforeOpen(this);
 
         // event: on After Open
+        this.receiver_ids[this.getIndexById(id)].active = true;
         const afterOpen = (target) => {
             this.config.onAfterOpen(this, target);
         }
 
         // get related elements
-        const {previous, current} = this.getElements(id);
+        const {current} = this.getElements(id);
 
         // open
         switch(this.config.animation){
             case 'slide':
                 current.forEach(el => this.slideDown(el, this.config.duration, () => afterOpen(el)));
-                previous.forEach(el => this.slideUp(el, this.config.duration, () => afterOpen(el)));
                 break;
             case 'fade':
                 current.forEach(el => this.fadeIn(el, this.config.duration, () => afterOpen(el)));
-                previous.forEach(el => this.fadeOut(el, this.config.duration, () => afterOpen(el)));
                 break;
         }
 
         // update classes
         current.forEach(item => item.classList.add(this._class.active));
-        previous.forEach(item => item.classList.remove(this._class.active));
+
+        // close all others
+        this.receiver_ids.filter(x => x.id !== id).forEach(previous => this.closePanel(previous.id));
     }
 
     closePanel(id = this.current_id){
+        if(!this.validID(id)) return;
+
         // event: on Before Close
         this.config.onBeforeClose(this);
 
         // event: on After Close
+        this.receiver_ids[this.getIndexById(id)].active = false;
         const afterClose = (target) => {
             this.config.onAfterClose(this, target);
         }
 
         // get related elements
-        const {previous, current} = this.getElements(id);
+        const {current} = this.getElements(id);
 
         // close
         switch(this.config.animation){
@@ -306,37 +312,58 @@ class EasyTabAccordion{
         });
     }
 
-    activate(id, type = 'undefined', force = false){
-        this.log('[activate] > start', arguments, this);
-        const isCurrent = id === this.current_id;
+    getToggleState(id){
+        if(!this.validID(id)) return;
+        // close: -1
+        // open: 1
+        // exit: 0
 
-        if(!this.config.allowCollapseAll){
-            // exit if active already or empty id
-            if((!force && isCurrent)){
-                this.log(`[activate] > exit, id[${id}] is active already`);
-                return;
-            }
-        }
+        const open = this.receiver_ids[this.getIndexById(id)].active;
+
+        // is open and allow collapse all => close
+        if(open && this.config.allowCollapseAll) return -1;
+
+        // is open and not allow collapse all => close
+        if(open && !this.config.allowCollapseAll) return 0;
+
+        // is close and allow collapse all => open
+        if(!open && this.config.allowCollapseAll) return 1;
+
+        // is close and not allow collapse all => open
+        if(!open && !this.config.allowCollapseAll) return 1;
+
+        return open ? 1 : -1;
+    }
+
+    validID(id){
+        return !!this.receiver_ids.filter(i => i.id === id).length;
+    }
+
+    toggle(id, type = 'undefined', force = false){
+        this.log('[toggle] > start', arguments, this);
 
         // exit if id is not found
-        if(!this.receiver_ids.filter(i => i.id === id).length){
-            this.log(`[activate] > exit, id[${id}] not found`);
+        if(!this.validID(id)){
+            this.log(`[toggle] > exit, id[${id}] not found`);
             return;
         }
 
-        // before activate
-        this.log('Before activate', id);
+        const toggleState = this.getToggleState(id);
+        if(toggleState === 0) return;
+
+        // before toggle
+        this.log('Before toggle', id);
 
         // update data
         this.type = type;
         this.previous_id = this.current_id ? this.current_id : this.receiver_ids[0].id;
-        if(isCurrent){
-            // close
-            this.closePanel(this.current_id);
-        }else{
+        if(toggleState === 1){
             // open
             this.current_id = id;
             this.openPanel(this.current_id);
+        }else{
+            // close
+            this.closePanel(this.current_id);
         }
 
         // update URL
@@ -363,6 +390,10 @@ class EasyTabAccordion{
         const current = this.wrapper.querySelectorAll(`[${attr}="${id}"]`);
 
         return {previous, current};
+    }
+
+    getIndexById(id){
+        return this.receiver_ids.findIndex(x => x.id === id);
     }
 
     slideUp(target, duration = 500, fn){
