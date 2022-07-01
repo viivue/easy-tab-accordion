@@ -17,21 +17,34 @@ class EasyTabAccordion{
             hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation'
         };
-        this.config = {
+
+        // handle options
+        this.options = {
             ...{
+                // selectors
                 el: document.querySelector(`[${this._attr.container}]`), // DOM element
                 trigger: `[${this._attr.trigger}]`, // string selector
                 triggerAttr: this._attr.trigger, // attribute name
                 receiver: `[${this._attr.receiver}]`, // string selector
                 receiverAttr: this._attr.receiver, // attribute name
                 activeClass: this._class.active,
+
+                // animation
                 animation: 'slide', // slide, fade
                 duration: 600,
+
+                // hash
                 hash: false,
                 hashScroll: false,
+
+                // responsive
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+
+                // open/close
                 activeSection: 0, // default opening section
                 allowCollapseAll: false,
+
+                // events
                 onBeforeOpen: (data, el) => {
                 },
                 onBeforeClose: (data, el) => {
@@ -44,21 +57,21 @@ class EasyTabAccordion{
                 },
             }, ...options
         }
-        this.wrapper = this.config.el;
+        this.wrapper = this.options.el;
         this.current_id = '';
         this.previous_id = '';
         this.type = '';
         this.hasInitialized = false;
         this.enabled = this.hasLiveBreakpoint() ? this.isLive() : true;
-        this.length = this.wrapper.querySelectorAll(this.config.trigger).length;
+        this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
         // update hash from attribute
-        this.config.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.config.hash;
-        this.config.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.config.hashScroll;
+        this.options.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.options.hash;
+        this.options.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.options.hashScroll;
 
         // update animation from attribute
         const animationValue = this.wrapper.getAttribute(this._attr.animation);
-        this.config.animation = animationValue !== null ? animationValue : this.config.animation;
+        this.options.animation = animationValue !== null ? animationValue : this.options.animation;
 
         // init
         if(this.enabled && !this.hasInitialized) this.init();
@@ -69,17 +82,17 @@ class EasyTabAccordion{
             const hashData = this.getHash();
             const hash = hashData.hash;
             const hashID = hashData.id;
-            const isValidHash = this.config.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
+            const isValidHash = this.options.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
 
             if(isValidHash){
                 this.toggle(hashID, 'hash');
             }else{
                 // check valid activeSection (section index)
-                const isValid = this.config.activeSection >= 0 && this.config.activeSection < this.length;
+                const isValid = this.options.activeSection >= 0 && this.options.activeSection < this.count;
 
                 // toggle activeSection
                 if(isValid){
-                    this.toggle(this.receiver_ids[this.config.activeSection].id, 'auto');
+                    this.toggle(this.receiver_ids[this.options.activeSection].id, 'auto');
                 }
             }
         }
@@ -142,12 +155,12 @@ class EasyTabAccordion{
     }
 
     hasLiveBreakpoint(){
-        return this.config.liveBreakpoint.length === 2;
+        return this.options.liveBreakpoint.length === 2;
     }
 
     // check if is in live breakpoint
     isLive(){
-        const isLiveRange = window.innerWidth <= this.config.liveBreakpoint[0] && window.innerWidth >= this.config.liveBreakpoint[1];
+        const isLiveRange = window.innerWidth <= this.options.liveBreakpoint[0] && window.innerWidth >= this.options.liveBreakpoint[1];
         return isLiveRange && this.hasLiveBreakpoint();
     }
 
@@ -170,7 +183,7 @@ class EasyTabAccordion{
         e.preventDefault();
         e.stopPropagation();
 
-        const id = e.target.getAttribute(this.config.triggerAttr) || e.target.closest(this.config.trigger).getAttribute(this.config.triggerAttr);
+        const id = e.target.getAttribute(this.options.triggerAttr) || e.target.closest(this.options.trigger).getAttribute(this.options.triggerAttr);
         this.log('manualTriggerFunction', id);
         this.toggle(id, 'manual');
     }
@@ -183,26 +196,26 @@ class EasyTabAccordion{
         this.wrapper.classList.add(this._class.enabled);
 
         // loop through triggers
-        this.wrapper.querySelectorAll(this.config.trigger).forEach(trigger => {
+        this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
             // assign click event
             trigger.addEventListener('click', e => this.manualTriggerFunction(e), true);
         });
 
         // loop through receivers
         this.receiver_ids = [];
-        this.wrapper.querySelectorAll(this.config.receiver).forEach(el => {
-            const id = el.getAttribute(this.config.receiverAttr);
+        this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
+            const id = el.getAttribute(this.options.receiverAttr);
             this.receiver_ids.push({id, el, active: false});
 
             // setup CSS for fade animation
-            if(this.config.animation === 'fade'){
+            if(this.options.animation === 'fade'){
                 el.style.position = getComputedStyle(el).position !== 'absolute' ? 'absolute' : '';
                 el.style.inset = '0';
-                el.style.transition = `opacity ${this.config.duration}ms ease`;
+                el.style.transition = `opacity ${this.options.duration}ms ease`;
                 el.style.overflow = 'hidden';
 
                 el.parentElement.style.position = getComputedStyle(el).position !== 'relative' ? 'relative' : '';
-                el.parentElement.style.transition = `height ${this.config.duration}ms ease`;
+                el.parentElement.style.transition = `height ${this.options.duration}ms ease`;
             }
         });
 
@@ -216,7 +229,7 @@ class EasyTabAccordion{
         this.wrapper.classList.remove(this._class.enabled);
 
         // loop through triggers
-        this.wrapper.querySelectorAll(this.config.trigger).forEach(trigger => {
+        this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
             trigger.removeEventListener('click', this.manualTriggerFunction, true);
         });
 
@@ -224,8 +237,8 @@ class EasyTabAccordion{
         this.receiver_ids = [];
 
         // reset CSS for fade animation
-        if(this.config.animation === 'fade'){
-            this.wrapper.querySelectorAll(this.config.receiver).forEach(el => {
+        if(this.options.animation === 'fade'){
+            this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
                 el.style.opacity = '';
                 el.style.visibility = '';
                 el.style.position = '';
@@ -239,38 +252,53 @@ class EasyTabAccordion{
         }
 
         // reset CSS for slide animation
-        if(this.config.animation === 'slide'){
-            this.wrapper.querySelectorAll(this.config.receiver).forEach(el => {
-                this.slideDown(el, this.config.duration);
+        if(this.options.animation === 'slide'){
+            this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
+                this.slideDown(el, this.options.duration);
             });
         }
 
         // event: onAfterDestroy
-        this.config.onAfterDestroy(this);
+        this.options.onAfterDestroy(this);
     }
 
     openPanel(id = this.current_id){
         if(!this.validID(id)) return;
 
+        const beforeOpen = () => {
+            // update section status
+            this.receiver_ids[this.getIndexById(id)].active = true;
+
+            // update URL
+            this.updateURL(id);
+
+            // events
+            this.options.onBeforeOpen(this);
+        }
+
         // event: on Before Open
-        this.config.onBeforeOpen(this);
+        beforeOpen();
 
         // event: on After Open
-        this.receiver_ids[this.getIndexById(id)].active = true;
         const afterOpen = (target) => {
-            this.config.onAfterOpen(this, target);
+            // hash scroll
+            if(this.type === 'hash' && this.options.hashScroll){
+                window.addEventListener('load', () => setTimeout(() => this.scrollIntoView(), 100));
+            }
+
+            this.options.onAfterOpen(this, target);
         }
 
         // get related elements
         const {current} = this.getElements(id);
 
         // open
-        switch(this.config.animation){
+        switch(this.options.animation){
             case 'slide':
-                current.forEach(el => this.slideDown(el, this.config.duration, () => afterOpen(el)));
+                current.forEach(el => this.slideDown(el, this.options.duration, () => afterOpen(el)));
                 break;
             case 'fade':
-                current.forEach(el => this.fadeIn(el, this.config.duration, () => afterOpen(el)));
+                current.forEach(el => this.fadeIn(el, this.options.duration, () => afterOpen(el)));
                 break;
         }
 
@@ -285,24 +313,24 @@ class EasyTabAccordion{
         if(!this.validID(id)) return;
 
         // event: on Before Close
-        this.config.onBeforeClose(this);
+        this.options.onBeforeClose(this);
 
         // event: on After Close
         this.receiver_ids[this.getIndexById(id)].active = false;
         const afterClose = (target) => {
-            this.config.onAfterClose(this, target);
+            this.options.onAfterClose(this, target);
         }
 
         // get related elements
         const {current} = this.getElements(id);
 
         // close
-        switch(this.config.animation){
+        switch(this.options.animation){
             case 'slide':
-                current.forEach(el => this.slideUp(el, this.config.duration, () => afterClose(el)));
+                current.forEach(el => this.slideUp(el, this.options.duration, () => afterClose(el)));
                 break;
             case 'fade':
-                current.forEach(el => this.fadeOut(el, this.config.duration, () => afterClose(el)));
+                current.forEach(el => this.fadeOut(el, this.options.duration, () => afterClose(el)));
                 break;
         }
 
@@ -321,16 +349,16 @@ class EasyTabAccordion{
         const open = this.receiver_ids[this.getIndexById(id)].active;
 
         // is open and allow collapse all => close
-        if(open && this.config.allowCollapseAll) return -1;
+        if(open && this.options.allowCollapseAll) return -1;
 
         // is open and not allow collapse all => close
-        if(open && !this.config.allowCollapseAll) return 0;
+        if(open && !this.options.allowCollapseAll) return 0;
 
         // is close and allow collapse all => open
-        if(!open && this.config.allowCollapseAll) return 1;
+        if(!open && this.options.allowCollapseAll) return 1;
 
         // is close and not allow collapse all => open
-        if(!open && !this.config.allowCollapseAll) return 1;
+        if(!open && !this.options.allowCollapseAll) return 1;
 
         return open ? 1 : -1;
     }
@@ -365,26 +393,18 @@ class EasyTabAccordion{
             // close
             this.closePanel(this.current_id);
         }
-
-        // update URL
-        this.updateURL(id);
-
-        // hash scroll
-        if(type === 'hash' && this.config.hashScroll){
-            window.addEventListener('load', () => setTimeout(() => this.scrollIntoView(), 100));
-        }
     };
 
     // update url
-    updateURL(id, type = 'undefined'){
+    updateURL(id, type = this.type){
         const originalHref = document.location.origin + document.location.pathname;
-        if(this.config.hash && type === 'manual') document.location = originalHref + '#' + id;
+        if(this.options.hash && type === 'manual') document.location = originalHref + '#' + id;
     }
 
     // get elements (receiver/trigger) by ID
     getElements(id, isReceiver = true){
-        const selector = isReceiver ? this.config.receiver : this.config.trigger;
-        const attr = isReceiver ? this.config.receiverAttr : this.config.triggerAttr;
+        const selector = isReceiver ? this.options.receiver : this.options.trigger;
+        const attr = isReceiver ? this.options.receiverAttr : this.options.triggerAttr;
 
         const previous = this.wrapper.querySelectorAll(`${selector}:not([${attr}="${id}"])`);
         const current = this.wrapper.querySelectorAll(`[${attr}="${id}"]`);
