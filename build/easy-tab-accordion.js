@@ -137,8 +137,8 @@ class EasyTabAccordion{
     // find possible trigger and assign click event
     assignTriggerElements(){
         document.querySelectorAll(`a[href^="#"]`).forEach(trigger => {
-            let href = trigger.getAttribute('href');
-            let id = href[0] === '#' ? href.slice(1) : this.getHash(href).id;
+            const href = trigger.getAttribute('href');
+            const id = href[0] === '#' ? href.slice(1) : this.getHash(href).id;
 
             if(!id) return;
 
@@ -418,8 +418,6 @@ class EasyTabAccordion{
     }
 
     slideUp(target, duration = 500, fn){
-        //if(this.isAnimating && this.type === 'manual') return;
-        //this.isAnimating = true;
         this.log(`[animate] slide up`, arguments);
 
         // before
@@ -435,7 +433,6 @@ class EasyTabAccordion{
             target.style.display = 'none';
             target.style.removeProperty('height');
             this.removeTransition(target);
-            //this.isAnimating = false;
 
             // callback
             if(typeof fn === 'function') fn();
@@ -443,8 +440,6 @@ class EasyTabAccordion{
     }
 
     slideDown(target, duration = 500, fn){
-        //if(this.isAnimating && this.type === 'manual') return;
-        //this.isAnimating = true;
         this.log(`[animate] slide down`);
 
         // before
@@ -459,7 +454,6 @@ class EasyTabAccordion{
         // end
         setTimeout(() => {
             this.removeTransition(target);
-            //this.isAnimating = false;
 
             // callback
             if(typeof fn === 'function') fn();
@@ -470,8 +464,11 @@ class EasyTabAccordion{
         target.style.opacity = '0';
         target.style.visibility = 'hidden';
 
-        // callback
-        if(typeof fn === 'function') fn();
+        // end
+        setTimeout(() => {
+            // callback
+            if(typeof fn === 'function') fn();
+        }, duration);
     }
 
     fadeIn(target, duration = 500, fn){
@@ -483,8 +480,11 @@ class EasyTabAccordion{
         target.parentElement.style.height = `${target.offsetHeight}px`;
         target.style.bottom = '0';
 
-        // callback
-        if(typeof fn === 'function') fn();
+        // end
+        setTimeout(() => {
+            // callback
+            if(typeof fn === 'function') fn();
+        }, duration);
     }
 
     setTransition(target, duration){
