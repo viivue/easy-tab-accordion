@@ -1,4 +1,4 @@
-# Easy Tab & Accordion v1.0.1
+# Easy Tab & Accordion v2.0.0
 
 [![release](https://badgen.net/github/release/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/releases/latest)
 [![minified](https://badgen.net/badge/minified/7KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
@@ -15,22 +15,14 @@
 
 ```html
 
-<link rel="stylesheet" href="./easy-tab-accordion.css">
-<script src="./easy-tab-accordion.js"></script>
+<script src="./easy-tab-accordion.min.js"></script>
 ```
 
 👉 CDN Hosted - [jsDelivr](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
 
 ```html
 <!-- JS (12KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.1/build/easy-tab-accordion.js"></script>
-```
-
-or minified version
-
-```html
-<!-- JS (7KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.1/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.0.0/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Init

@@ -1,7 +1,8 @@
 {
   "name": "easy-tab-accordion",
-  "version": "1.0.1",
-  "description": "JavaScript + GreenSock customize mouse cursor with inertia for modern browsers.",
+  "version": "2.0.0",
+  "description": "Javascript library to create tabs or accordion.",
+  "homepage": "https://github.com/viivue/easy-tab-accordion",
   "repository": {
     "type": "git",
     "url": "git@github.com:viivue/easy-tab-accordion"
@@ -12,8 +13,10 @@
     "url": "https://buiminhphuc.com/"
   },
   "keywords": [
-    "gsap",
-    "cursor"
+    "viivue",
+    "javascript",
+    "tabs",
+    "accordion"
   ],
   "license": "MIT",
   "main": "./dist/easy-tab-accordion.module.js",
@@ -47,8 +50,5 @@
     "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.3.1",
     "webpack-merge": "^5.8.0"
-  },
-  "dependencies": {
-    "gsap": "^3.10.4"
   }
 }
