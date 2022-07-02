@@ -5,6 +5,7 @@
  */
 import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView} from "./animation";
 import {getHash, updateURL} from "./hash";
+import {validID, getToggleState, getIndexById, getElements, hasLiveBreakpoint, isLive} from "./helpers";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -66,7 +67,7 @@ export class EasyTabAccordion{
         this.previous_id = '';
         this.type = '';
         this.hasInitialized = false;
-        this.enabled = this.hasLiveBreakpoint() ? this.isLive() : true;
+        this.enabled = hasLiveBreakpoint(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
         // update hash from attribute
@@ -139,19 +140,9 @@ export class EasyTabAccordion{
         });
     }
 
-    hasLiveBreakpoint(){
-        return this.options.liveBreakpoint.length === 2;
-    }
-
-    // check if is in live breakpoint
-    isLive(){
-        const isLiveRange = window.innerWidth <= this.options.liveBreakpoint[0] && window.innerWidth >= this.options.liveBreakpoint[1];
-        return isLiveRange && this.hasLiveBreakpoint();
-    }
-
     resizeWatcher(e){
-        if(this.hasLiveBreakpoint() && this.isLive() !== this.enabled){
-            this.enabled = this.isLive();
+        if(hasLiveBreakpoint(this) && isLive(this) !== this.enabled){
+            this.enabled = isLive(this);
 
             if(this.enabled){
                 this.init();
@@ -248,11 +239,11 @@ export class EasyTabAccordion{
     }
 
     openPanel(id = this.current_id){
-        if(!this.validID(id)) return;
+        if(!validID(this, id)) return;
 
         const beforeOpen = () => {
             // update section status
-            this.receiver_ids[this.getIndexById(id)].active = true;
+            this.receiver_ids[getIndexById(this, id)].active = true;
 
             // update URL
             if(this.options.hash && this.type === 'manual') updateURL(id);
@@ -275,7 +266,7 @@ export class EasyTabAccordion{
         }
 
         // get related elements
-        const {current} = this.getElements(id);
+        const {current} = getElements(this, id);
 
         // open
         switch(this.options.animation){
@@ -295,19 +286,19 @@ export class EasyTabAccordion{
     }
 
     closePanel(id = this.current_id){
-        if(!this.validID(id)) return;
+        if(!validID(this, id)) return;
 
         // event: on Before Close
         this.options.onBeforeClose(this);
 
         // event: on After Close
-        this.receiver_ids[this.getIndexById(id)].active = false;
+        this.receiver_ids[getIndexById(this, id)].active = false;
         const afterClose = (target) => {
             this.options.onAfterClose(this, target);
         }
 
         // get related elements
-        const {current} = this.getElements(id);
+        const {current} = getElements(this, id);
 
         // close
         switch(this.options.animation){
@@ -325,43 +316,17 @@ export class EasyTabAccordion{
         });
     }
 
-    getToggleState(id){
-        if(!this.validID(id)) return;
-        // close: -1
-        // open: 1
-        // exit: 0
-
-        const open = this.receiver_ids[this.getIndexById(id)].active;
-
-        // is open and allow collapse all => close
-        if(open && this.options.allowCollapseAll) return -1;
-
-        // is open and not allow collapse all => close
-        if(open && !this.options.allowCollapseAll) return 0;
-
-        // is close and allow collapse all => open
-        if(!open && this.options.allowCollapseAll) return 1;
-
-        // is close and not allow collapse all => open
-        if(!open && !this.options.allowCollapseAll) return 1;
-
-        return open ? 1 : -1;
-    }
-
-    validID(id){
-        return !!this.receiver_ids.filter(i => i.id === id).length;
-    }
 
     toggle(id, type = 'undefined', force = false){
         this.log('[toggle] > start', arguments, this);
 
         // exit if id is not found
-        if(!this.validID(id)){
+        if(!validID(this, id)){
             this.log(`[toggle] > exit, id[${id}] not found`);
             return;
         }
 
-        const toggleState = this.getToggleState(id);
+        const toggleState = getToggleState(this, id);
         if(toggleState === 0) return;
 
         // before toggle
@@ -380,20 +345,6 @@ export class EasyTabAccordion{
         }
     };
 
-    // get elements (receiver/trigger) by ID
-    getElements(id, isReceiver = true){
-        const selector = isReceiver ? this.options.receiver : this.options.trigger;
-        const attr = isReceiver ? this.options.receiverAttr : this.options.triggerAttr;
-
-        const previous = this.wrapper.querySelectorAll(`${selector}:not([${attr}="${id}"])`);
-        const current = this.wrapper.querySelectorAll(`[${attr}="${id}"]`);
-
-        return {previous, current};
-    }
-
-    getIndexById(id){
-        return this.receiver_ids.findIndex(x => x.id === id);
-    }
 
 }
 

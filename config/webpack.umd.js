@@ -4,7 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
     mode: 'production',
     devtool: false,
-    entry: "./src/js/easy-tab-accordion.js",
+    entry: "./src/easy-tab-accordion.js",
     output: {
         filename: 'easy-tab-accordion.min.js',
         libraryTarget: 'umd',
@@ -16,7 +16,7 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 {
-                    from: "./src/js/easy-tab-accordion.js",
+                    from: "./src/easy-tab-accordion.js",
                     to: "./easy-tab-accordion.module.js"
                 },
             ],
