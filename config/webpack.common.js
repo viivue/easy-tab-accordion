@@ -39,7 +39,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             inject: true,
             hash: true,
-            title: 'webpack Boilerplate',
+            title: 'Easy Tab & Accordion',
             favicon: paths.src + '/images/favicon.png',
             template: paths.src + '/template.html', // template file
             filename: 'index.html', // output file

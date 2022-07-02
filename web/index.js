@@ -1,6 +1,7 @@
 import '@/styles/index.scss'
-import {EasyTabAccordion} from "@/js/easy-tab-accordion";
+
 import homeHtml from "@/html/home.html";
+import {EasyTabAccordion} from "@/../src/easy-tab-accordion";
 
 /**
  * Create HTML
