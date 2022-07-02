@@ -3,12 +3,14 @@
  * https://github.com/viivue/easy-tab-accordion
  * MIT license - 2022
  */
+import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView} from "./animation";
+import {getHash, updateURL} from "./hash";
+
 export class EasyTabAccordion{
     constructor(options){
         this.dev = false;
         this._class = {
-            enabled: 'easy-tab-accordion-enabled',
-            active: 'active'
+            enabled: 'easy-tab-accordion-enabled', active: 'active'
         };
         this._attr = {
             container: 'data-eta',
@@ -35,8 +37,7 @@ export class EasyTabAccordion{
                 duration: 600,
 
                 // hash
-                hash: false,
-                hashScroll: false,
+                hash: false, hashScroll: false,
 
                 // responsive
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
@@ -47,14 +48,10 @@ export class EasyTabAccordion{
 
                 // events
                 onBeforeOpen: (data, el) => {
-                },
-                onBeforeClose: (data, el) => {
-                },
-                onAfterOpen: (data, el) => {
-                },
-                onAfterClose: (data, el) => {
-                },
-                onAfterDestroy: (data, el) => {
+                }, onBeforeClose: (data, el) => {
+                }, onAfterOpen: (data, el) => {
+                }, onAfterClose: (data, el) => {
+                }, onAfterDestroy: (data, el) => {
                 },
             }, ...options
         }
@@ -86,7 +83,7 @@ export class EasyTabAccordion{
 
         // toggle via hash
         if(this.enabled){
-            const hashData = this.getHash();
+            const hashData = getHash();
             const hash = hashData.hash;
             const hashID = hashData.id;
             const isValidHash = this.options.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
@@ -120,31 +117,12 @@ export class EasyTabAccordion{
         if(this.dev) console.log(...arguments);
     }
 
-    getHash(url = document.location){
-        const data = new URL(url);
-
-        // trim params if any
-        const indexOfQuestionMark = data.hash.indexOf('?');
-        const hash = indexOfQuestionMark > -1 ? data.hash.slice(0, indexOfQuestionMark) : data.hash
-
-        return {
-            data,
-            hash,
-            id: hash.slice(1)
-        }
-    }
-
-    scrollIntoView(){
-        this.wrapper.scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
 
     // find possible trigger and assign click event
     assignTriggerElements(){
         document.querySelectorAll(`a[href^="#"]`).forEach(trigger => {
             const href = trigger.getAttribute('href');
-            const id = href[0] === '#' ? href.slice(1) : this.getHash(href).id;
+            const id = href[0] === '#' ? href.slice(1) : getHash(href).id;
 
             if(!id) return;
 
@@ -154,7 +132,7 @@ export class EasyTabAccordion{
                     trigger.addEventListener('click', e => {
                         e.preventDefault();
                         this.toggle(id, 'manual');
-                        this.scrollIntoView();
+                        scrollIntoView();
                     });
                 }
             })
@@ -261,7 +239,7 @@ export class EasyTabAccordion{
         // reset CSS for slide animation
         if(this.options.animation === 'slide'){
             this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
-                this.slideDown(el, this.options.duration);
+                slideDown(el, this.options.duration);
             });
         }
 
@@ -277,7 +255,7 @@ export class EasyTabAccordion{
             this.receiver_ids[this.getIndexById(id)].active = true;
 
             // update URL
-            this.updateURL(id);
+            if(this.options.hash && this.type === 'manual') updateURL(id);
 
             // events
             this.options.onBeforeOpen(this);
@@ -290,7 +268,7 @@ export class EasyTabAccordion{
         const afterOpen = (target) => {
             // hash scroll
             if(this.type === 'hash' && this.options.hashScroll){
-                window.addEventListener('load', () => setTimeout(() => this.scrollIntoView(), 100));
+                window.addEventListener('load', () => setTimeout(() => scrollIntoView(), 100));
             }
 
             this.options.onAfterOpen(this, target);
@@ -302,10 +280,10 @@ export class EasyTabAccordion{
         // open
         switch(this.options.animation){
             case 'slide':
-                current.forEach(el => this.slideDown(el, this.options.duration, () => afterOpen(el)));
+                current.forEach(el => slideDown(el, this.options.duration, () => afterOpen(el)));
                 break;
             case 'fade':
-                current.forEach(el => this.fadeIn(el, this.options.duration, () => afterOpen(el)));
+                current.forEach(el => fadeIn(el, this.options.duration, () => afterOpen(el)));
                 break;
         }
 
@@ -334,10 +312,10 @@ export class EasyTabAccordion{
         // close
         switch(this.options.animation){
             case 'slide':
-                current.forEach(el => this.slideUp(el, this.options.duration, () => afterClose(el)));
+                current.forEach(el => slideUp(el, this.options.duration, () => afterClose(el)));
                 break;
             case 'fade':
-                current.forEach(el => this.fadeOut(el, this.options.duration, () => afterClose(el)));
+                current.forEach(el => fadeOut(el, this.options.duration, () => afterClose(el)));
                 break;
         }
 
@@ -402,12 +380,6 @@ export class EasyTabAccordion{
         }
     };
 
-    // update url
-    updateURL(id, type = this.type){
-        const originalHref = document.location.origin + document.location.pathname;
-        if(this.options.hash && type === 'manual') document.location = originalHref + '#' + id;
-    }
-
     // get elements (receiver/trigger) by ID
     getElements(id, isReceiver = true){
         const selector = isReceiver ? this.options.receiver : this.options.trigger;
@@ -423,93 +395,6 @@ export class EasyTabAccordion{
         return this.receiver_ids.findIndex(x => x.id === id);
     }
 
-    slideUp(target, duration = 500, fn){
-        this.log(`[animate] slide up`, arguments);
-
-        // before
-        target.style.boxSizing = 'border-box';
-        target.style.height = target.scrollHeight + 'px';
-        this.setTransition(target, duration);
-
-        // animate
-        target.style.height = '0px';
-
-        // end
-        setTimeout(() => {
-            target.style.display = 'none';
-            target.style.removeProperty('height');
-            this.removeTransition(target);
-
-            // callback
-            if(typeof fn === 'function') fn();
-        }, duration);
-    }
-
-    slideDown(target, duration = 500, fn){
-        this.log(`[animate] slide down`);
-
-        // before
-        target.style.boxSizing = 'border-box';
-        target.style.height = '0px';
-        target.style.display = 'block';
-        this.setTransition(target, duration);
-
-        // animate
-        target.style.height = target.scrollHeight + 'px';
-
-        // end
-        setTimeout(() => {
-            this.removeTransition(target);
-
-            // callback
-            if(typeof fn === 'function') fn();
-        }, duration);
-    }
-
-    fadeOut(target, duration = 500, fn){
-        target.style.opacity = '0';
-        target.style.visibility = 'hidden';
-
-        // end
-        setTimeout(() => {
-            // callback
-            if(typeof fn === 'function') fn();
-        }, duration);
-    }
-
-    fadeIn(target, duration = 500, fn){
-        target.style.bottom = '';
-        target.style.opacity = '1';
-        target.style.visibility = 'visible';
-
-        // update parent height
-        target.parentElement.style.height = `${target.offsetHeight}px`;
-        target.style.bottom = '0';
-
-        // end
-        setTimeout(() => {
-            // callback
-            if(typeof fn === 'function') fn();
-        }, duration);
-    }
-
-    setTransition(target, duration){
-        target.style.transitionProperty = "height, margin, padding";
-        target.style.transitionDuration = duration + 'ms';
-        target.style.overflow = 'hidden';
-    }
-
-    removeTransition(target){
-        target.style.removeProperty('overflow');
-        target.style.removeProperty('transition-duration');
-        target.style.removeProperty('transition-property');
-
-        target.style.removeProperty('box-sizing');
-        target.style.removeProperty('padding-top');
-        target.style.removeProperty('padding-bottom');
-        target.style.removeProperty('margin-top');
-        target.style.removeProperty('margin-bottom');
-    }
 }
 
 /**
