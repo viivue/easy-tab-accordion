@@ -3,7 +3,7 @@
  * https://github.com/viivue/easy-tab-accordion
  * MIT license - 2022
  */
-class EasyTabAccordion{
+export class EasyTabAccordion{
     constructor(options){
         this.dev = false;
         this._class = {
@@ -58,6 +58,12 @@ class EasyTabAccordion{
                 },
             }, ...options
         }
+
+        if(!this.options.el){
+            console.warn('ETA Error, target not found!');
+            return;
+        }
+
         this.wrapper = this.options.el;
         this.current_id = '';
         this.previous_id = '';
