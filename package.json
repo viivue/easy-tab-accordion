@@ -1,5 +1,6 @@
 {
   "name": "easy-tab-accordion",
+  "prettyName": "Easy Tabs & Accordion",
   "version": "2.0.0",
   "description": "Javascript library to create tabs or accordion.",
   "homepage": "https://github.com/viivue/easy-tab-accordion",
@@ -9,11 +10,11 @@
   },
   "author": {
     "name": "phucbm",
-    "email": "hiphucbui@gmail.com",
-    "url": "https://buiminhphuc.com/"
+    "url": "https://github.com/phucbm"
   },
   "keywords": [
     "viivue",
+    "phucbm",
     "javascript",
     "tabs",
     "accordion"

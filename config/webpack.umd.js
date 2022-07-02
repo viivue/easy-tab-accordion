@@ -1,6 +1,17 @@
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 
+const webpack = require('webpack');
+const PACKAGE = require('../package.json');
+const banner = `
+/**!
+ * ${PACKAGE.prettyName} v${PACKAGE.version}
+ * @author ${PACKAGE.author.name}
+ * @homepage ${PACKAGE.homepage}
+ * @license ${PACKAGE.license} ${new Date().getFullYear()}
+ */
+`;
+
 module.exports = {
     mode: 'production',
     devtool: false,
@@ -21,6 +32,10 @@ module.exports = {
                 },
             ],
         }),
+        new webpack.BannerPlugin({
+            banner: banner,
+            raw: true
+        })
     ],
     optimization: {
         minimizer: [new TerserPlugin({extractComments: false})],

@@ -1,8 +1,3 @@
-/**!
- * Easy Tab & Accordion v2.0.0
- * https://github.com/viivue/easy-tab-accordion
- * MIT license - 2022
- */
 import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView} from "./animation";
 import {getHash, updateURL} from "./hash";
 import {validID, getToggleState, getIndexById, getElements, hasLiveBreakpoint, isLive} from "./helpers";
