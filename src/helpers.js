@@ -36,10 +36,6 @@ export function getToggleState(context, id){
     return open ? 1 : -1;
 }
 
-export function getIndexById(context, id){
-    return context.receiver_ids.findIndex(x => x.id === id);
-}
-
 // get elements (receiver/trigger) by ID
 export function getElements(context, id){
     const selector = isReceiver => isReceiver ? context.options.receiver : context.options.trigger;
@@ -52,6 +48,14 @@ export function getElements(context, id){
     const currentTrigger = context.wrapper.querySelectorAll(`[${attr(false)}="${id}"]`);
 
     return {previous, current, previousTrigger, currentTrigger};
+}
+
+export function getIndexById(context, id){
+    return context.receiver_ids.findIndex(x => x.id === id);
+}
+
+export function getIdByIndex(context, index){
+    return context.receiver_ids[index].id;
 }
 
 export function removeActiveClass(context, id){

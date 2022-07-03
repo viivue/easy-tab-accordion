@@ -7,7 +7,7 @@ import {
     getElements,
     hasLiveBreakpoint,
     isLive,
-    removeActiveClass, addActiveClass
+    removeActiveClass, addActiveClass, getIdByIndex
 } from "./helpers";
 
 export class EasyTabAccordion{
@@ -113,7 +113,7 @@ export class EasyTabAccordion{
         // public methods
         return {
             toggle: id => this.toggle(id),
-            toggleByIndex: index => this.toggle(this.receiver_ids[index].id),
+            toggleByIndex: index => this.toggle(getIdByIndex(this, index)),
             destroy: () => this.destroy()
         }
     }
@@ -324,7 +324,7 @@ export class EasyTabAccordion{
 
         // update data
         this.type = type;
-        this.previous_id = this.current_id ? this.current_id : this.receiver_ids[0].id;
+        this.previous_id = this.current_id ? this.current_id : getIdByIndex(this, 0);
         if(toggleState === 1){
             // open
             this.current_id = id;
