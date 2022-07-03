@@ -33,7 +33,8 @@ export class EasyTabAccordion{
                 duration: 600,
 
                 // hash
-                hash: false, hashScroll: false,
+                hash: false, // update hash URL
+                hashScroll: false, // scroll into view when page loaded with a valid hash
 
                 // responsive
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
@@ -261,7 +262,7 @@ export class EasyTabAccordion{
         }
 
         // get related elements
-        const {current} = getElements(this, id);
+        const {current, currentTrigger} = getElements(this, id);
 
         // open
         switch(this.options.animation){
@@ -274,7 +275,8 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        current.forEach(item => item.classList.add(this._class.active));
+        if(current) current.forEach(item => item.classList.add(this._class.active));
+        if(currentTrigger) currentTrigger.forEach(item => item.classList.add(this._class.active));
 
         // close all others
         this.receiver_ids.filter(x => x.id !== id).forEach(previous => this.closePanel(previous.id));
@@ -293,7 +295,7 @@ export class EasyTabAccordion{
         }
 
         // get related elements
-        const {current} = getElements(this, id);
+        const {current, currentTrigger} = getElements(this, id);
 
         // close
         switch(this.options.animation){
@@ -306,9 +308,8 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        current.forEach(item => {
-            item.classList.remove(this._class.active);
-        });
+        current.forEach(item => item.classList.remove(this._class.active));
+        currentTrigger.forEach(item => item.classList.remove(this._class.active));
     }
 
 
