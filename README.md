@@ -203,7 +203,13 @@ Start dev server
 npm run dev
 ```
 
-Build
+Distribute production files
+
+```shell
+npm run prod
+```
+
+Build demo site
 
 ```shell
 npm run build
