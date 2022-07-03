@@ -50,3 +50,16 @@ export function arrayUnique(array){
 
     return array.filter(onlyUnique);
 }
+
+
+/**
+ * Sort array of integers
+ * @param array
+ * @param asc
+ * @returns {*}
+ */
+export function arraySortInteger(array, asc = true){
+    return array.sort(function(a, b){
+        return asc ? a - b : b - a;
+    });
+}
