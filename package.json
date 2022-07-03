@@ -23,7 +23,8 @@
   "main": "./dist/easy-tab-accordion.module.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
+    "prod": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
     "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
   },
   "devDependencies": {
