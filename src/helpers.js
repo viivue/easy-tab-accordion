@@ -20,18 +20,19 @@ export function getToggleState(context, id){
     // exit: 0
 
     const open = context.receiver_ids[getIndexById(context, id)].active;
+    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
     // is open and allow collapse all => close
-    if(open && context.options.allowCollapseAll) return -1;
+    if(open && allowCollapseAll) return -1;
 
     // is open and not allow collapse all => close
-    if(open && !context.options.allowCollapseAll) return 0;
+    if(open && !allowCollapseAll) return 0;
 
     // is close and allow collapse all => open
-    if(!open && context.options.allowCollapseAll) return 1;
+    if(!open && allowCollapseAll) return 1;
 
     // is close and not allow collapse all => open
-    if(!open && !context.options.allowCollapseAll) return 1;
+    if(!open && !allowCollapseAll) return 1;
 
     return open ? 1 : -1;
 }

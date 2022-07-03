@@ -40,7 +40,7 @@ export class EasyTabAccordion{
 
                 // open/close
                 activeSection: 0, // default opening section
-                allowCollapseAll: false,
+                allowCollapseAll: false, // for slide animation only
 
                 // events
                 onBeforeOpen: (data, el) => {
