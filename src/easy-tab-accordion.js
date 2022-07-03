@@ -14,7 +14,6 @@ import {validBreakpoints, isLive, responsive} from "./responsive";
 
 export class EasyTabAccordion{
     constructor(options){
-        this.dev = false;
         this._class = {
             enabled: 'easy-tab-accordion-enabled', active: 'active'
         };
@@ -137,11 +136,6 @@ export class EasyTabAccordion{
         this.update();
         responsive(this, event);
     }
-
-    log(){
-        if(this.dev) console.log(...arguments);
-    }
-
 
     // find possible trigger and assign click event
     assignTriggerElements(){
@@ -325,19 +319,11 @@ export class EasyTabAccordion{
 
 
     toggle(id, type = 'undefined', force = false){
-        this.log('[toggle] > start', arguments, this);
-
         // exit if id is not found
-        if(!validID(this, id)){
-            this.log(`[toggle] > exit, id[${id}] not found`);
-            return;
-        }
+        if(!validID(this, id)) return;
 
         const toggleState = getToggleState(this, id);
         if(toggleState === 0) return;
-
-        // before toggle
-        this.log('Before toggle', id);
 
         // update data
         this.type = type;
