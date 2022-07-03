@@ -11,6 +11,7 @@ import {
     isLive,
     removeActiveClass, addActiveClass, getIdByIndex
 } from "./helpers";
+import {debounce} from "./utils";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -113,9 +114,9 @@ export class EasyTabAccordion{
             }
         }
 
-        // watch for resize event
-        window.addEventListener('resize', e => this.resizeWatcher(e));
-        window.addEventListener('load', e => this.resizeWatcher(e));
+        // watch for resize/load events
+        window.addEventListener('resize', debounce(e => this.onResize(e), 300));
+        window.addEventListener('load', e => this.onLoad(e));
 
         // public methods
         return {
@@ -124,6 +125,16 @@ export class EasyTabAccordion{
             destroy: () => this.destroy(),
             update: () => this.update()
         }
+    }
+
+    onResize(event){
+        this.update();
+        this.responsive(event);
+    }
+
+    onLoad(event){
+        this.update();
+        this.responsive(event);
     }
 
     log(){
@@ -152,7 +163,7 @@ export class EasyTabAccordion{
         });
     }
 
-    resizeWatcher(e){
+    responsive(event){
         if(hasLiveBreakpoint(this) && isLive(this) !== this.enabled){
             this.enabled = isLive(this);
 
