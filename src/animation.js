@@ -27,6 +27,16 @@ export function getElementMarginHeight(el){
 
 
 /**
+ * Get element height including margin
+ * @param target
+ * @returns {string}
+ */
+export function getElementHeight(target){
+    return target.scrollHeight + getElementMarginHeight(target) + 'px';
+}
+
+
+/**
  * Set CSS
  * @param target
  * @param props
