@@ -1,7 +1,12 @@
 import {setCSS, setTransition, removeTransition, getElementMarginHeight} from "./animation";
 
+
 /**
  * Slide Up
+ * @param target
+ * @param duration
+ * @param fn
+ * @since 1.0.0
  */
 export function slideUp(target, duration = 500, fn){
     // before
@@ -33,8 +38,13 @@ export function slideUp(target, duration = 500, fn){
     }, duration);
 }
 
+
 /**
  * Slide Down
+ * @param target
+ * @param duration
+ * @param fn
+ * @since 1.0.0
  */
 export function slideDown(target, duration = 500, fn){
     // before
@@ -63,8 +73,11 @@ export function slideDown(target, duration = 500, fn){
     }, duration);
 }
 
+
 /**
  * Destroy Slide
+ * @param context
+ * @since 2.0.0
  */
 export function destroySlide(context){
     context.wrapper.querySelectorAll(context.options.receiver).forEach(target => {

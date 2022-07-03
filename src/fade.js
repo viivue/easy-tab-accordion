@@ -7,6 +7,7 @@ import {getElementMarginHeight, removeTransition, setCSS, setTransition} from ".
  * @param target
  * @param duration
  * @param fn
+ * @since 1.0.0
  */
 export function fadeOut(target, duration = 500, fn){
     // before
@@ -33,6 +34,7 @@ export function fadeOut(target, duration = 500, fn){
  * @param target
  * @param duration
  * @param fn
+ * @since 1.0.0
  */
 export function fadeIn(target, duration = 500, fn){
     // before
@@ -60,6 +62,7 @@ export function fadeIn(target, duration = 500, fn){
 /**
  * Destroy Fade
  * @param context
+ * @since 2.0.0
  */
 export function destroyFade(context){
     context.wrapper.querySelectorAll(context.options.receiver).forEach(target => {

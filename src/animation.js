@@ -1,6 +1,7 @@
 /**
  * Scroll into view
  * @param target
+ * @since 1.0.0
  */
 export function scrollIntoView(target){
     target.scrollIntoView({
@@ -13,6 +14,7 @@ export function scrollIntoView(target){
  * Get margin height of element
  * @param el
  * @returns {number}
+ * @since 2.0.0
  */
 export function getElementMarginHeight(el){
     const computedStyle = getComputedStyle(el);
@@ -24,6 +26,7 @@ export function getElementMarginHeight(el){
  * Set CSS
  * @param target
  * @param props
+ * @since 2.0.0
  */
 export function setCSS(target, props){
     Object.assign(target.style, props);
@@ -34,6 +37,7 @@ export function setCSS(target, props){
  * Set transition
  * @param target
  * @param duration
+ * @since 2.0.0
  */
 export function setTransition(target, duration){
     setCSS(target, {
@@ -47,6 +51,7 @@ export function setTransition(target, duration){
 /**
  * Remove transition
  * @param target
+ * @since 2.0.0
  */
 export function removeTransition(target){
     setCSS(target, {

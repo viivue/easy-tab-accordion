@@ -1,3 +1,9 @@
+/**
+ * Get hash information
+ * @param url
+ * @returns {{data: module:url.URL, id: string, hash: string}}
+ * @since 1.0.0
+ */
 export function getHash(url = document.location){
     const data = new URL(url);
 
@@ -12,7 +18,12 @@ export function getHash(url = document.location){
     }
 }
 
-// update url
+
+/**
+ * Update hash URL
+ * @param id
+ * @since 1.0.0
+ */
 export function updateURL(id){
     const originalHref = document.location.origin + document.location.pathname;
     document.location = originalHref + '#' + id;
