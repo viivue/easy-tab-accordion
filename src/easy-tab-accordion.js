@@ -1,5 +1,6 @@
 import {slideDown, slideUp, destroySlide} from "./slide";
-import {fadeIn, fadeOut, scrollIntoView, setCSS, destroyFade} from "./animation";
+import {fadeIn, fadeOut, destroyFade} from "./fade";
+import {scrollIntoView, setCSS} from "./animation";
 import {getHash, updateURL} from "./hash";
 import {
     validID,
