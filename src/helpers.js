@@ -1,27 +1,5 @@
 import {arrayUnique} from "./utils";
 
-/**
- * Check if is in live breakpoint
- * @param context
- * @returns {boolean}
- * @since 1.0.0
- */
-export function isLive(context){
-    const isLiveRange = window.innerWidth <= context.options.liveBreakpoint[0] && window.innerWidth >= context.options.liveBreakpoint[1];
-    return isLiveRange && hasLiveBreakpoint(context);
-}
-
-
-/**
- * Has valid live breakpoint
- * @param context
- * @returns {boolean}
- * @since 1.0.0
- */
-export function hasLiveBreakpoint(context){
-    return context.options.liveBreakpoint.length === 2;
-}
-
 
 /**
  * Has valid id

@@ -7,11 +7,10 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    hasLiveBreakpoint,
-    isLive,
     removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections
 } from "./helpers";
 import {debounce} from "./utils";
+import {hasLiveBreakpoint, isLive, responsive} from "./responsive";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -124,12 +123,12 @@ export class EasyTabAccordion{
 
     onResize(event){
         this.update();
-        this.responsive(event);
+        responsive(this, event);
     }
 
     onLoad(event){
         this.update();
-        this.responsive(event);
+        responsive(this, event);
     }
 
     log(){
@@ -156,21 +155,6 @@ export class EasyTabAccordion{
                 }
             })
         });
-    }
-
-    responsive(event){
-        if(hasLiveBreakpoint(this) && isLive(this) !== this.enabled){
-            this.enabled = isLive(this);
-
-            if(this.enabled){
-                this.init();
-
-                // toggle the current one or the first one
-                this.toggle(this.current_id || this.receiver_ids[0].id, 'auto', true);
-            }else{
-                this.destroy();
-            }
-        }
     }
 
     manualTriggerFunction(e){
