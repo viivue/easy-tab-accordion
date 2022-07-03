@@ -47,31 +47,50 @@ export function getToggleState(context, id){
 
 export function defaultActiveSections(context){
     let activeIndexes = [];
-    switch(typeof context.options.activeSection){
-        case "number":
-            activeIndexes.push(context.options.activeSection);
+    const activeSection = context.options.activeSection;
+
+    switch(context.options.animation){
+        case 'slide':
+            switch(typeof activeSection){
+                case "number":
+                    activeIndexes.push(activeSection);
+                    break;
+                case "object":
+                    if(context.options.allowExpandAll && context.options.animation === 'slide'){
+                        // only allow to activate multiple sections when allow to expand all
+                        activeIndexes = arrayUnique(activeSection);
+                    }else{
+                        // if not allow to expand all => only expand the first index
+                        activeIndexes.push(activeSection[0]);
+                    }
+                    break;
+            }
             break;
-        case "object":
-            if(context.options.allowExpandAll && context.options.animation === 'slide'){
-                // only allow to activate multiple sections when allow to expand all
-                activeIndexes = arrayUnique(context.options.activeSection);
-            }else{
-                // if not allow to expand all => only expand the first index
-                activeIndexes.push(context.options.activeSection[0]);
+        case 'fade':
+            // fade animation always have one active section
+            switch(typeof activeSection){
+                case "number":
+                    activeIndexes.push(isValidIndex(context, activeSection) ? activeSection : 0);
+                    break;
+                case "object":
+                    const firstIndex = activeSection[0];
+                    activeIndexes.push(isValidIndex(context, firstIndex) ? firstIndex : 0);
+                    break;
             }
             break;
     }
 
     activeIndexes.forEach(index => {
-        // check valid activeSection (section index)
-        const isValid = index >= 0 && index < context.count;
-        if(!isValid) return;
-
+        if(!isValidIndex(context, index)) return;
         context.toggle(getIdByIndex(context, index), 'auto');
     });
 
     // close not active sections
     context.dataset.filter(item => !item.active).forEach(item => context.closePanel(item.id));
+}
+
+function isValidIndex(context, index){
+    return index >= 0 && index < context.count;
 }
 
 

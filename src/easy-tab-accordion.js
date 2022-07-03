@@ -77,7 +77,7 @@ export class EasyTabAccordion{
 
                 // animation
                 animation: 'slide', // slide, fade
-                duration: 600,
+                duration: 450,
 
                 // hash
                 hash: false, // update hash URL
