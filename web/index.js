@@ -20,6 +20,7 @@ const accordion = new EasyTabAccordion({
     receiver: '[data-accordion-receiver]',
     receiverAttr: 'data-accordion-receiver',
     allowCollapseAll: true,
+    allowExpandAll: true
     //hash: true
 });
 
@@ -30,7 +31,6 @@ const tab = new EasyTabAccordion({
     triggerAttr: 'data-tabs-trigger',
     receiver: '[data-tabs-receiver]',
     receiverAttr: 'data-tabs-receiver',
-    allowCollapseAll: true,
     //hash: true
 });
 

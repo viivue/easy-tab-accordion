@@ -9,7 +9,7 @@ import {
     getElements,
     hasLiveBreakpoint,
     isLive,
-    removeActiveClass, addActiveClass, getIdByIndex
+    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections
 } from "./helpers";
 import {debounce} from "./utils";
 
@@ -51,8 +51,9 @@ export class EasyTabAccordion{
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
 
                 // open/close
-                activeSection: 0, // default opening section
+                activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
                 allowCollapseAll: false, // for slide animation only
+                allowExpandAll: false, // for slide animation only
 
                 // events
                 onBeforeInit: (data) => {
@@ -104,13 +105,7 @@ export class EasyTabAccordion{
             if(isValidHash(this)){
                 this.toggle(getHash().id, 'hash');
             }else{
-                // check valid activeSection (section index)
-                const isValid = this.options.activeSection >= 0 && this.options.activeSection < this.count;
-
-                // toggle activeSection
-                if(isValid){
-                    this.toggle(this.receiver_ids[this.options.activeSection].id, 'auto');
-                }
+                defaultActiveSections(this);
             }
         }
 
@@ -308,7 +303,8 @@ export class EasyTabAccordion{
         addActiveClass(this, id);
 
         // close all others
-        this.receiver_ids.filter(x => x.id !== id).forEach(previous => this.closePanel(previous.id));
+        const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
+        if(closeAllOthers) this.receiver_ids.filter(x => x.id !== id).forEach(item => this.closePanel(item.id));
     }
 
     closePanel(id = this.current_id){
@@ -363,7 +359,7 @@ export class EasyTabAccordion{
             this.openPanel(this.current_id);
         }else{
             // close
-            this.closePanel(this.current_id);
+            this.closePanel(id);
         }
     };
 

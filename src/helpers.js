@@ -1,3 +1,5 @@
+import {arrayUnique} from "./utils";
+
 /**
  * Check if is in live breakpoint
  * @param context
@@ -65,24 +67,61 @@ export function getToggleState(context, id){
 }
 
 
+export function defaultActiveSections(context){
+    let activeIndexes = [];
+    switch(typeof context.options.activeSection){
+        case "number":
+            activeIndexes.push(context.options.activeSection);
+            break;
+        case "object":
+            if(context.options.allowExpandAll && context.options.animation === 'slide'){
+                // only allow to activate multiple sections when allow to expand all
+                activeIndexes = arrayUnique(context.options.activeSection);
+            }else{
+                // if not allow to expand all => only expand the first index
+                activeIndexes.push(context.options.activeSection[0]);
+            }
+            break;
+    }
+
+    activeIndexes.forEach(index => {
+        // check valid activeSection (section index)
+        const isValid = index >= 0 && index < context.count;
+        if(!isValid) return;
+
+        context.toggle(getIdByIndex(context, index), 'auto');
+    });
+
+    // close not active sections
+    context.receiver_ids.filter(item => !item.active).forEach(item => context.closePanel(item.id));
+}
+
+
 /**
  * Get elements (receiver/trigger) by ID
  * @param context
  * @param id
- * @returns {{currentTrigger: NodeListOf<Element>, current: NodeListOf<Element>, previous: NodeListOf<Element>, previousTrigger: NodeListOf<Element>}}
+ * @returns {{currentTrigger: NodeListOf<Element>, current: NodeListOf<Element>}}
  * @since 2.0.0
  */
 export function getElements(context, id){
     const selector = isReceiver => isReceiver ? context.options.receiver : context.options.trigger;
     const attr = isReceiver => isReceiver ? context.options.receiverAttr : context.options.triggerAttr;
 
-    const previous = context.wrapper.querySelectorAll(`${selector(true)}:not([${attr(true)}="${id}"])`);
-    const current = context.wrapper.querySelectorAll(`[${attr(true)}="${id}"]`);
+    if(id){
+        const previous = context.wrapper.querySelectorAll(`${selector(true)}:not([${attr(true)}="${id}"])`);
+        const current = context.wrapper.querySelectorAll(`[${attr(true)}="${id}"]`);
 
-    const previousTrigger = context.wrapper.querySelectorAll(`${selector(false)}:not([${attr(false)}="${id}"])`);
-    const currentTrigger = context.wrapper.querySelectorAll(`[${attr(false)}="${id}"]`);
+        const previousTrigger = context.wrapper.querySelectorAll(`${selector(false)}:not([${attr(false)}="${id}"])`);
+        const currentTrigger = context.wrapper.querySelectorAll(`[${attr(false)}="${id}"]`);
 
-    return {previous, current, previousTrigger, currentTrigger};
+        return {previous, current, previousTrigger, currentTrigger};
+    }else{
+        const current = context.wrapper.querySelectorAll(`[${attr(true)}]`);
+        const currentTrigger = context.wrapper.querySelectorAll(`[${attr(false)}]`);
+
+        return {current, currentTrigger};
+    }
 }
 
 
@@ -117,7 +156,7 @@ export function getIdByIndex(context, index){
  * @since 2.0.0
  */
 export function removeActiveClass(context, id){
-    const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
+    const {current, currentTrigger} = getElements(context, id);
 
     // update classes
     current.forEach(item => item.classList.remove(context._class.active));
