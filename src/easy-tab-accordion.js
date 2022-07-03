@@ -1,5 +1,5 @@
-import {slideDown, slideUp, destroySlide} from "./slide";
-import {fadeIn, fadeOut, destroyFade} from "./fade";
+import {slideDown, slideUp, destroySlide, updateSlide} from "./slide";
+import {fadeIn, fadeOut, destroyFade, updateFade} from "./fade";
 import {scrollIntoView, setCSS} from "./animation";
 import {getHash, isValidHash, hashScroll, updateURL} from "./hash";
 import {
@@ -55,10 +55,16 @@ export class EasyTabAccordion{
 
                 // events
                 onBeforeOpen: (data, el) => {
-                }, onBeforeClose: (data, el) => {
-                }, onAfterOpen: (data, el) => {
-                }, onAfterClose: (data, el) => {
-                }, onDestroy: (data, el) => {
+                },
+                onBeforeClose: (data, el) => {
+                },
+                onAfterOpen: (data, el) => {
+                },
+                onAfterClose: (data, el) => {
+                },
+                onDestroy: (data) => {
+                },
+                onUpdate: (data) => {
                 },
             }, ...options
         }
@@ -111,7 +117,8 @@ export class EasyTabAccordion{
         return {
             toggle: id => this.toggle(id),
             toggleByIndex: index => this.toggle(getIdByIndex(this, index)),
-            destroy: () => this.destroy()
+            destroy: () => this.destroy(),
+            update: () => this.update()
         }
     }
 
@@ -229,6 +236,20 @@ export class EasyTabAccordion{
 
         // event: onDestroy
         this.options.onDestroy(this);
+    }
+
+    update(){
+        switch(this.options.animation){
+            case "slide":
+                updateSlide(this);
+                break;
+            case "fade":
+                updateFade(this);
+                break;
+        }
+
+        // event: onUpdate
+        this.options.onUpdate(this);
     }
 
     openPanel(id = this.current_id){

@@ -89,3 +89,18 @@ export function destroySlide(context){
         removeTransition(target);
     });
 }
+
+
+/**
+ * Update Slide
+ * @param context
+ */
+export function updateSlide(context){
+    context.receiver_ids.forEach(item => {
+        const target = item.el;
+        const duration = context.options.duration;
+
+        if(item.active) slideDown(target, duration);
+        if(!item.active) slideUp(target, duration);
+    });
+}

@@ -45,6 +45,9 @@ document.querySelectorAll('[data-btn]').forEach(btn => {
                 break;
             case 'init-accordion':
                 break;
+            case 'update-accordion':
+                accordion.update();
+                break;
             case 'destroy-tab':
                 tab.destroy();
                 break;

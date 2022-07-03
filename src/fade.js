@@ -83,3 +83,18 @@ export function destroyFade(context){
 
     removeActiveClass(context);
 }
+
+
+/**
+ * Update Fade
+ * @param context
+ */
+export function updateFade(context){
+    context.receiver_ids.forEach(item => {
+        const target = item.el;
+        const duration = context.options.duration;
+
+        if(item.active) fadeIn(target, duration);
+        if(!item.active) fadeOut(target, duration);
+    });
+}
