@@ -1,11 +1,11 @@
-# Easy Tab & Accordion v2.0.0
+# Easy Tab & Accordion (ETA) v2.0.0
 
 [![release](https://badgen.net/github/release/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/releases/latest)
 [![minified](https://badgen.net/badge/minified/7KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
 [![jsdelivr](https://data.jsdelivr.com/v1/package/gh/viivue/easy-tab-accordion/badge?style=rounded)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
 [![license](https://badgen.net/github/license/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/blob/main/LICENSE)
 
-> Pure Javascript API to create switchable tabs or accordion.
+> Javascript library to create tabs or accordion.
 
 ## Getting started
 
@@ -21,20 +21,24 @@
 👉 CDN Hosted - [jsDelivr](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
 
 ```html
-<!-- JS (12KB) -->
+<!-- JS (10KB) -->
 <script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.0.0/dist/easy-tab-accordion.min.js"></script>
 ```
 
-## Init
+## Initialize
 
-To init via HTML. We need three things to make a tab/accordion works:
+To initialize an ETA script, always remember three things:
 
-1. Wrapper element
-2. Trigger element(s)
-3. Receiver element(s)
+1. Wrapper
+2. Trigger(s)
+3. Receiver(s)
+
+### With HTML
+
+Using these HTML attributes to initialize without JavaScript.
 
 ```html
-
+<!-- No Js init -->
 <div data-eta>
     <!-- section 1 -->
     <div>
@@ -50,81 +54,162 @@ To init via HTML. We need three things to make a tab/accordion works:
 </div>
 ```
 
-Init via JS. You're free to use your own HTML and attributes.
+> ⚠️ Notice that value of `data-eta-trigger` and `data-eta-receiver` must be the same.
 
-```js
-const eta = new EasyTabAccordion({
-    el: document.querySelector('.wrapper'), // DOM element
-    trigger: 'button.trigger', // string selector
-    triggerAttr: 'data-trigger', // attribute name
-    receiver: '.content', // string selector
-    receiverAttr: 'id', // attribute name
-});
-```
+### With JavaScript
 
-## Options and events
-
-```js
-const eta = new EasyTabAccordion({
-    el: document.querySelector('.wrapper'), // DOM element
-    trigger: 'button.trigger', // string selector
-    triggerAttr: 'data-trigger', // attribute name
-    receiver: '.content', // string selector
-    receiverAttr: 'id', // attribute name
-    activeClass: 'active',
-    animation: 'slide', // slide, fade
-    duration: 600, // animation duration
-    hash: false, // update hash on URL, open tab/accordion via hash
-    liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-    activeSection: 0, // will show order of item show, close all if activeSection < 0 or activeSection >= length item
-    allowCollapseAll: false,
-    onBeforeOpen: (data, el) => {
-    },
-    onBeforeClose: (data, el) => {
-    },
-    onAfterOpen: (data, el) => {
-    },
-    onAfterClose: (data, el) => {
-    },
-    onAfterDestroy: (data, el) => {
-    },
-});
-```
-
-Hash and animation could be set via attributes.
+Assume that we have the HTML like below
 
 ```html
-<div data-eta data-eta-hash="true" data-eta-animation="fade">
-    ...
+<!-- Custom HTML -->
+<div class="my-accordion">
+    <!-- section 1 -->
+    <div>
+        <button data-trigger="section-1">Section 1</button>
+        <div class="content" id="section-1">Content</div>
+    </div>
+
+    <!-- section 2 -->
+    <div>
+        <button data-trigger="section-2">Section 2</button>
+        <div class="content" id="section-2">Content</div>
+    </div>
 </div>
 ```
 
+```js
+// Init
+const eta = new EasyTabAccordion({
+    el: document.querySelector('.my-accordion'), // DOM element
+    trigger: '[data-trigger]', // CSS selector
+    triggerAttr: 'data-trigger', // attribute name
+    receiver: '.content', // CSS selector
+    receiverAttr: 'id', // attribute name
+});
+```
+
+## Options
+
+### Attribute options
+
+### Selectors
+
+| Name         | Type        | Default               | Required | Description                                |
+|--------------|-------------|-----------------------|----------|--------------------------------------------|
+| el           | DOM element | `[data-eta]`          | ✅        | Wrapper element                            |
+| trigger      | string      | `[data-eta-trigger]`  | ✅        | CSS selector for trigger elements          |
+| triggerAttr  | string      | `data-eta-trigger`    | ✅        | Attribute name of trigger elements         |
+| receiver     | string      | `[data-eta-receiver]` | ✅        | CSS selector for receiver elements         |
+| receiverAttr | string      | `data-eta-receiver`   | ✅        | Attribute name of receiver elements        |
+| activeClass  | string      | `"active"`            | ❌        | Class name for active trigger and receiver |
+
+> ⚠️ Notice that value of `triggerAttr` and `receiverAttr` must be the same.
+
+### Animation
+
+| Name      | Type   | Default   | Description                                                                                               |
+|-----------|--------|-----------|-----------------------------------------------------------------------------------------------------------|
+| animation | string | `"slide"` | `"slide"` for accordion style (slide up and slide down), `"fade"` for tabbed style (fade in and fade out) |
+| duration  | number | `450`     | Duration of animation in milisecond                                                                       |
+
+### Hash
+
+| Name       | Type    | Default | Description                                         |
+|------------|---------|---------|-----------------------------------------------------|
+| hash       | boolean | `false` | Update hash URL                                     |
+| hashScroll | boolean | `false` | Scroll into view when page loaded with a valid hash |
+
+### Responsive
+
+| Name           | Type  | Default | Description             |
+|----------------|-------|---------|-------------------------|
+| liveBreakpoint | array | `[]`    | An array of two numbers |
+
+`liveBreakpoint` defines a range to enable ETA, when the browser's width is outside this range ETA will be destroyed (
+detecting via window resizing event).
+
+For instance:
+
+- `liveBreakpoint:[99999,768]`: destroy ETA on screen that smaller than 768px
+- `liveBreakpoint:[1024,-1]`: destroy ETA on screen that bigger than 1024px
+
+### Open and close
+
+| Name          | Type         | Default | Description                                                                                  |
+|---------------|--------------|---------|----------------------------------------------------------------------------------------------|
+| activeSection | number/array | `0`     | Index(s) of section to be active on init, array input only available for `animation:"slide"` |
+
+#### For `animation:"slide"` only
+
+| Name             | Type    | Default | Description                                     |
+|------------------|---------|---------|-------------------------------------------------|
+| allowCollapseAll | boolean | `false` | Allow to collapse all sections at the same time |
+| allowExpandAll   | boolean | `false` | Allow to expand all sections at the same time   |
+
+### HTML attributes
+
+Add these attributes on the wrapper element.
+
+| Attribute                   | As for option       | 
+|-----------------------------|---------------------|
+| `data-eta-animation="fade"` | `animation: "fade"` |
+| `data-eta-hash`             | `hash: true`        | 
+| `data-eta-hash-scroll`      | `hashScroll: true`  |
+
+## Events
+
+| Name                             | Description | 
+|----------------------------------|-------------|
+| `onBeforeInit: (data) => {}`     |             |
+| `onAfterInit: (data) => {}`      |             |
+| `onBeforeOpen: (data,el) => {}`  |             |
+| `onBeforeClose: (data,el) => {}` |             |
+| `onAfterOpen: (data,el) => {}`   |             |
+| `onAfterClose: (data,el) => {}`  |             |
+| `onDestroy: (data) => {}`        |             |
+| `onUpdate: (data) => {}`         |             |
+
 ## Methods
 
-```js
-const eta = new EasyTabAccordion({});
+| Name            | Usage                      | Description                 | 
+|-----------------|----------------------------|-----------------------------|
+| `toggle`        | `eta.toggle(id)`           | Toggle a section by ID      |
+| `toggleByIndex` | `eta.toggleByIndex(index)` | Toggle a section by index   |
+| `destroy`       | `eta.destroy()`            | Remove all style and events |
+| `init`          | `eta.init()`               | Could be use after destroy  |
+| `update`        | `eta.update()`             | Update styling              |
 
-eta.activate('section-2');
-eta.activateByIndex(1);
-eta.destroy();
+Get the instance with JS init
+
+```js
+const options = {};
+const eta = new EasyTabAccordion(options);
+
+// use methods
 ```
 
 ## Deployment
 
-Install gulp
+Install node environment
 
 ```shell
 npm install
 ```
 
-And start server
+Start dev server
 
 ```shell
-gulp serve
+npm run dev
 ```
 
-Release new version
+Build
 
 ```shell
-gulp release
+npm run build
 ```
+
+## License
+
+[MIT License](https://github.com/viivue/easy-tab-accordion/blob/main/LICENSE)
+
+Copyright (c) 2022 ViiVue
