@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.0] - 2022-07-03
+
+- Refactor developing environment using webpack with ES6 modules
+- Allow to expand all with `allowExpandAll`
+- Method `init` and `update`
+- Add prettier demos
+
 ### [1.0.1] - 2022-06-23
 
 - Settings via attributes
