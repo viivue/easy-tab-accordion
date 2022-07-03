@@ -1,9 +1,13 @@
 /**
  * Scroll into view
+ * @param context
  * @param target
  * @since 1.0.0
  */
-export function scrollIntoView(target){
+export function scrollIntoView({context, target}){
+    // scroll to wrapper if target is not set
+    if(!target) target = context.wrapper;
+
     target.scrollIntoView({
         behavior: 'smooth'
     });

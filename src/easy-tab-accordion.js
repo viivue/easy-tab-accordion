@@ -1,7 +1,7 @@
 import {slideDown, slideUp, destroySlide} from "./slide";
 import {fadeIn, fadeOut, destroyFade} from "./fade";
 import {scrollIntoView, setCSS} from "./animation";
-import {getHash, updateURL} from "./hash";
+import {getHash, isValidHash, hashScroll, updateURL} from "./hash";
 import {
     validID,
     getToggleState,
@@ -90,13 +90,8 @@ export class EasyTabAccordion{
 
         // toggle via hash
         if(this.enabled){
-            const hashData = getHash();
-            const hash = hashData.hash;
-            const hashID = hashData.id;
-            const isValidHash = this.options.hash && hash.length && this.receiver_ids.filter(i => i.id === hashID).length;
-
-            if(isValidHash){
-                this.toggle(hashID, 'hash');
+            if(isValidHash(this)){
+                this.toggle(getHash().id, 'hash');
             }else{
                 // check valid activeSection (section index)
                 const isValid = this.options.activeSection >= 0 && this.options.activeSection < this.count;
@@ -139,7 +134,7 @@ export class EasyTabAccordion{
                     trigger.addEventListener('click', e => {
                         e.preventDefault();
                         this.toggle(id, 'manual');
-                        scrollIntoView();
+                        scrollIntoView({context: this});
                     });
                 }
             })
@@ -244,7 +239,7 @@ export class EasyTabAccordion{
             this.receiver_ids[getIndexById(this, id)].active = true;
 
             // update URL
-            if(this.options.hash && this.type === 'manual') updateURL(id);
+            updateURL(this, id);
 
             // events
             this.options.onBeforeOpen(this);
@@ -255,10 +250,7 @@ export class EasyTabAccordion{
 
         // event: on After Open
         const afterOpen = (target) => {
-            // hash scroll
-            if(this.type === 'hash' && this.options.hashScroll){
-                window.addEventListener('load', () => setTimeout(() => scrollIntoView(), 100));
-            }
+            hashScroll(this);
 
             this.options.onAfterOpen(this, target);
         }
