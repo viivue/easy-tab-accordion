@@ -35,3 +35,18 @@ export function debounceLeading(func, timeout = 150){
         }, timeout);
     };
 }
+
+
+/**
+ * Get array with unique values
+ * https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+ * @param array
+ * @returns {*}
+ */
+export function arrayUnique(array){
+    function onlyUnique(value, index, self){
+        return self.indexOf(value) === index;
+    }
+
+    return array.filter(onlyUnique);
+}
