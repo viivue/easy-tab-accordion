@@ -54,6 +54,10 @@ export class EasyTabAccordion{
                 allowCollapseAll: false, // for slide animation only
 
                 // events
+                onBeforeInit: (data) => {
+                },
+                onAfterInit: (data) => {
+                },
                 onBeforeOpen: (data, el) => {
                 },
                 onBeforeClose: (data, el) => {
@@ -173,7 +177,8 @@ export class EasyTabAccordion{
     }
 
     init(){
-        this.log(`Before init`, this);
+        // event: onBeforeInit
+        this.options.onBeforeInit(this);
 
         this.hasInitialized = true;
         this.enabled = true;
@@ -209,7 +214,8 @@ export class EasyTabAccordion{
 
         this.assignTriggerElements();
 
-        this.log(`After init`, this);
+        // event: onAfterInit
+        this.options.onAfterInit(this);
     }
 
     destroy(){
