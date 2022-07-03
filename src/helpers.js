@@ -4,7 +4,6 @@ export function isLive(context){
     return isLiveRange && hasLiveBreakpoint(context);
 }
 
-
 export function hasLiveBreakpoint(context){
     return context.options.liveBreakpoint.length === 2;
 }
@@ -53,4 +52,20 @@ export function getElements(context, id){
     const currentTrigger = context.wrapper.querySelectorAll(`[${attr(false)}="${id}"]`);
 
     return {previous, current, previousTrigger, currentTrigger};
+}
+
+export function removeActiveClass(context, id){
+    const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
+
+    // update classes
+    current.forEach(item => item.classList.remove(context._class.active));
+    currentTrigger.forEach(item => item.classList.remove(context._class.active));
+}
+
+export function addActiveClass(context, id){
+    const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
+
+    // update classes
+    if(current) current.forEach(item => item.classList.add(context._class.active));
+    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
 }

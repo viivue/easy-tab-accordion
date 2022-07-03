@@ -1,6 +1,14 @@
-import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView, setCSS} from "./animation";
+import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView, setCSS, destroyFade, destroySlide} from "./animation";
 import {getHash, updateURL} from "./hash";
-import {validID, getToggleState, getIndexById, getElements, hasLiveBreakpoint, isLive} from "./helpers";
+import {
+    validID,
+    getToggleState,
+    getIndexById,
+    getElements,
+    hasLiveBreakpoint,
+    isLive,
+    removeActiveClass, addActiveClass
+} from "./helpers";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -48,7 +56,7 @@ export class EasyTabAccordion{
                 }, onBeforeClose: (data, el) => {
                 }, onAfterOpen: (data, el) => {
                 }, onAfterClose: (data, el) => {
-                }, onAfterDestroy: (data, el) => {
+                }, onDestroy: (data, el) => {
                 },
             }, ...options
         }
@@ -213,29 +221,17 @@ export class EasyTabAccordion{
         this.receiver_ids = [];
 
         // reset CSS for fade animation
-        if(this.options.animation === 'fade'){
-            this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
-                el.style.opacity = '';
-                el.style.visibility = '';
-                el.style.position = '';
-                el.style.inset = '';
-                el.style.transition = '';
-
-                el.parentElement.style.height = '';
-                el.parentElement.style.position = '';
-                el.parentElement.style.transition = '';
-            });
+        switch(this.options.animation){
+            case "slide":
+                destroySlide(this);
+                break;
+            case "fade":
+                destroyFade(this);
+                break;
         }
 
-        // reset CSS for slide animation
-        if(this.options.animation === 'slide'){
-            this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
-                slideDown(el, this.options.duration);
-            });
-        }
-
-        // event: onAfterDestroy
-        this.options.onAfterDestroy(this);
+        // event: onDestroy
+        this.options.onDestroy(this);
     }
 
     openPanel(id = this.current_id){
@@ -265,10 +261,8 @@ export class EasyTabAccordion{
             this.options.onAfterOpen(this, target);
         }
 
-        // get related elements
-        const {current, currentTrigger} = getElements(this, id);
-
         // open
+        const {current} = getElements(this, id);
         switch(this.options.animation){
             case 'slide':
                 current.forEach(el => slideDown(el, this.options.duration, () => afterOpen(el)));
@@ -279,8 +273,7 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        if(current) current.forEach(item => item.classList.add(this._class.active));
-        if(currentTrigger) currentTrigger.forEach(item => item.classList.add(this._class.active));
+        addActiveClass(this, id);
 
         // close all others
         this.receiver_ids.filter(x => x.id !== id).forEach(previous => this.closePanel(previous.id));
@@ -298,10 +291,8 @@ export class EasyTabAccordion{
             this.options.onAfterClose(this, target);
         }
 
-        // get related elements
-        const {current, currentTrigger} = getElements(this, id);
-
-        // close
+        // close animation
+        const {current} = getElements(this, id);
         switch(this.options.animation){
             case 'slide':
                 current.forEach(el => slideUp(el, this.options.duration, () => afterClose(el)));
@@ -312,8 +303,7 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        current.forEach(item => item.classList.remove(this._class.active));
-        currentTrigger.forEach(item => item.classList.remove(this._class.active));
+        removeActiveClass(this, id);
     }
 
 

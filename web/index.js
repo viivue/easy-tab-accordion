@@ -22,6 +22,7 @@ const accordion = new EasyTabAccordion({
     allowCollapseAll: true,
     //hash: true
 });
+
 const tab = new EasyTabAccordion({
     animation: 'fade',
     el: document.querySelector('[data-tabs]'),
@@ -31,4 +32,24 @@ const tab = new EasyTabAccordion({
     receiverAttr: 'data-tabs-receiver',
     allowCollapseAll: true,
     //hash: true
+});
+
+/**
+ * Button click
+ */
+document.querySelectorAll('[data-btn]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        switch(e.target.dataset.btn){
+            case 'destroy-accordion':
+                accordion.destroy();
+                break;
+            case 'init-accordion':
+                break;
+            case 'destroy-tab':
+                tab.destroy();
+                break;
+            case 'init-tab':
+                break;
+        }
+    })
 });

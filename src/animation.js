@@ -1,3 +1,5 @@
+import {removeActiveClass} from "./helpers";
+
 /**
  * Scroll into view
  * @param target
@@ -73,10 +75,40 @@ export function slideDown(target, duration = 500, fn){
     }, duration);
 }
 
+export function destroySlide(context){
+    context.wrapper.querySelectorAll(context.options.receiver).forEach(target => {
+        setCSS(target, {
+            display: '',
+            height: ''
+        });
+
+        removeTransition(target);
+    });
+}
 
 /**
  * Fade
  */
+
+export function destroyFade(context){
+    context.wrapper.querySelectorAll(context.options.receiver).forEach(target => {
+        setCSS(target, {
+            opacity: '',
+            visibility: '',
+            position: '',
+            inset: ''
+        });
+        setCSS(target.parentElement, {
+            height: '',
+            position: ''
+        });
+
+        removeTransition(target);
+        removeTransition(target.parentElement);
+    });
+
+    removeActiveClass(context);
+}
 
 export function fadeOut(target, duration = 500, fn){
     // before
