@@ -63,10 +63,13 @@ hr {
   }
 }
 
-[data-accordion-receiver], [data-tabs-receiver] {
+[data-accordion-receiver], .tabs-content {
   background-color: #f3f3f3;
   border-radius: 5px;
   padding: 20px;
-  margin-bottom: 20px;
   border: 1px solid $color-primary;
+}
+
+[data-accordion-receiver] {
+  margin-bottom: 20px;
 }
