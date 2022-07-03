@@ -1,4 +1,4 @@
-import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView} from "./animation";
+import {slideDown, slideUp, fadeIn, fadeOut, scrollIntoView, setCSS} from "./animation";
 import {getHash, updateURL} from "./hash";
 import {validID, getToggleState, getIndexById, getElements, hasLiveBreakpoint, isLive} from "./helpers";
 
@@ -181,13 +181,17 @@ export class EasyTabAccordion{
 
             // setup CSS for fade animation
             if(this.options.animation === 'fade'){
-                el.style.position = getComputedStyle(el).position !== 'absolute' ? 'absolute' : '';
-                el.style.inset = '0';
-                el.style.transition = `opacity ${this.options.duration}ms ease`;
-                el.style.overflow = 'hidden';
+                // tab parent
+                setCSS(el.parentElement, {
+                    overflow: 'hidden',
+                    position: getComputedStyle(el).position !== 'relative' ? 'relative' : '',
+                });
 
-                el.parentElement.style.position = getComputedStyle(el).position !== 'relative' ? 'relative' : '';
-                el.parentElement.style.transition = `height ${this.options.duration}ms ease`;
+                // tab children
+                setCSS(el, {
+                    position: getComputedStyle(el).position !== 'absolute' ? 'absolute' : '',
+                    inset: '0 0 auto'
+                });
             }
         });
 

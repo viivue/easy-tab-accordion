@@ -1,3 +1,7 @@
+/**
+ * Scroll into view
+ * @param target
+ */
 export function scrollIntoView(target){
     target.scrollIntoView({
         behavior: 'smooth'
@@ -53,7 +57,7 @@ export function slideDown(target, duration = 500, fn){
 
     // animate
     setCSS(target, {
-        height: target.scrollHeight + 'px',
+        height: `${target.scrollHeight + getElementMarginHeight(target)}px`,
         marginTop: '',
         marginBottom: '',
         paddingTop: '',
@@ -69,9 +73,70 @@ export function slideDown(target, duration = 500, fn){
     }, duration);
 }
 
+
+/**
+ * Fade
+ */
+
+export function fadeOut(target, duration = 500, fn){
+    // before
+    setTransition(target, duration);
+
+    // animate
+    setCSS(target, {
+        opacity: '0',
+        visibility: 'hidden'
+    });
+
+    // end
+    setTimeout(() => {
+        removeTransition(target);
+
+        // callback
+        if(typeof fn === 'function') fn();
+    }, duration);
+}
+
+export function fadeIn(target, duration = 500, fn){
+    // before
+    setTransition(target, duration);
+    setTransition(target.parentElement, duration);
+
+    // animate
+    setCSS(target, {
+        opacity: '1',
+        visibility: 'visible'
+    });
+
+    // update parent height
+    setCSS(target.parentElement, {height: `${target.scrollHeight + getElementMarginHeight(target)}px`});
+
+    // end
+    setTimeout(() => {
+        removeTransition(target);
+        removeTransition(target.parentElement);
+
+        // callback
+        if(typeof fn === 'function') fn();
+    }, duration);
+}
+
+/**
+ * Helpers
+ */
+
+function getElementMarginHeight(el){
+    const computedStyle = getComputedStyle(el);
+    return parseInt(computedStyle.getPropertyValue('margin-top') + computedStyle.getPropertyValue('margin-bottom'), 10);
+}
+
+export function setCSS(target, props){
+    Object.assign(target.style, props);
+}
+
 function setTransition(target, duration){
     setCSS(target, {
-        transitionProperty: "height, margin, padding",
+        transitionProperty: "height, margin, padding, opacity",
         transitionDuration: duration + 'ms',
         overflow: 'hidden'
     });
@@ -86,41 +151,6 @@ function removeTransition(target){
         paddingTop: '',
         paddingBottom: '',
         marginTop: '',
-        marginBottom: '',
+        marginBottom: ''
     });
-}
-
-function setCSS(target, props){
-    Object.assign(target.style, props);
-}
-
-/**
- * Fade
- */
-
-export function fadeOut(target, duration = 500, fn){
-    target.style.opacity = '0';
-    target.style.visibility = 'hidden';
-
-    // end
-    setTimeout(() => {
-        // callback
-        if(typeof fn === 'function') fn();
-    }, duration);
-}
-
-export function fadeIn(target, duration = 500, fn){
-    target.style.bottom = '';
-    target.style.opacity = '1';
-    target.style.visibility = 'visible';
-
-    // update parent height
-    target.parentElement.style.height = `${target.offsetHeight}px`;
-    target.style.bottom = '0';
-
-    // end
-    setTimeout(() => {
-        // callback
-        if(typeof fn === 'function') fn();
-    }, duration);
 }
