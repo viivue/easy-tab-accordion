@@ -110,7 +110,7 @@ export function destroySlide(context){
 export function updateSlide(context){
     // slide animation can update size using default behavior of CSS height:auto
 
-    // context.receiver_ids.forEach(item => {
+    // context.dataset.forEach(item => {
     //     const target = item.el;
     //     const duration = context.options.duration;
     //

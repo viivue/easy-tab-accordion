@@ -46,7 +46,7 @@ export function isValidHash(context){
     const hashData = getHash();
     const hash = hashData.hash;
     const hashID = hashData.id;
-    return context.options.hash && hash.length && context.receiver_ids.filter(i => i.id === hashID).length;
+    return context.options.hash && hash.length && context.dataset.filter(i => i.id === hashID).length;
 }
 
 

@@ -145,7 +145,7 @@ export class EasyTabAccordion{
 
             if(!id) return;
 
-            this.receiver_ids.forEach(item => {
+            this.dataset.forEach(item => {
                 if(item.id === id){
                     // valid trigger
                     trigger.addEventListener('click', e => {
@@ -180,10 +180,10 @@ export class EasyTabAccordion{
         });
 
         // loop through receivers
-        this.receiver_ids = [];
+        this.dataset = [];
         this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
             const id = el.getAttribute(this.options.receiverAttr);
-            this.receiver_ids.push({id, el, active: false});
+            this.dataset.push({id, el, active: false});
 
             // setup CSS for fade animation
             if(this.options.animation === 'fade'){
@@ -217,7 +217,7 @@ export class EasyTabAccordion{
         });
 
         // loop through receivers
-        this.receiver_ids = [];
+        this.dataset = [];
 
         // reset CSS for fade animation
         switch(this.options.animation){
@@ -252,7 +252,7 @@ export class EasyTabAccordion{
 
         const beforeOpen = () => {
             // update section status
-            this.receiver_ids[getIndexById(this, id)].active = true;
+            this.dataset[getIndexById(this, id)].active = true;
 
             // update URL
             updateURL(this, id);
@@ -287,7 +287,7 @@ export class EasyTabAccordion{
 
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
-        if(closeAllOthers) this.receiver_ids.filter(x => x.id !== id).forEach(item => this.closePanel(item.id));
+        if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => this.closePanel(item.id));
     }
 
     closePanel(id = this.current_id){
@@ -297,7 +297,7 @@ export class EasyTabAccordion{
         this.options.onBeforeClose(this);
 
         // event: on After Close
-        this.receiver_ids[getIndexById(this, id)].active = false;
+        this.dataset[getIndexById(this, id)].active = false;
         const afterClose = (target) => {
             this.options.onAfterClose(this, target);
         }

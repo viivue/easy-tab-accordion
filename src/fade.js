@@ -90,7 +90,7 @@ export function destroyFade(context){
  * @param context
  */
 export function updateFade(context){
-    context.receiver_ids.forEach(item => {
+    context.dataset.forEach(item => {
         const target = item.el;
         const duration = context.options.duration;
 

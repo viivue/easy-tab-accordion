@@ -9,7 +9,7 @@ import {arrayUnique} from "./utils";
  * @since 2.0.0
  */
 export function validID(context, id){
-    return !!context.receiver_ids.filter(i => i.id === id).length;
+    return !!context.dataset.filter(i => i.id === id).length;
 }
 
 
@@ -26,7 +26,7 @@ export function getToggleState(context, id){
     // open: 1
     // exit: 0
 
-    const open = context.receiver_ids[getIndexById(context, id)].active;
+    const open = context.dataset[getIndexById(context, id)].active;
     const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
     // is open and allow collapse all => close
@@ -71,7 +71,7 @@ export function defaultActiveSections(context){
     });
 
     // close not active sections
-    context.receiver_ids.filter(item => !item.active).forEach(item => context.closePanel(item.id));
+    context.dataset.filter(item => !item.active).forEach(item => context.closePanel(item.id));
 }
 
 
@@ -111,7 +111,7 @@ export function getElements(context, id){
  * @since 2.0.0
  */
 export function getIndexById(context, id){
-    return context.receiver_ids.findIndex(x => x.id === id);
+    return context.dataset.findIndex(x => x.id === id);
 }
 
 
@@ -123,7 +123,7 @@ export function getIndexById(context, id){
  * @since 2.0.0
  */
 export function getIdByIndex(context, index){
-    return context.receiver_ids[index].id;
+    return context.dataset[index].id;
 }
 
 
