@@ -169,7 +169,6 @@ export class EasyTabAccordion{
         e.stopPropagation();
 
         const id = e.target.getAttribute(this.options.triggerAttr) || e.target.closest(this.options.trigger).getAttribute(this.options.triggerAttr);
-        this.log('manualTriggerFunction', id);
         this.toggle(id, 'manual');
     }
 
@@ -178,13 +177,12 @@ export class EasyTabAccordion{
         this.options.onBeforeInit(this);
 
         this.hasInitialized = true;
-        this.enabled = true;
         this.wrapper.classList.add(this._class.enabled);
 
         // loop through triggers
         this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
             // assign click event
-            trigger.addEventListener('click', e => this.manualTriggerFunction(e), true);
+            trigger.addEventListener('click', this.manualTriggerFunction.bind(this));
         });
 
         // loop through receivers
@@ -216,12 +214,12 @@ export class EasyTabAccordion{
     }
 
     destroy(){
-        this.enabled = false;
+        this.hasInitialized = false;
         this.wrapper.classList.remove(this._class.enabled);
 
         // loop through triggers
         this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
-            trigger.removeEventListener('click', e => this.manualTriggerFunction(e), true);
+            trigger.outerHTML = `${trigger.outerHTML}`; // a trick to remove all events by cloning itself
         });
 
         // loop through receivers
