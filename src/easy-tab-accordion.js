@@ -10,7 +10,7 @@ import {
     removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections
 } from "./helpers";
 import {debounce} from "./utils";
-import {hasLiveBreakpoint, isLive, responsive} from "./responsive";
+import {validBreakpoints, isLive, responsive} from "./responsive";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -84,7 +84,7 @@ export class EasyTabAccordion{
         this.previous_id = '';
         this.type = '';
         this.hasInitialized = false;
-        this.enabled = hasLiveBreakpoint(this) ? isLive(this) : true;
+        this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
         // update hash from attribute
