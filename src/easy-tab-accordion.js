@@ -26,7 +26,7 @@ export class EasyTabAccordion{
             animation: 'data-eta-animation'
         };
 
-        // handle options
+        // save options
         this.originalOptions = options;
 
         // init
@@ -37,11 +37,34 @@ export class EasyTabAccordion{
             toggle: id => this.toggle(id),
             toggleByIndex: index => this.toggle(getIdByIndex(this, index)),
             destroy: () => this.destroy(),
+            init: () => this.initialize(),
             update: () => this.update()
         }
     }
 
     initialize(){
+        // setup
+        this.setupData();
+
+        // init
+        if(this.enabled && !this.hasInitialized) this.init();
+        if(!this.enabled && this.hasInitialized) this.destroy();
+
+        // toggle via hash
+        if(this.enabled){
+            if(isValidHash(this)){
+                this.toggle(getHash().id, 'hash');
+            }else{
+                defaultActiveSections(this);
+            }
+        }
+
+        // watch for resize/load events
+        window.addEventListener('resize', debounce(e => this.onResize(e), 300));
+        window.addEventListener('load', e => this.onLoad(e));
+    }
+
+    setupData(){
         this.options = {
             ...{
                 // selectors
@@ -108,62 +131,6 @@ export class EasyTabAccordion{
         // update animation from attribute
         const animationValue = this.wrapper.getAttribute(this._attr.animation);
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
-
-        // init
-        if(this.enabled && !this.hasInitialized) this.init();
-        if(!this.enabled && this.hasInitialized) this.destroy();
-
-        // toggle via hash
-        if(this.enabled){
-            if(isValidHash(this)){
-                this.toggle(getHash().id, 'hash');
-            }else{
-                defaultActiveSections(this);
-            }
-        }
-
-        // watch for resize/load events
-        window.addEventListener('resize', debounce(e => this.onResize(e), 300));
-        window.addEventListener('load', e => this.onLoad(e));
-    }
-
-    onResize(event){
-        this.update();
-        responsive(this, event);
-    }
-
-    onLoad(event){
-        this.update();
-        responsive(this, event);
-    }
-
-    // find possible trigger and assign click event
-    assignTriggerElements(){
-        document.querySelectorAll(`a[href^="#"]`).forEach(trigger => {
-            const href = trigger.getAttribute('href');
-            const id = href[0] === '#' ? href.slice(1) : getHash(href).id;
-
-            if(!id) return;
-
-            this.dataset.forEach(item => {
-                if(item.id === id){
-                    // valid trigger
-                    trigger.addEventListener('click', e => {
-                        e.preventDefault();
-                        this.toggle(id, 'manual');
-                        scrollIntoView({context: this});
-                    });
-                }
-            })
-        });
-    }
-
-    manualTriggerFunction(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        const id = e.target.getAttribute(this.options.triggerAttr) || e.target.closest(this.options.trigger).getAttribute(this.options.triggerAttr);
-        this.toggle(id, 'manual');
     }
 
     init(){
@@ -336,8 +303,48 @@ export class EasyTabAccordion{
             // close
             this.closePanel(id);
         }
-    };
+    }
 
+
+    onResize(event){
+        this.update();
+        responsive(this, event);
+    }
+
+    onLoad(event){
+        this.update();
+        responsive(this, event);
+    }
+
+
+    assignTriggerElements(){
+        // find possible trigger and assign click event
+        document.querySelectorAll(`a[href^="#"]`).forEach(trigger => {
+            const href = trigger.getAttribute('href');
+            const id = href[0] === '#' ? href.slice(1) : getHash(href).id;
+
+            if(!id) return;
+
+            this.dataset.forEach(item => {
+                if(item.id === id){
+                    // valid trigger
+                    trigger.addEventListener('click', e => {
+                        e.preventDefault();
+                        this.toggle(id, 'manual');
+                        scrollIntoView({context: this});
+                    });
+                }
+            })
+        });
+    }
+
+    manualTriggerFunction(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = e.target.getAttribute(this.options.triggerAttr) || e.target.closest(this.options.trigger).getAttribute(this.options.triggerAttr);
+        this.toggle(id, 'manual');
+    }
 
 }
 
