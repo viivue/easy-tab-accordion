@@ -42,12 +42,15 @@ export function getIndexById(context, id){
 }
 
 // get elements (receiver/trigger) by ID
-export function getElements(context, id, isReceiver = true){
-    const selector = isReceiver ? context.options.receiver : context.options.trigger;
-    const attr = isReceiver ? context.options.receiverAttr : context.options.triggerAttr;
+export function getElements(context, id){
+    const selector = isReceiver => isReceiver ? context.options.receiver : context.options.trigger;
+    const attr = isReceiver => isReceiver ? context.options.receiverAttr : context.options.triggerAttr;
 
-    const previous = context.wrapper.querySelectorAll(`${selector}:not([${attr}="${id}"])`);
-    const current = context.wrapper.querySelectorAll(`[${attr}="${id}"]`);
+    const previous = context.wrapper.querySelectorAll(`${selector(true)}:not([${attr(true)}="${id}"])`);
+    const current = context.wrapper.querySelectorAll(`[${attr(true)}="${id}"]`);
 
-    return {previous, current};
+    const previousTrigger = context.wrapper.querySelectorAll(`${selector(false)}:not([${attr(false)}="${id}"])`);
+    const currentTrigger = context.wrapper.querySelectorAll(`[${attr(false)}="${id}"]`);
+
+    return {previous, current, previousTrigger, currentTrigger};
 }
