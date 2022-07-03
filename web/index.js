@@ -20,7 +20,7 @@ const accordion = new EasyTabAccordion({
     receiver: '[data-accordion-receiver]',
     receiverAttr: 'data-accordion-receiver',
     allowCollapseAll: true,
-    allowExpandAll: true,
+    //allowExpandAll: true,
     liveBreakpoint: [1920, 1024]
     //hash: true
 });

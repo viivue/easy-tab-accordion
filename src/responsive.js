@@ -10,10 +10,7 @@ export function responsive(context, event){
         context.enabled = isLive(context);
 
         if(context.enabled){
-            context.init();
-
-            // toggle the current one or the first one
-            context.toggle(context.current_id || context.receiver_ids[0].id, 'auto', true);
+            context.initialize();
         }else{
             context.destroy();
         }

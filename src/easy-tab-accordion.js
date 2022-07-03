@@ -28,6 +28,21 @@ export class EasyTabAccordion{
         };
 
         // handle options
+        this.originalOptions = options;
+
+        // init
+        this.initialize();
+
+        // public methods
+        return {
+            toggle: id => this.toggle(id),
+            toggleByIndex: index => this.toggle(getIdByIndex(this, index)),
+            destroy: () => this.destroy(),
+            update: () => this.update()
+        }
+    }
+
+    initialize(){
         this.options = {
             ...{
                 // selectors
@@ -71,7 +86,7 @@ export class EasyTabAccordion{
                 },
                 onUpdate: (data) => {
                 },
-            }, ...options
+            }, ...this.originalOptions
         }
 
         if(!this.options.el){
@@ -111,14 +126,6 @@ export class EasyTabAccordion{
         // watch for resize/load events
         window.addEventListener('resize', debounce(e => this.onResize(e), 300));
         window.addEventListener('load', e => this.onLoad(e));
-
-        // public methods
-        return {
-            toggle: id => this.toggle(id),
-            toggleByIndex: index => this.toggle(getIdByIndex(this, index)),
-            destroy: () => this.destroy(),
-            update: () => this.update()
-        }
     }
 
     onResize(event){
@@ -214,7 +221,7 @@ export class EasyTabAccordion{
 
         // loop through triggers
         this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
-            trigger.removeEventListener('click', this.manualTriggerFunction, true);
+            trigger.removeEventListener('click', e => this.manualTriggerFunction(e), true);
         });
 
         // loop through receivers
