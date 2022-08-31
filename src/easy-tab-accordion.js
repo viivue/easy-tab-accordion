@@ -95,7 +95,7 @@ export class EasyTabAccordion{
                 avoidDoubleClick: true,
 
                 // dev mode => enable console.log
-                dev: false,
+                dev: true,
 
                 // open/close
                 activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
@@ -123,7 +123,7 @@ export class EasyTabAccordion{
         }
 
         if(!this.options.el){
-            log(this,'ETA Error, target not found!', 'warn');
+            log(this,'warn', 'ETA Error, target not found!');
             return;
         }
 
@@ -249,7 +249,7 @@ export class EasyTabAccordion{
             this.options.onAfterOpen(this, target);
 
             // log
-            log(this, `after open ${id}`);
+            log(this, 'log',  'after open', id);
 
             // toggle animating status
             if (this.options.avoidDoubleClick) {
@@ -288,7 +288,7 @@ export class EasyTabAccordion{
             this.options.onAfterClose(this, target);
 
             // log
-            log(this, `after close ${id}`);
+            log(this, 'log', 'after close', id);
 
             // toggle animating status
             if (this.options.avoidDoubleClick) {
@@ -315,7 +315,7 @@ export class EasyTabAccordion{
     toggle(id, type = 'undefined', force = false){
         // exit if id is not found
         if(!validID(this, id)) {
-            log(this, 'invalid id', 'warn');
+            log(this, 'warn', 'invalid id');
         }
 
         const toggleState = getToggleState(this, id);

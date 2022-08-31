@@ -29,11 +29,11 @@ export function getToggleState(context, id){
     // check if option is avoid double click
     if (context.options.avoidDoubleClick) {
         if (context.isAnimating) {
-            log(context,`block ${id}`, 'warn');
+            log(context, 'warn', 'block', id);
             return 0;
         }
         // set enable status
-        context.isAnimating = true
+        context.isAnimating = true;
     }
 
     const open = context.dataset[getIndexById(context, id)].active;
@@ -185,8 +185,8 @@ export function addActiveClass(context, id){
     if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
 }
 
-export function log(context, message, status = 'log') {
+export function log(context, status, ...message) {
     if (context.options.dev) {
-        console?.[status](message);
+        console?.[status](...message);
     }
 }
