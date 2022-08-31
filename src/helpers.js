@@ -26,6 +26,16 @@ export function getToggleState(context, id){
     // open: 1
     // exit: 0
 
+    // check if option is avoid double click
+    if (context.options.avoidDoubleClick) {
+        if (context.isAnimating) {
+            log(context,`block ${id}`, 'warn');
+            return 0;
+        }
+        // set enable status
+        context.isAnimating = true
+    }
+
     const open = context.dataset[getIndexById(context, id)].active;
     const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
@@ -173,4 +183,10 @@ export function addActiveClass(context, id){
     // update classes
     if(current) current.forEach(item => item.classList.add(context._class.active));
     if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
+}
+
+export function log(context, message, status = 'log') {
+    if (context.options.dev) {
+        console?.[status](message);
+    }
 }

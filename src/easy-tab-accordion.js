@@ -7,7 +7,7 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections
+    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log
 } from "./helpers";
 import {debounce} from "./utils";
 import {validBreakpoints, isLive, responsive} from "./responsive";
@@ -31,6 +31,11 @@ export class EasyTabAccordion{
 
         // init
         this.initialize();
+
+        // avoid double click
+        if (this.options.avoidDoubleClick) {
+            this.isAnimating = true;
+        }
 
         // public methods
         return {
@@ -86,6 +91,12 @@ export class EasyTabAccordion{
                 // responsive
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
 
+                // avoid double click
+                avoidDoubleClick: true,
+
+                // dev mode => enable console.log
+                dev: false,
+
                 // open/close
                 activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
                 allowCollapseAll: false, // for slide animation only
@@ -112,7 +123,7 @@ export class EasyTabAccordion{
         }
 
         if(!this.options.el){
-            console.warn('ETA Error, target not found!');
+            log(this,'ETA Error, target not found!', 'warn');
             return;
         }
 
@@ -236,6 +247,14 @@ export class EasyTabAccordion{
             hashScroll(this);
 
             this.options.onAfterOpen(this, target);
+
+            // log
+            log(this, `after open ${id}`);
+
+            // toggle animating status
+            if (this.options.avoidDoubleClick) {
+                this.isAnimating = false;
+            }
         }
 
         // open
@@ -267,6 +286,14 @@ export class EasyTabAccordion{
         this.dataset[getIndexById(this, id)].active = false;
         const afterClose = (target) => {
             this.options.onAfterClose(this, target);
+
+            // log
+            log(this, `after close ${id}`);
+
+            // toggle animating status
+            if (this.options.avoidDoubleClick) {
+                this.isAnimating = false;
+            }
         }
 
         // close animation
@@ -287,7 +314,9 @@ export class EasyTabAccordion{
 
     toggle(id, type = 'undefined', force = false){
         // exit if id is not found
-        if(!validID(this, id)) return;
+        if(!validID(this, id)) {
+            log(this, 'invalid id', 'warn');
+        }
 
         const toggleState = getToggleState(this, id);
         if(toggleState === 0) return;
