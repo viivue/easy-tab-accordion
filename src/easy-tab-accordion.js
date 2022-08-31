@@ -95,7 +95,7 @@ export class EasyTabAccordion{
                 avoidDoubleClick: true,
 
                 // dev mode => enable console.log
-                dev: true,
+                dev: false,
 
                 // open/close
                 activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
