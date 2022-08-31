@@ -33,7 +33,7 @@ export class EasyTabAccordion{
         this.initialize();
 
         // avoid double click
-        if (this.options.avoidDoubleClick) {
+        if(this.options.avoidDoubleClick){
             this.isAnimating = true;
         }
 
@@ -44,7 +44,7 @@ export class EasyTabAccordion{
             destroy: () => this.destroy(),
             init: () => this.initialize(),
             update: () => this.update()
-        }
+        };
     }
 
     initialize(){
@@ -120,10 +120,10 @@ export class EasyTabAccordion{
                 onUpdate: (data) => {
                 },
             }, ...this.originalOptions
-        }
+        };
 
         if(!this.options.el){
-            log(this,'warn', 'ETA Error, target not found!');
+            log(this, 'warn', 'ETA Error, target not found!');
             return;
         }
 
@@ -237,7 +237,7 @@ export class EasyTabAccordion{
 
             // events
             this.options.onBeforeOpen(this);
-        }
+        };
 
         // event: on Before Open
         beforeOpen();
@@ -249,13 +249,13 @@ export class EasyTabAccordion{
             this.options.onAfterOpen(this, target);
 
             // log
-            log(this, 'log',  'after open', id);
+            log(this, 'log', 'after open', id);
 
             // toggle animating status
-            if (this.options.avoidDoubleClick) {
+            if(this.options.avoidDoubleClick){
                 this.isAnimating = false;
             }
-        }
+        };
 
         // open
         const {current} = getElements(this, id);
@@ -274,8 +274,8 @@ export class EasyTabAccordion{
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
         if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => {
-            if (item.active) {
-                 this.closePanel(item.id)
+            if(item.active){
+                this.closePanel(item.id);
             }
         });
     }
@@ -295,10 +295,10 @@ export class EasyTabAccordion{
             log(this, 'log', 'after close', id);
 
             // toggle animating status
-            if (this.options.avoidDoubleClick) {
+            if(this.options.avoidDoubleClick){
                 this.isAnimating = false;
             }
-        }
+        };
 
         // close animation
         const {current} = getElements(this, id);
@@ -318,8 +318,9 @@ export class EasyTabAccordion{
 
     toggle(id, type = 'undefined', force = false){
         // exit if id is not found
-        if(!validID(this, id)) {
+        if(!validID(this, id)){
             log(this, 'warn', 'invalid id');
+            return;
         }
 
         const toggleState = getToggleState(this, id);
@@ -367,7 +368,7 @@ export class EasyTabAccordion{
                         scrollIntoView({context: this});
                     });
                 }
-            })
+            });
         });
     }
 
