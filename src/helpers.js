@@ -26,18 +26,20 @@ export function getToggleState(context, id){
     // open: 1
     // exit: 0
 
+    const open = context.dataset[getIndexById(context, id)].active;
+    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
+
     // check if option is avoid double click
-    if (context.options.avoidDoubleClick) {
-        if (context.isAnimating) {
+    if(context.options.avoidDoubleClick){
+        if(context.isAnimating){
             log(context, 'warn', 'block', id);
             return 0;
         }
-        // set enable status
-        context.isAnimating = true;
+        // set animating status on accordion, not tab
+        if(allowCollapseAll){
+            context.isAnimating = true;
+        }
     }
-
-    const open = context.dataset[getIndexById(context, id)].active;
-    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
     // is open and allow collapse all => close
     if(open && allowCollapseAll) return -1;
@@ -185,8 +187,8 @@ export function addActiveClass(context, id){
     if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
 }
 
-export function log(context, status, ...message) {
-    if (context.options.dev) {
+export function log(context, status, ...message){
+    if(context.options.dev){
         console?.[status](...message);
     }
 }
