@@ -273,7 +273,11 @@ export class EasyTabAccordion{
 
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
-        if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => this.closePanel(item.id));
+        if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => {
+            if (item.active) {
+                 this.closePanel(item.id)
+            }
+        });
     }
 
     closePanel(id = this.current_id){
