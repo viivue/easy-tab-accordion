@@ -26,9 +26,6 @@ export function getToggleState(context, id){
     // open: 1
     // exit: 0
 
-    const open = context.dataset[getIndexById(context, id)].active;
-    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
-
     // check if option is avoid double click
     if(context.options.avoidDoubleClick){
         if(context.isAnimating){
@@ -36,10 +33,13 @@ export function getToggleState(context, id){
             return 0;
         }
         // set animating status on accordion, not tab
-        if(allowCollapseAll){
+        if(context.options.animation === 'slide'){
             context.isAnimating = true;
         }
     }
+
+    const open = context.dataset[getIndexById(context, id)].active;
+    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
     // is open and allow collapse all => close
     if(open && allowCollapseAll) return -1;
