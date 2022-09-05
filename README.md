@@ -1,4 +1,4 @@
-# Easy Tab & Accordion (ETA) v2.0.0
+# Easy Tab & Accordion (ETA) v2.0.1
 
 [![release](https://badgen.net/github/release/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/releases/latest)
 [![minified](https://badgen.net/badge/minified/10KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
@@ -23,7 +23,7 @@
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.0.0/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.0.1/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
