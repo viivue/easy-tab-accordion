@@ -26,6 +26,18 @@ export function getToggleState(context, id){
     // open: 1
     // exit: 0
 
+    // check if option is avoid double click
+    if(context.options.avoidDoubleClick){
+        if(context.isAnimating){
+            log(context, 'warn', 'block', id);
+            return 0;
+        }
+        // set animating status on accordion, not tab
+        if(context.options.animation === 'slide'){
+            context.isAnimating = true;
+        }
+    }
+
     const open = context.dataset[getIndexById(context, id)].active;
     const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
@@ -173,4 +185,10 @@ export function addActiveClass(context, id){
     // update classes
     if(current) current.forEach(item => item.classList.add(context._class.active));
     if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
+}
+
+export function log(context, status, ...message){
+    if(context.options.dev){
+        console?.[status](...message);
+    }
 }
