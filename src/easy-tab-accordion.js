@@ -7,7 +7,7 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections
+    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log
 } from "./helpers";
 import {debounce} from "./utils";
 import {validBreakpoints, isLive, responsive} from "./responsive";
@@ -32,6 +32,11 @@ export class EasyTabAccordion{
         // init
         this.initialize();
 
+        // avoid double click
+        if(this.options.avoidDoubleClick){
+            this.isAnimating = true;
+        }
+
         // public methods
         return {
             toggle: id => this.toggle(id),
@@ -39,7 +44,7 @@ export class EasyTabAccordion{
             destroy: () => this.destroy(),
             init: () => this.initialize(),
             update: () => this.update()
-        }
+        };
     }
 
     initialize(){
@@ -86,6 +91,12 @@ export class EasyTabAccordion{
                 // responsive
                 liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
 
+                // avoid double click
+                avoidDoubleClick: true,
+
+                // dev mode => enable console.log
+                dev: false,
+
                 // open/close
                 activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
                 allowCollapseAll: false, // for slide animation only
@@ -109,10 +120,10 @@ export class EasyTabAccordion{
                 onUpdate: (data) => {
                 },
             }, ...this.originalOptions
-        }
+        };
 
         if(!this.options.el){
-            console.warn('ETA Error, target not found!');
+            log(this, 'warn', 'ETA Error, target not found!');
             return;
         }
 
@@ -226,7 +237,7 @@ export class EasyTabAccordion{
 
             // events
             this.options.onBeforeOpen(this);
-        }
+        };
 
         // event: on Before Open
         beforeOpen();
@@ -236,7 +247,15 @@ export class EasyTabAccordion{
             hashScroll(this);
 
             this.options.onAfterOpen(this, target);
-        }
+
+            // log
+            log(this, 'log', 'after open', id);
+
+            // toggle animating status
+            if(this.options.avoidDoubleClick){
+                this.isAnimating = false;
+            }
+        };
 
         // open
         const {current} = getElements(this, id);
@@ -254,7 +273,11 @@ export class EasyTabAccordion{
 
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
-        if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => this.closePanel(item.id));
+        if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => {
+            if(item.active){
+                this.closePanel(item.id);
+            }
+        });
     }
 
     closePanel(id = this.current_id){
@@ -267,7 +290,15 @@ export class EasyTabAccordion{
         this.dataset[getIndexById(this, id)].active = false;
         const afterClose = (target) => {
             this.options.onAfterClose(this, target);
-        }
+
+            // log
+            log(this, 'log', 'after close', id);
+
+            // toggle animating status
+            if(this.options.avoidDoubleClick){
+                this.isAnimating = false;
+            }
+        };
 
         // close animation
         const {current} = getElements(this, id);
@@ -287,7 +318,10 @@ export class EasyTabAccordion{
 
     toggle(id, type = 'undefined', force = false){
         // exit if id is not found
-        if(!validID(this, id)) return;
+        if(!validID(this, id)){
+            log(this, 'warn', 'invalid id');
+            return;
+        }
 
         const toggleState = getToggleState(this, id);
         if(toggleState === 0) return;
@@ -334,7 +368,7 @@ export class EasyTabAccordion{
                         scrollIntoView({context: this});
                     });
                 }
-            })
+            });
         });
     }
 
