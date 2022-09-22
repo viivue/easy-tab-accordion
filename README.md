@@ -1,4 +1,4 @@
-# Easy Tab & Accordion (ETA) v2.0.1
+# Easy Tab & Accordion (ETA) v2.0.2
 
 [![release](https://badgen.net/github/release/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/releases/latest)
 [![minified](https://badgen.net/badge/minified/10KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
@@ -23,7 +23,7 @@
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.0.1/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.0.2/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
@@ -203,13 +203,13 @@ Start dev server
 npm run dev
 ```
 
-Distribute production files
+Distribute production files (set new version in `package.json` first)
 
 ```shell
 npm run prod
 ```
 
-Build demo site
+Build demo site (for Netlify only)
 
 ```shell
 npm run build
