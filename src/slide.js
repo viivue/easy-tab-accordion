@@ -54,13 +54,16 @@ export function slideUp(target, duration = 500, fn){
  * @since 1.0.0
  */
 export function slideDown(target, duration = 500, fn){
-    // before
-    setCSS(target, {
-        boxSizing: 'border-box',
-        height: '0px',
-        display: 'block'
-    });
-    setTransition(target, duration);
+    // not reset if is already open
+    if(parseInt(getElementHeight(target)) === 0){
+        // before
+        setCSS(target, {
+            boxSizing: 'border-box',
+            height: '0px',
+            display: 'block'
+        });
+        setTransition(target, duration);
+    }
 
     // animate (set 10ms delay for CSS transition take effect)
     setTimeout(() => {
