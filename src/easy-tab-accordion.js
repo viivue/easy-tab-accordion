@@ -279,7 +279,9 @@ export class EasyTabAccordion{
                 this.closePanel(item.id);
             }
         });
-        this.isFirst = false;
+        if(this.isFirst){
+            this.isFirst = false;
+        }
     }
 
     closePanel(id = this.current_id){
