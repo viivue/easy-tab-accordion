@@ -55,7 +55,8 @@ export function slideUp(target, duration = 500, fn){
  */
 export function slideDown(target, duration = 500, fn){
     // not reset if is already open
-    if(parseInt(getElementHeight(target)) === 0){
+    // check display:none because sometimes the browser has a wrong calculation of target's height when it is visible!
+    if(parseInt(getElementHeight(target)) === 0 || target.style.display.trim() === 'none'){
         // before
         setCSS(target, {
             boxSizing: 'border-box',
