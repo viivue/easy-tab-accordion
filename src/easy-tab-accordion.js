@@ -134,6 +134,7 @@ export class EasyTabAccordion{
         this.hasInitialized = false;
         this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
+        this.isFirst = true;
 
         // update hash from attribute
         this.options.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.options.hash;
@@ -274,10 +275,11 @@ export class EasyTabAccordion{
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
         if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => {
-            if(item.active){
+            if(item.active || this.isFirst){
                 this.closePanel(item.id);
             }
         });
+        this.isFirst = false;
     }
 
     closePanel(id = this.current_id){
