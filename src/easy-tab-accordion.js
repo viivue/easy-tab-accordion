@@ -134,6 +134,8 @@ export class EasyTabAccordion{
         this.hasInitialized = false;
         this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
+
+        // check the condition at openPanel, when calls close others (because there is no active element at begin)
         this.isFirst = true;
 
         // update hash from attribute
