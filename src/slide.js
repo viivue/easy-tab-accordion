@@ -12,7 +12,10 @@ import {removeActiveClass} from "./helpers";
 export function slideUp(target, duration = 500, fn){
     // skip if already closed
     const height = getElementHeight(target);
-    if(height === '0px') return;
+    if(height === '0px'){
+        // callback
+        if(typeof fn === 'function') fn();
+    }
 
     // before
     setCSS(target, {
