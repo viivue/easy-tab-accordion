@@ -29,12 +29,8 @@ export function getToggleState(context, id){
     // check if option is avoid double click
     if(context.options.avoidDoubleClick){
         if(context.isAnimating){
-            log(context, 'warn', 'block', id);
+            log(context, 'warn', `Block [${id}] to avoid double click on animating item.`);
             return 0;
-        }
-        // set animating status on accordion, not tab
-        if(context.options.animation === 'slide'){
-            context.isAnimating = true;
         }
     }
 

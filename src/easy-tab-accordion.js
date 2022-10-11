@@ -33,9 +33,7 @@ export class EasyTabAccordion{
         this.initialize();
 
         // avoid double click
-        if(this.options.avoidDoubleClick){
-            this.isAnimating = true;
-        }
+        this.isAnimating = false;
 
         // public methods
         return {
@@ -245,6 +243,18 @@ export class EasyTabAccordion{
 
             // events
             this.options.onBeforeOpen(this);
+
+            // start animation
+            this.isAnimating = true;
+            log(this, 'log', 'Start animation.');
+
+            // stop animation
+            clearTimeout(this.animationTimeout);
+            this.animationTimeout = setTimeout(() => {
+                // toggle animating status
+                this.isAnimating = false;
+                log(this, 'log', 'Stop animation.');
+            }, this.options.duration + 10);
         };
 
         // event: on Before Open
@@ -258,11 +268,6 @@ export class EasyTabAccordion{
 
             // log
             log(this, 'log', 'after open', id);
-
-            // toggle animating status
-            if(this.options.avoidDoubleClick){
-                this.isAnimating = false;
-            }
         };
 
         // open
@@ -304,11 +309,6 @@ export class EasyTabAccordion{
 
             // log
             log(this, 'log', 'after close', id);
-
-            // toggle animating status
-            if(this.options.avoidDoubleClick){
-                this.isAnimating = false;
-            }
         };
 
         // close animation
