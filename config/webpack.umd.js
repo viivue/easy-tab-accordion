@@ -24,14 +24,14 @@ module.exports = {
         globalObject: 'this',
     },
     plugins: [
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: "./src/easy-tab-accordion.js",
-                    to: "./easy-tab-accordion.module.js"
-                },
-            ],
-        }),
+        // new CopyPlugin({
+        //     patterns: [
+        //         {
+        //             from: "./src/easy-tab-accordion.js",
+        //             to: "./easy-tab-accordion.module.js"
+        //         },
+        //     ],
+        // }),
         new webpack.BannerPlugin({
             banner: banner,
             raw: true
