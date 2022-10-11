@@ -51,6 +51,11 @@ export class EasyTabAccordion{
         // setup
         this.setupData();
 
+        if(this.count < 1){
+            log(this, 'warn', 'Quit init due to child panels not found', this);
+            return;
+        }
+
         // init
         if(this.enabled && !this.hasInitialized) this.init();
         if(!this.enabled && this.hasInitialized) this.destroy();
