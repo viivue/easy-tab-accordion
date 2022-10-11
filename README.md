@@ -1,4 +1,4 @@
-# Easy Tab & Accordion (ETA) v2.0.2
+# Easy Tab & Accordion (ETA)
 
 [![release](https://badgen.net/github/release/viivue/easy-tab-accordion/)](https://github.com/viivue/easy-tab-accordion/releases/latest)
 [![minified](https://badgen.net/badge/minified/10KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/easy-tab-accordion)
@@ -12,7 +12,7 @@
 
 ### Download
 
-👉 Self hosted - [Download latest release](https://github.com/viivue/easy-tab-accordion/releases/latest)
+👉 Self hosted - [Download the latest release](https://github.com/viivue/easy-tab-accordion/releases/latest)
 
 ```html
 
