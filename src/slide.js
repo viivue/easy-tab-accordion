@@ -15,6 +15,7 @@ export function slideUp(target, duration = 500, fn){
     if(height === '0px'){
         // callback
         if(typeof fn === 'function') fn();
+        return;
     }
 
     // before
