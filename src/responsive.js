@@ -10,7 +10,7 @@ export function responsive(context, event){
         context.enabled = isLive(context);
 
         if(context.enabled){
-            context.initialize();
+            context.init();
         }else{
             context.destroy();
         }

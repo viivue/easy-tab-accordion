@@ -8,8 +8,9 @@ import {
     getElements,
     removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getID
 } from "./helpers";
-import {debounce} from "./utils";
-import {initSetup, onLoad, onResize, setupData} from "./methods";
+import {debounce, uniqueId} from "./utils";
+import {initSetup, onLoad, onResize} from "./methods";
+import {isLive, validBreakpoints} from "./responsive";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -25,6 +26,56 @@ export class EasyTabAccordion{
             hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation'
         };
+        this.defaultOptions = {
+            // selectors
+            el: document.querySelector(`[${this._attr.container}]`), // DOM element
+            id: uniqueId('eta-'),
+            trigger: `[${this._attr.trigger}]`, // string selector
+            triggerAttr: this._attr.trigger, // attribute name
+            receiver: `[${this._attr.receiver}]`, // string selector
+            receiverAttr: this._attr.receiver, // attribute name
+            activeClass: this._class.active,
+
+            // animation
+            animation: 'slide', // slide, fade
+            duration: 450,
+
+            // hash
+            hash: false, // update hash URL
+            hashScroll: false, // scroll into view when page loaded with a valid hash
+
+            // responsive
+            liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+
+            // avoid double click
+            avoidDoubleClick: true,
+
+            // dev mode => enable console.log
+            dev: false,
+
+            // open/close
+            activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
+            allowCollapseAll: false, // for slide animation only
+            allowExpandAll: false, // for slide animation only
+
+            // events
+            onBeforeInit: (data) => {
+            },
+            onAfterInit: (data) => {
+            },
+            onBeforeOpen: (data, el) => {
+            },
+            onBeforeClose: (data, el) => {
+            },
+            onAfterOpen: (data, el) => {
+            },
+            onAfterClose: (data, el) => {
+            },
+            onDestroy: (data) => {
+            },
+            onUpdate: (data) => {
+            },
+        };
 
         // save options
         this.originalOptions = options;
@@ -38,7 +89,33 @@ export class EasyTabAccordion{
 
     init(){
         // setup
-        setupData(this);
+        this.options = {...this.defaultOptions, ...this.originalOptions};
+
+        if(!this.options.el){
+            log(this, 'warn', 'ETA Error, target not found!');
+            return;
+        }
+
+        this.wrapper = this.options.el;
+        this.current_id = '';
+        this.previous_id = '';
+        this.type = '';
+        this.hasInitialized = false;
+        this.enabled = validBreakpoints(this) ? isLive(this) : true;
+        this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
+
+        // check the condition at openPanel, when calls close others (because there is no active element at begin)
+        this.isFirst = true;
+
+        // update hash from attribute
+        this.options.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.options.hash;
+        this.options.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.options.hashScroll;
+
+        // update animation from attribute
+        const animationValue = this.wrapper.getAttribute(this._attr.animation);
+        this.options.animation = animationValue !== null ? animationValue : this.options.animation;
+
+        // ID
         this.id = getID(this);
 
         this.wrapper.setAttribute(this._attr.container, this.id);
@@ -260,13 +337,16 @@ window.ETAController = new Controller();
  */
 window.ETA = {
     // init new instances
-    init: (options = {}) => {
-        const selector = options.selector || '[data-eta]';
+    init: (options = undefined) => {
+        // no param
+        if(typeof options === 'undefined'){
+            // init with attribute
+            document.querySelectorAll('[data-eta]').forEach(el => {
+                window.ETAController.add(new EasyTabAccordion({el, ...options}));
+            });
+        }
 
-        // init with selector
-        document.querySelectorAll(selector).forEach(el => {
-            window.ETAController.add(new EasyTabAccordion({el, ...options}));
-        });
+        window.ETAController.add(new EasyTabAccordion(options));
     },
     // Get instance object by ID
     get: id => window.ETAController.get(id)

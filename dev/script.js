@@ -38,7 +38,7 @@ const accordion = new EasyTabAccordion({
     //hash: true
 });
 
-const tab = new EasyTabAccordion({
+ETA.init({
     animation: 'fade',
     el: document.querySelector('[data-tabs]'),
     id: 'test',
