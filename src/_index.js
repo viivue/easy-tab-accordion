@@ -12,7 +12,7 @@ import {
 import {debounce} from "./utils";
 import {validBreakpoints, isLive, responsive} from "./responsive";
 
-export class _index{
+export class EasyTabAccordion{
     constructor(options){
         this._class = {
             enabled: 'easy-tab-accordion-enabled', active: 'active'
@@ -396,4 +396,4 @@ export class _index{
 /**
  * Global init
  */
-document.querySelectorAll('[data-eta]').forEach(el => new _index({el}));
+document.querySelectorAll('[data-eta]').forEach(el => new EasyTabAccordion({el}));
