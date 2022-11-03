@@ -34,7 +34,7 @@ const accordion = new EasyTabAccordion({
     receiverAttr: 'data-accordion-receiver',
     allowCollapseAll: true,
     //allowExpandAll: true,
-    liveBreakpoint: [1920, 1024]
+    //liveBreakpoint: [1920, 1024]
     //hash: true
 });
 
