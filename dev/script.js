@@ -1,15 +1,28 @@
-import '@/styles/index.scss'
+// public styles
+import '../public/style/fonts.css';
 
-import homeHtml from "@/html/home.html";
-import {EasyTabAccordion} from "@/../src/easy-tab-accordion";
+// private style
+import './style.scss';
+
+// source script
+//import '@/_index';
+import {EasyTabAccordion} from "@/_index";
+
+// import package info
+const packageInfo = require('../package.json');
 
 /**
- * Create HTML
+ * Update HTML
  */
-const app = document.querySelector('#root')
-app.innerHTML = homeHtml;
+// update title
+const title = `${packageInfo.prettyName} v${packageInfo.version}`;
+document.title = `[DEV] ${title} - ${packageInfo.description}`;
+document.querySelector('[data-title]').innerHTML = title;
+document.querySelector('[data-description]').innerHTML = packageInfo.description;
 
-
+/**
+ * Lib usage
+ */
 /**
  * Init
  */
@@ -21,13 +34,14 @@ const accordion = new EasyTabAccordion({
     receiverAttr: 'data-accordion-receiver',
     allowCollapseAll: true,
     //allowExpandAll: true,
-    liveBreakpoint: [1920, 1024]
+    //liveBreakpoint: [1920, 1024]
     //hash: true
 });
 
-const tab = new EasyTabAccordion({
+ETA.init({
     animation: 'fade',
     el: document.querySelector('[data-tabs]'),
+    id: 'test',
     trigger: '[data-tabs-trigger]',
     triggerAttr: 'data-tabs-trigger',
     receiver: '[data-tabs-receiver]',

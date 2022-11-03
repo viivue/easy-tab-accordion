@@ -1,21 +1,22 @@
 import {slideDown, slideUp, destroySlide, updateSlide} from "./slide";
 import {fadeIn, fadeOut, destroyFade, updateFade} from "./fade";
-import {scrollIntoView, setCSS} from "./animation";
 import {getHash, isValidHash, hashScroll, updateURL} from "./hash";
 import {
     validID,
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log
+    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getID
 } from "./helpers";
-import {debounce} from "./utils";
-import {validBreakpoints, isLive, responsive} from "./responsive";
+import {debounce, uniqueId} from "./utils";
+import {initSetup, onLoad, onResize} from "./methods";
+import {isLive, validBreakpoints} from "./responsive";
 
 export class EasyTabAccordion{
     constructor(options){
         this._class = {
-            enabled: 'easy-tab-accordion-enabled', active: 'active'
+            enabled: 'easy-tab-accordion-enabled',
+            active: 'active'
         };
         this._attr = {
             container: 'data-eta',
@@ -25,105 +26,70 @@ export class EasyTabAccordion{
             hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation'
         };
+        this.defaultOptions = {
+            // selectors
+            el: document.querySelector(`[${this._attr.container}]`), // DOM element
+            id: uniqueId('eta-'),
+            trigger: `[${this._attr.trigger}]`, // string selector
+            triggerAttr: this._attr.trigger, // attribute name
+            receiver: `[${this._attr.receiver}]`, // string selector
+            receiverAttr: this._attr.receiver, // attribute name
+            activeClass: this._class.active,
+
+            // animation
+            animation: 'slide', // slide, fade
+            duration: 450,
+
+            // hash
+            hash: false, // update hash URL
+            hashScroll: false, // scroll into view when page loaded with a valid hash
+
+            // responsive
+            liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
+
+            // avoid double click
+            avoidDoubleClick: true,
+
+            // dev mode => enable console.log
+            dev: false,
+
+            // open/close
+            activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
+            allowCollapseAll: false, // for slide animation only
+            allowExpandAll: false, // for slide animation only
+
+            // events
+            onBeforeInit: (data) => {
+            },
+            onAfterInit: (data) => {
+            },
+            onBeforeOpen: (data, el) => {
+            },
+            onBeforeClose: (data, el) => {
+            },
+            onAfterOpen: (data, el) => {
+            },
+            onAfterClose: (data, el) => {
+            },
+            onDestroy: (data) => {
+            },
+            onUpdate: (data) => {
+            },
+        };
 
         // save options
         this.originalOptions = options;
 
         // init
-        this.initialize();
+        this.init();
 
         // avoid double click
         this.isAnimating = false;
-
-        // public methods
-        return {
-            toggle: id => this.toggle(id),
-            toggleByIndex: index => this.toggle(getIdByIndex(this, index)),
-            destroy: () => this.destroy(),
-            init: () => this.initialize(),
-            update: () => this.update()
-        };
     }
 
-    initialize(){
+    init(){
         // setup
-        this.setupData();
-
-        if(this.count < 1){
-            log(this, 'warn', 'Quit init due to child panels not found', this);
-            return;
-        }
-
-        // init
-        if(this.enabled && !this.hasInitialized) this.init();
-        if(!this.enabled && this.hasInitialized) this.destroy();
-
-        // toggle via hash
-        if(this.enabled){
-            if(isValidHash(this)){
-                this.toggle(getHash().id, 'hash');
-            }else{
-                defaultActiveSections(this);
-            }
-        }
-
-        // watch for resize/load events
-        window.addEventListener('resize', debounce(e => this.onResize(e), 300));
-        window.addEventListener('load', e => this.onLoad(e));
-    }
-
-    setupData(){
-        this.options = {
-            ...{
-                // selectors
-                el: document.querySelector(`[${this._attr.container}]`), // DOM element
-                trigger: `[${this._attr.trigger}]`, // string selector
-                triggerAttr: this._attr.trigger, // attribute name
-                receiver: `[${this._attr.receiver}]`, // string selector
-                receiverAttr: this._attr.receiver, // attribute name
-                activeClass: this._class.active,
-
-                // animation
-                animation: 'slide', // slide, fade
-                duration: 450,
-
-                // hash
-                hash: false, // update hash URL
-                hashScroll: false, // scroll into view when page loaded with a valid hash
-
-                // responsive
-                liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-
-                // avoid double click
-                avoidDoubleClick: true,
-
-                // dev mode => enable console.log
-                dev: false,
-
-                // open/close
-                activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
-                allowCollapseAll: false, // for slide animation only
-                allowExpandAll: false, // for slide animation only
-
-                // events
-                onBeforeInit: (data) => {
-                },
-                onAfterInit: (data) => {
-                },
-                onBeforeOpen: (data, el) => {
-                },
-                onBeforeClose: (data, el) => {
-                },
-                onAfterOpen: (data, el) => {
-                },
-                onAfterClose: (data, el) => {
-                },
-                onDestroy: (data) => {
-                },
-                onUpdate: (data) => {
-                },
-            }, ...this.originalOptions
-        };
+        this.options = {...this.defaultOptions, ...this.originalOptions};
 
         if(!this.options.el){
             log(this, 'warn', 'ETA Error, target not found!');
@@ -148,47 +114,33 @@ export class EasyTabAccordion{
         // update animation from attribute
         const animationValue = this.wrapper.getAttribute(this._attr.animation);
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
-    }
 
-    init(){
-        // event: onBeforeInit
-        this.options.onBeforeInit(this);
+        // ID
+        this.id = getID(this);
 
-        this.hasInitialized = true;
-        this.wrapper.classList.add(this._class.enabled);
+        this.wrapper.setAttribute(this._attr.container, this.id);
 
-        // loop through triggers
-        this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
-            // assign click event
-            trigger.addEventListener('click', this.manualTriggerFunction.bind(this));
-        });
+        if(this.count < 1){
+            log(this, 'warn', 'Quit init due to child panels not found', this);
+            return;
+        }
 
-        // loop through receivers
-        this.dataset = [];
-        this.wrapper.querySelectorAll(this.options.receiver).forEach(el => {
-            const id = el.getAttribute(this.options.receiverAttr);
-            this.dataset.push({id, el, active: false});
+        // init
+        if(this.enabled && !this.hasInitialized) initSetup(this);
+        if(!this.enabled && this.hasInitialized) this.destroy();
 
-            // setup CSS for fade animation
-            if(this.options.animation === 'fade'){
-                // tab parent
-                setCSS(el.parentElement, {
-                    overflow: 'hidden',
-                    position: getComputedStyle(el).position !== 'relative' ? 'relative' : '',
-                });
-
-                // tab children
-                setCSS(el, {
-                    position: getComputedStyle(el).position !== 'absolute' ? 'absolute' : '',
-                    inset: '0 0 auto'
-                });
+        // toggle via hash
+        if(this.enabled){
+            if(isValidHash(this)){
+                this.toggle(getHash().id, 'hash');
+            }else{
+                defaultActiveSections(this);
             }
-        });
+        }
 
-        this.assignTriggerElements();
-
-        // event: onAfterInit
-        this.options.onAfterInit(this);
+        // watch for resize/load events
+        window.addEventListener('resize', debounce(e => onResize(this, e), 300));
+        window.addEventListener('load', e => onLoad(this, e));
     }
 
     destroy(){
@@ -326,7 +278,6 @@ export class EasyTabAccordion{
         removeActiveClass(this, id);
     }
 
-
     toggle(id, type = 'undefined', force = false){
         // exit if id is not found
         if(!validID(this, id)){
@@ -350,50 +301,55 @@ export class EasyTabAccordion{
         }
     }
 
-
-    onResize(event){
-        this.update();
-        responsive(this, event);
+    toggleByIndex(index){
+        this.toggle(getIdByIndex(this, index));
     }
-
-    onLoad(event){
-        this.update();
-        responsive(this, event);
-    }
-
-
-    assignTriggerElements(){
-        // find possible trigger and assign click event
-        document.querySelectorAll(`a[href^="#"]`).forEach(trigger => {
-            const href = trigger.getAttribute('href');
-            const id = href[0] === '#' ? href.slice(1) : getHash(href).id;
-
-            if(!id) return;
-
-            this.dataset.forEach(item => {
-                if(item.id === id){
-                    // valid trigger
-                    trigger.addEventListener('click', e => {
-                        e.preventDefault();
-                        this.toggle(id, 'manual');
-                        scrollIntoView({context: this});
-                    });
-                }
-            });
-        });
-    }
-
-    manualTriggerFunction(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        const id = e.target.getAttribute(this.options.triggerAttr) || e.target.closest(this.options.trigger).getAttribute(this.options.triggerAttr);
-        this.toggle(id, 'manual');
-    }
-
 }
 
 /**
- * Global init
+ * Private class Controller
+ * This class will hold instances of the library's objects
  */
-document.querySelectorAll('[data-eta]').forEach(el => new EasyTabAccordion({el}));
+class Controller{
+    constructor(){
+        this.instances = [];
+    }
+
+    add(instance){
+        this.instances.push(instance);
+    }
+
+    get(id){
+        return this.instances.filter(instance => instance.id === id)[0];
+    }
+}
+
+
+/**
+ * Public library data
+ * access via window.ETAController
+ */
+window.ETAController = new Controller();
+
+/**
+ * Public library object
+ * access via window.ETA
+ */
+window.ETA = {
+    // init new instances
+    init: (options = undefined) => {
+        // no param
+        if(typeof options === 'undefined'){
+            // init with attribute
+            document.querySelectorAll('[data-eta]').forEach(el => {
+                window.ETAController.add(new EasyTabAccordion({el, ...options}));
+            });
+        }
+
+        window.ETAController.add(new EasyTabAccordion(options));
+    },
+    // Get instance object by ID
+    get: id => window.ETAController.get(id)
+};
+
+window.ETA.init();

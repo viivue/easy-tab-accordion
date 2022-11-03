@@ -10,6 +10,20 @@
 
 ## Getting started
 
+### NPM Package
+
+Install NPM package
+
+```shell
+npm i @viivue/easy-tab-accordion
+```
+
+Import
+
+```js
+import "@viivue/easy-tab-accordion";
+```
+
 ### Download
 
 👉 Self hosted - [Download the latest release](https://github.com/viivue/easy-tab-accordion/releases/latest)
@@ -80,7 +94,7 @@ Assume that we have the HTML like below
 
 ```js
 // Init
-const eta = new EasyTabAccordion({
+ETA.init({
     el: document.querySelector('.my-accordion'), // DOM element
     trigger: '[data-trigger]', // CSS selector
     triggerAttr: 'data-trigger', // attribute name
@@ -90,8 +104,6 @@ const eta = new EasyTabAccordion({
 ```
 
 ## Options
-
-### Attribute options
 
 ### Selectors
 
@@ -183,19 +195,17 @@ Add these attributes on the wrapper element.
 Get the instance with JS init
 
 ```js
-const options = {};
-const eta = new EasyTabAccordion(options);
+ETA.init({
+    id: 'my-eta'
+});
+
+const eta = ETA.get('my-eta');
 
 // use methods
+eta.update();
 ```
 
 ## Deployment
-
-Install node environment
-
-```shell
-npm install
-```
 
 Start dev server
 
@@ -209,7 +219,7 @@ Distribute production files (set new version in `package.json` first)
 npm run prod
 ```
 
-Build demo site (for Netlify only)
+Build dev site (for Netlify only)
 
 ```shell
 npm run build

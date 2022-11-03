@@ -63,3 +63,20 @@ export function arraySortInteger(array, asc = true){
         return asc ? a - b : b - a;
     });
 }
+
+/**
+ * Generate unique ID
+ */
+export function uniqueId(prefix = ''){
+    return prefix + (+new Date()).toString(16) +
+        (Math.random() * 100000000 | 0).toString(16);
+}
+
+/**
+ * Check if value is an empty string
+ * @param value
+ * @returns {boolean}
+ */
+export function isEmptyString(value){
+    return typeof value === 'string' && value.length === 0;
+}
