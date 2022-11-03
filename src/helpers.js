@@ -1,4 +1,4 @@
-import {arrayUnique} from "./utils";
+import {arrayUnique, isEmptyString} from "./utils";
 
 
 /**
@@ -187,4 +187,21 @@ export function log(context, status, ...message){
     if(context.options.dev){
         console?.[status](...message);
     }
+}
+
+/**
+ * Get ID from attribute
+ * @param context
+ * @returns {*|string}
+ */
+export function getID(context){
+    // id (priority: attribute > options > auto-generate)
+    let id = context.wrapper.getAttribute(context._attr.container);
+
+    // string from init attribute always be treated as ID
+    //if(isJSON(id)) return context.config.id;
+
+    // ID priority: attribute > js object > default
+    id = id !== null && !isEmptyString(id) ? id : context.options.id;
+    return id;
 }

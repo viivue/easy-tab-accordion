@@ -41,6 +41,7 @@ const accordion = new EasyTabAccordion({
 const tab = new EasyTabAccordion({
     animation: 'fade',
     el: document.querySelector('[data-tabs]'),
+    id: 'test',
     trigger: '[data-tabs-trigger]',
     triggerAttr: 'data-tabs-trigger',
     receiver: '[data-tabs-receiver]',

@@ -7,15 +7,16 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log
+    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getID
 } from "./helpers";
-import {debounce} from "./utils";
+import {debounce, uniqueId} from "./utils";
 import {validBreakpoints, isLive, responsive} from "./responsive";
 
 export class EasyTabAccordion{
     constructor(options){
         this._class = {
-            enabled: 'easy-tab-accordion-enabled', active: 'active'
+            enabled: 'easy-tab-accordion-enabled',
+            active: 'active'
         };
         this._attr = {
             container: 'data-eta',
@@ -48,6 +49,9 @@ export class EasyTabAccordion{
     initialize(){
         // setup
         this.setupData();
+        this.id = getID(this);
+
+        this.wrapper.setAttribute(this._attr.container, this.id);
 
         if(this.count < 1){
             log(this, 'warn', 'Quit init due to child panels not found', this);
@@ -77,6 +81,7 @@ export class EasyTabAccordion{
             ...{
                 // selectors
                 el: document.querySelector(`[${this._attr.container}]`), // DOM element
+                id: uniqueId('eta-'),
                 trigger: `[${this._attr.trigger}]`, // string selector
                 triggerAttr: this._attr.trigger, // attribute name
                 receiver: `[${this._attr.receiver}]`, // string selector
@@ -394,6 +399,46 @@ export class EasyTabAccordion{
 }
 
 /**
- * Global init
+ * Private class Controller
+ * This class will hold instances of the library's objects
  */
-document.querySelectorAll('[data-eta]').forEach(el => new EasyTabAccordion({el}));
+class Controller{
+    constructor(){
+        this.instances = [];
+    }
+
+    add(instance){
+        this.instances.push(instance);
+    }
+
+    get(id){
+        return this.instances.filter(instance => instance.id === id)[0];
+    }
+}
+
+
+/**
+ * Public library data
+ * access via window.ETAController
+ */
+window.ETAController = new Controller();
+
+/**
+ * Public library object
+ * access via window.ETA
+ */
+window.ETA = {
+    // init new instances
+    init: (options = {}) => {
+        const selector = options.selector || '[data-eta]';
+
+        // init with selector
+        document.querySelectorAll(selector).forEach(el => {
+            window.ETAController.add(new EasyTabAccordion({el, ...options}));
+        });
+    },
+    // Get instance object by ID
+    get: id => window.ETAController.get(id)
+};
+
+window.ETA.init();
