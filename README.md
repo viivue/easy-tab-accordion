@@ -80,7 +80,7 @@ Assume that we have the HTML like below
 
 ```js
 // Init
-const eta = new EasyTabAccordion({
+const eta = new _index({
     el: document.querySelector('.my-accordion'), // DOM element
     trigger: '[data-trigger]', // CSS selector
     triggerAttr: 'data-trigger', // attribute name
@@ -184,7 +184,7 @@ Get the instance with JS init
 
 ```js
 const options = {};
-const eta = new EasyTabAccordion(options);
+const eta = new _index(options);
 
 // use methods
 ```

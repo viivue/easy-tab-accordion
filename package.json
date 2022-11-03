@@ -1,7 +1,7 @@
 {
-  "name": "easy-tab-accordion",
+  "name": "@viivue/easy-tab-accordion",
   "prettyName": "Easy Tabs & Accordion",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Javascript library to create tabs or accordion.",
   "homepage": "https://github.com/viivue/easy-tab-accordion",
   "repository": {
@@ -19,13 +19,15 @@
     "tabs",
     "accordion"
   ],
-  "license": "MIT",
   "main": "./dist/easy-tab-accordion.module.js",
+  "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
-    "prod": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
-    "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
+    "dev": "webpack serve --config config/webpack.dev.js",
+    "web": "cross-env ENTRY=web PORT=8081 webpack serve --config config/webpack.dev.js",
+    "build": "webpack --config config/webpack.build.js",
+    "build-dev": "cross-env ENTRY=dev webpack --config config/webpack.build.js",
+    "prod": "webpack --config config/webpack.prod.js && cross-env TARGET=module webpack --config config/webpack.prod.js",
+    "publish": "npm run prod & npm publish"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
@@ -38,7 +40,6 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.4.0",
     "css-minimizer-webpack-plugin": "^3.1.1",
-    "dat.gui": "^0.7.9",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.4.2",
