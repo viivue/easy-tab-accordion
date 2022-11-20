@@ -1,5 +1,6 @@
 // public styles
-import '../public/style/fonts.css';
+import '@viivue/atomic-css';
+import 'honcau';
 
 // private style
 import './style.scss';
@@ -41,13 +42,15 @@ const accordion = new EasyTabAccordion({
 ETA.init({
     animation: 'fade',
     el: document.querySelector('[data-tabs]'),
-    id: 'test',
+    id: 'tab',
     trigger: '[data-tabs-trigger]',
     triggerAttr: 'data-tabs-trigger',
     receiver: '[data-tabs-receiver]',
     receiverAttr: 'data-tabs-receiver',
     //hash: true
 });
+const tab = ETA.get('tab');
+
 
 /**
  * Button click
