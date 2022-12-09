@@ -1,5 +1,9 @@
 # Changelog
 
+### [2.1.1] - 2022-12-09
+
+- Minor bug of `slideDown` when initial
+
 ### [2.0.0] - 2022-07-03
 
 - Refactor developing environment using webpack with ES6 modules
