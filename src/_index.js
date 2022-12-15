@@ -244,7 +244,9 @@ export class EasyTabAccordion{
             }
         });
         if(this.isFirst){
-            current[0].style.display = 'block';
+            if(this.options.animation === 'slide'){
+                current.forEach(cur => cur.style.display = 'block');
+            }
             this.isFirst = false;
         }
     }
