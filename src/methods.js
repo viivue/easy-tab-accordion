@@ -29,11 +29,17 @@ export function initSetup(context){
                 position: getComputedStyle(el).position !== 'relative' ? 'relative' : '',
             });
 
-            // tab children
-            setCSS(el, {
-                position: getComputedStyle(el).position !== 'absolute' ? 'absolute' : '',
+            const getStyle = () => getComputedStyle(el).position !== 'absolute' ? 'absolute' : '';
+
+            const styleObj = {
+                position: getStyle(),
                 inset: '0 0 auto'
-            });
+            };
+
+            // tab children
+            setTimeout(() => {
+                setCSS(el, styleObj);
+            }, 1);
         }
     });
 
