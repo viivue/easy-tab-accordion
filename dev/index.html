@@ -169,6 +169,23 @@
 
     </div>
 
+    <h2 class="heading-separator"><span>Accordion initialize with JSON format</span></h2>
+
+    <div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":100}'>
+        <!-- section 1 -->
+        <div>
+            <button data-eta-trigger="section-1">Section 1</button>
+            <div data-eta-receiver="section-1">Content</div>
+        </div>
+
+        <!-- section 2 -->
+        <div>
+            <button data-eta-trigger="section-2">Section 2</button>
+            <div data-eta-receiver="section-2">Content</div>
+        </div>
+    </div>
+
+
     <!--Footer -->
     <footer class="footer ta-center mb">
         <hr class="mb bold">

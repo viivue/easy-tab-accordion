@@ -104,12 +104,17 @@ export class EasyTabAccordion{
         this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
+        // check if ETA has already initialized
+        if(this.wrapper.classList.contains(this._class.enabled)){
+            log(this, 'ETA has initialized');
+            return;
+        }
+
         // check the condition at openPanel, when calls close others (because there is no active element at begin)
         this.isFirst = true;
 
         // get options init by data attribute (JSON format)
         getOptions(this);
-
         // assign id to wrapper
         this.wrapper.setAttribute(this._attr.container, this.id);
 

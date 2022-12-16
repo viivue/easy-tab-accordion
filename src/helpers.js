@@ -217,7 +217,6 @@ export function getOptions(context){
     // get ID
     if(options['id'] && !isEmptyString(options['id'])){
         context.id = options['id'];
-        delete options['id'];
     }else{
         context.id = context.options.id;
     }
