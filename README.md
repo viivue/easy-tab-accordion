@@ -73,7 +73,7 @@ Or using data-attributes (with JSON format) to initialize.
 
 ```html
 
-<div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":100}'>
+<div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":"100"}'>
     <!-- section 1 -->
     <div>
         <button data-eta-trigger="section-1">Section 1</button>

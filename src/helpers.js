@@ -211,6 +211,7 @@ export function getOptions(context){
     for(const [key, value] of Object.entries(options)){
         if(value === "false") options[key] = false;
         if(value === "true") options[key] = true;
+        if(!isNaN(value)) options[key] = parseInt(value);
     }
 
     // get ID
