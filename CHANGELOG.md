@@ -1,5 +1,11 @@
 # Changelog
 
+### [2.1.2] - 2022-12-21
+
+- Slide down function > fix a minor bug
+- Fade animation missing position absolute
+- Init ETA by data-attribute with JSON format
+
 ### [2.1.1] - 2022-12-09
 
 - Minor bug of `slideDown` when initial
