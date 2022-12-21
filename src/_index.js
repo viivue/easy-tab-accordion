@@ -113,8 +113,16 @@ export class EasyTabAccordion{
         // check the condition at openPanel, when calls close others (because there is no active element at begin)
         this.isFirst = true;
 
+        // update hash from attribute
+        this.options.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.options.hash;
+        this.options.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.options.hashScroll;
+        // update animation from attribute
+        const animationValue = this.wrapper.getAttribute(this._attr.animation);
+        this.options.animation = animationValue !== null ? animationValue : this.options.animation;
+
         // get options init by data attribute (JSON format)
         getOptions(this);
+
         // assign id to wrapper
         this.wrapper.setAttribute(this._attr.container, this.id);
 

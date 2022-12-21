@@ -196,14 +196,13 @@ export function log(context, status, ...message){
  */
 export function getOptions(context){
     // options from attribute
-    let string = context.options.el.getAttribute(context._attr.container);
+    let string = context.wrapper.getAttribute(context._attr.container);
     let options = {};
 
     if(!isJSON(string)){
         context.id = context.options.id;
         return;
     }
-
 
     // option priority: attribute > js object > default
     options = {...JSON.parse(string)};
