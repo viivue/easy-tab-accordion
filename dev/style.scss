@@ -23,7 +23,7 @@ img {
  * Tabs & Accordion
  */
 
-[data-accordion-trigger], [data-tabs-trigger] {
+[data-eta-trigger], [data-accordion-trigger], [data-tabs-trigger] {
   margin-bottom: 10px;
   background-color: $color-on-primary;
   color: #fff;
@@ -43,14 +43,14 @@ img {
   }
 }
 
-[data-accordion-receiver], .tabs-content {
+[data-eta-receiver], [data-accordion-receiver], .tabs-content {
   background-color: #f3f3f3;
   border-radius: 5px;
   padding: 20px;
   border: 1px solid $color-primary;
 }
 
-[data-accordion-receiver] {
+[data-eta-receiver], [data-accordion-receiver] {
   margin-bottom: 20px;
 }
 

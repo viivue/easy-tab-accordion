@@ -189,19 +189,53 @@ export function log(context, status, ...message){
     }
 }
 
+
 /**
- * Get ID from attribute
- * @param context
- * @returns {*|string}
+ * Get JSON options
+ * @returns void
  */
-export function getID(context){
-    // id (priority: attribute > options > auto-generate)
-    let id = context.wrapper.getAttribute(context._attr.container);
+export function getOptions(context){
+    // options from attribute
+    let string = context.wrapper.getAttribute(context._attr.container);
+    let options = {};
 
-    // string from init attribute always be treated as ID
-    //if(isJSON(id)) return context.config.id;
+    if(!isJSON(string)){
+        context.id = context.options.id;
+        return;
+    }
 
-    // ID priority: attribute > js object > default
-    id = id !== null && !isEmptyString(id) ? id : context.options.id;
-    return id;
+    // option priority: attribute > js object > default
+    options = {...JSON.parse(string)};
+
+    // convert boolean string to real boolean
+    for(const [key, value] of Object.entries(options)){
+        if(value === "false") options[key] = false;
+        if(value === "true") options[key] = true;
+        if(!isNaN(value)) options[key] = parseInt(value);
+    }
+
+    // get ID
+    if(options['id'] && !isEmptyString(options['id'])){
+        context.id = options['id'];
+    }else{
+        context.id = context.options.id;
+    }
+
+    // replace default options
+    context.options = {...context.options, ...options};
+}
+
+
+/**
+ * Is JSON string
+ * https://stackoverflow.com/a/32278428/6453822
+ * @param string
+ * @returns {any|boolean}
+ */
+function isJSON(string){
+    try{
+        return (JSON.parse(string) && !!string);
+    }catch(e){
+        return false;
+    }
 }
