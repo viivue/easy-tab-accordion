@@ -6,7 +6,7 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getID
+    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getOptions
 } from "./helpers";
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
@@ -79,7 +79,6 @@ export class EasyTabAccordion{
 
         // save options
         this.originalOptions = options;
-
         // init
         this.init();
 
@@ -97,6 +96,7 @@ export class EasyTabAccordion{
         }
 
         this.wrapper = this.options.el;
+        this.id = '';
         this.current_id = '';
         this.previous_id = '';
         this.type = '';
@@ -104,20 +104,26 @@ export class EasyTabAccordion{
         this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
+        // check if ETA has already initialized
+        if(this.wrapper.classList.contains(this._class.enabled)){
+            log(this, 'ETA has initialized');
+            return;
+        }
+
         // check the condition at openPanel, when calls close others (because there is no active element at begin)
         this.isFirst = true;
 
         // update hash from attribute
         this.options.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.options.hash;
         this.options.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.options.hashScroll;
-
         // update animation from attribute
         const animationValue = this.wrapper.getAttribute(this._attr.animation);
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
 
-        // ID
-        this.id = getID(this);
+        // get options init by data attribute (JSON format)
+        getOptions(this);
 
+        // assign id to wrapper
         this.wrapper.setAttribute(this._attr.container, this.id);
 
         if(this.count < 1){
