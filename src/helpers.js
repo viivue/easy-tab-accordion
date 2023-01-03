@@ -195,34 +195,39 @@ export function log(context, status, ...message){
  * @returns void
  */
 export function getOptions(context){
+    const numeric = ['duration', 'activeSection']; // convert these props to float
+    const wrapper = context.wrapper;
+
     // options from attribute
-    let string = context.wrapper.getAttribute(context._attr.container);
+    let dataAttribute = wrapper.getAttribute(context._attr.container);
     let options = {};
 
-    if(!isJSON(string)){
-        context.id = context.options.id;
+    // data attribute doesn't exist or not JSON format -> get default ID
+    if(!dataAttribute || !isJSON(dataAttribute)){
+        context.id = dataAttribute || context.options.id;
         return;
     }
 
     // option priority: attribute > js object > default
-    options = {...JSON.parse(string)};
+    options = JSON.parse(dataAttribute);
 
-    // convert boolean string to real boolean
     for(const [key, value] of Object.entries(options)){
+        // convert boolean string to real boolean
         if(value === "false") options[key] = false;
-        if(value === "true") options[key] = true;
-        if(!isNaN(value)) options[key] = parseInt(value);
+        else if(value === "true") options[key] = true;
+        else options[key] = value;
+
+        // convert string to float
+        if(numeric.includes(key) && typeof value === 'string' && value.length > 0){
+            options[key] = parseFloat(value);
+        }
     }
 
-    // get ID
-    if(options['id'] && !isEmptyString(options['id'])){
-        context.id = options['id'];
-    }else{
-        context.id = context.options.id;
-    }
-
-    // replace default options
     context.options = {...context.options, ...options};
+    context.id = options.id || context.options.id;
+
+    // remove json
+    wrapper.removeAttribute(context._attr.container);
 }
 
 
