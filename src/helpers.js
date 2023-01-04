@@ -220,12 +220,9 @@ export function getOptions(context, defaultOptions){
         // convert boolean string to real boolean
         if(value === "false") options[key] = false;
         else if(value === "true") options[key] = true;
-        else options[key] = value;
-
         // convert string to float
-        if(numeric.includes(key) && typeof value === 'string' && value.length > 0){
-            options[key] = parseFloat(value);
-        }
+        else if(numeric.includes(key) && typeof value === 'string' && value.length > 0) options[key] = parseFloat(value);
+        else options[key] = value;
     }
 
     // reassign id
