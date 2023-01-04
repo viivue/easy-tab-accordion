@@ -204,7 +204,7 @@ export function getOptions(context, defaultOptions){
     let dataAttribute = wrapper.getAttribute(context._attr.container);
     let options = {};
 
-    // data attribute doesn't exist or not JSON format -> get default ID
+    // data attribute doesn't exist or not JSON format -> string
     if(!dataAttribute || !isJSON(dataAttribute)){
         // reassign id
         const id = dataAttribute || wrapper.id || defaultOptions.id;
@@ -214,7 +214,6 @@ export function getOptions(context, defaultOptions){
         return defaultOptions;
     }
 
-    // option priority: attribute > js object > default
     options = JSON.parse(dataAttribute);
 
     for(const [key, value] of Object.entries(options)){
@@ -229,12 +228,12 @@ export function getOptions(context, defaultOptions){
         }
     }
 
-    options = {...defaultOptions, ...options};
-
     // reassign id
     const id = options.id || wrapper.id || defaultOptions.id;
     context.id = id;
     options.id = id;
+
+    options = {...defaultOptions, ...options};
 
     // remove json
     wrapper.removeAttribute(context._attr.container);
