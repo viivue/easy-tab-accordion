@@ -192,10 +192,11 @@ export function log(context, status, ...message){
 
 /**
  * Get JSON options
+ * ID priority: data-attribute > selector#id > unique id
  * @version 0.0.1
- * @returns void
+ * @returns {object}
  */
-export function getOptions(context){
+export function getOptions(context, defaultOptions){
     const numeric = ['duration', 'activeSection']; // convert these props to float
     const wrapper = context.wrapper;
 
@@ -205,8 +206,12 @@ export function getOptions(context){
 
     // data attribute doesn't exist or not JSON format -> get default ID
     if(!dataAttribute || !isJSON(dataAttribute)){
-        context.id = dataAttribute || context.options.id;
-        return;
+        // reassign id
+        const id = dataAttribute || wrapper.id || defaultOptions.id;
+        context.id = id;
+        defaultOptions.id = id;
+
+        return defaultOptions;
     }
 
     // option priority: attribute > js object > default
@@ -224,19 +229,24 @@ export function getOptions(context){
         }
     }
 
-    context.options = {...context.options, ...options};
-    context.id = options.id || context.options.id;
+    options = {...defaultOptions, ...options};
+
+    // reassign id
+    const id = options.id || wrapper.id || defaultOptions.id;
+    context.id = id;
+    options.id = id;
 
     // remove json
     wrapper.removeAttribute(context._attr.container);
+
+    return options;
 }
 
 
 /**
- * Is JSON string
- * https://stackoverflow.com/a/32278428/6453822
+ * Get ID
  * @param string
- * @returns {any|boolean}
+ * @returns void
  */
 function isJSON(string){
     try{
