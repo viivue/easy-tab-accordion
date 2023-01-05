@@ -197,6 +197,10 @@ export function log(context, status, ...message){
  * @returns {object}
  */
 export function getOptions(context, defaultOptions){
+    if(!defaultOptions){
+        defaultOptions = context.options || context.config || {};
+    }
+
     const numeric = ['duration', 'activeSection']; // convert these props to float
     const wrapper = context.wrapper;
 

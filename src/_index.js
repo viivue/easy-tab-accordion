@@ -121,7 +121,7 @@ export class EasyTabAccordion{
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
 
         // get options init by data attribute (JSON format)
-        this.options = getOptions(this, this.options);
+        this.options = getOptions(this);
 
         // assign id to wrapper
         this.wrapper.setAttribute(this._attr.container, this.id);
