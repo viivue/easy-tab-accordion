@@ -232,9 +232,6 @@ export function getOptions(context, defaultOptions){
 
     options = {...defaultOptions, ...options};
 
-    // remove json
-    wrapper.removeAttribute(context._attr.container);
-
     return options;
 }
 
