@@ -240,9 +240,10 @@ export function getOptions(context, defaultOptions){
 
 
 /**
- * Get ID
+ * Is JSON string
+ * https://stackoverflow.com/a/32278428/6453822
  * @param string
- * @returns void
+ * @returns {any|boolean}
  */
 function isJSON(string){
     try{
