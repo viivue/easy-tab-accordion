@@ -192,37 +192,52 @@ export function log(context, status, ...message){
 
 /**
  * Get JSON options
- * @returns void
+ * ID priority: data-attribute > selector#id > unique id
+ * @version 0.0.1
+ * @returns {object}
  */
-export function getOptions(context){
+export function getOptions(context, defaultOptions){
+    if(!defaultOptions){
+        defaultOptions = context.options || context.config || {};
+    }
+
+    const numeric = ['duration', 'activeSection']; // convert these props to float
+    const wrapper = context.wrapper;
+
     // options from attribute
-    let string = context.wrapper.getAttribute(context._attr.container);
+    let dataAttribute = wrapper.getAttribute(context._attr.container);
     let options = {};
 
-    if(!isJSON(string)){
-        context.id = context.options.id;
-        return;
-    }
+    // data attribute doesn't exist or not JSON format -> string
+    const attributeIsNotJSON = !dataAttribute || !isJSON(dataAttribute);
 
-    // option priority: attribute > js object > default
-    options = {...JSON.parse(string)};
+    // data attribute is not json format or string
+    if(attributeIsNotJSON){
+        options = defaultOptions;
 
-    // convert boolean string to real boolean
-    for(const [key, value] of Object.entries(options)){
-        if(value === "false") options[key] = false;
-        if(value === "true") options[key] = true;
-        if(!isNaN(value)) options[key] = parseInt(value);
-    }
-
-    // get ID
-    if(options['id'] && !isEmptyString(options['id'])){
-        context.id = options['id'];
+        // data attribute exist => string
+        if(dataAttribute) options.id = dataAttribute;
     }else{
-        context.id = context.options.id;
+        options = JSON.parse(dataAttribute);
+
+        for(const [key, value] of Object.entries(options)){
+            // convert boolean string to real boolean
+            if(value === "false") options[key] = false;
+            else if(value === "true") options[key] = true;
+            // convert string to float
+            else if(numeric.includes(key) && typeof value === 'string' && value.length > 0) options[key] = parseFloat(value);
+            else options[key] = value;
+        }
     }
 
-    // replace default options
-    context.options = {...context.options, ...options};
+    // reassign id
+    const id = options.id || wrapper.id || defaultOptions.id;
+    context.id = id;
+    options.id = id;
+
+    options = {...defaultOptions, ...options};
+
+    return options;
 }
 
 
