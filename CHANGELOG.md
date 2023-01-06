@@ -1,5 +1,9 @@
 # Changelog
 
+### [2.1.2] - 2023-01-06
+
+- Improve performances
+
 ### [2.1.2] - 2022-12-21
 
 - Slide down function > fix a minor bug
