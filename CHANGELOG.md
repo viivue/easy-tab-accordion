@@ -1,6 +1,6 @@
 # Changelog
 
-### [2.1.2] - 2023-01-06
+### [2.1.3] - 2023-01-13
 
 - Improve performances
 
