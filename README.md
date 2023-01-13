@@ -37,7 +37,7 @@ import "@viivue/easy-tab-accordion";
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.1.2/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.1.3/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
@@ -226,21 +226,14 @@ eta.update();
 
 ## Deployment
 
-Start dev server
-
 ```shell
+# Start dev server
 npm run dev
-```
 
-Distribute production files (set new version in `package.json` first)
-
-```shell
+# Distribute production files (set new version in `package.json` first)
 npm run prod
-```
 
-Build dev site (for Netlify only)
-
-```shell
+# Build dev site (for Netlify only)
 npm run build
 ```
 
@@ -248,4 +241,4 @@ npm run build
 
 [MIT License](https://github.com/viivue/easy-tab-accordion/blob/main/LICENSE)
 
-Copyright (c) 2022 ViiVue
+Copyright (c) 2023 ViiVue

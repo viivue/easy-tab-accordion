@@ -2,7 +2,7 @@
   "name": "@viivue/easy-tab-accordion",
   "filename": "easy-tab-accordion",
   "prettyName": "Easy Tabs & Accordion",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Javascript library to create tabs or accordion.",
   "homepage": "https://github.com/viivue/easy-tab-accordion",
   "repository": {
@@ -27,7 +27,6 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack serve --config config/webpack.dev.js",
-    "web": "cross-env ENTRY=web PORT=8081 webpack serve --config config/webpack.dev.js",
     "build": "webpack --config config/webpack.build.js",
     "build-dev": "cross-env ENTRY=dev webpack --config config/webpack.build.js",
     "prod": "webpack --config config/webpack.prod.js && cross-env TARGET=module webpack --config config/webpack.prod.js",
