@@ -63,7 +63,6 @@ function assignTriggerElements(context){
                 trigger.addEventListener('click', e => {
                     e.preventDefault();
                     context.toggle(id, 'manual');
-                    scrollIntoView({context});
                 });
             }
         });
