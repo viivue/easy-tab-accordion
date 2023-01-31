@@ -25,7 +25,6 @@ export class EasyTabAccordion{
             hash: 'data-eta-hash',
             hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation',
-            preventDefault: 'data-eta-prevent-default',
         };
         this.defaultOptions = {
             // selectors
@@ -123,8 +122,6 @@ export class EasyTabAccordion{
         // update animation from attribute
         const animationValue = this.wrapper.getAttribute(this._attr.animation);
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
-        // update prevent default option from attribute
-        this.options.isPreventDefault = !(this.wrapper.hasAttribute(this._attr.preventDefault) && this.wrapper.getAttribute(this._attr.preventDefault) === 'false');
 
         // get options init by data attribute (JSON format)
         this.options = getOptions(this);
