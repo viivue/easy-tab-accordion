@@ -193,7 +193,6 @@ Add these attributes on the wrapper element.
 | `data-eta-animation="fade"`         | `animation: "fade"`       |
 | `data-eta-hash`                     | `hash: true`              | 
 | `data-eta-hash-scroll`              | `hashScroll: true`        |
-| `data-eta-prevent-default="false"`  | `isPreventDefault: false` |
 
 ## Events
 
