@@ -171,10 +171,10 @@
 
     <h2 class="heading-separator"><span>Accordion initialize with JSON format</span></h2>
 
-    <div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":"1000"}'>
+    <div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":"1000", "isPreventDefault": "false"}'>
         <!-- section 1 -->
         <div>
-            <button data-eta-trigger="section-1">Section 1</button>
+            <a href="https://github.com" data-eta-trigger="section-1">Section 1</a>
             <div data-eta-receiver="section-1">
 
                 <p>Fusce quisque nam ac tortor sagittis. Nullam habitasse integer
@@ -199,7 +199,7 @@
 
         <!-- section 2 -->
         <div>
-            <button data-eta-trigger="section-2">Section 2</button>
+            <a href="https://google.com" data-eta-trigger="section-2">Section 2</a>
             <div data-eta-receiver="section-2">
                 <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta congue tincidunt consectetuer
                     lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
