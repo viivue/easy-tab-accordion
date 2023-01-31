@@ -178,15 +178,21 @@ For instance:
 | allowCollapseAll | boolean | `false` | Allow to collapse all sections at the same time |
 | allowExpandAll   | boolean | `false` | Allow to expand all sections at the same time   |
 
+#### Prevent default option
+
+| Name             | Type    | Default | Description                                                        |
+|------------------|---------|---------|--------------------------------------------------------------------|
+| isPreventDefault | boolean | `true`  | Allow preventing the default behavior when clicking on the trigger |
+
 ### HTML attributes
 
 Add these attributes on the wrapper element.
 
-| Attribute                   | As for option       | 
-|-----------------------------|---------------------|
-| `data-eta-animation="fade"` | `animation: "fade"` |
-| `data-eta-hash`             | `hash: true`        | 
-| `data-eta-hash-scroll`      | `hashScroll: true`  |
+| Attribute                           | As for option             | 
+|-------------------------------------|---------------------------|
+| `data-eta-animation="fade"`         | `animation: "fade"`       |
+| `data-eta-hash`                     | `hash: true`              | 
+| `data-eta-hash-scroll`              | `hashScroll: true`        |
 
 ## Events
 
