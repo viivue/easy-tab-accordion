@@ -61,7 +61,9 @@ function assignTriggerElements(context){
             if(item.id === id){
                 // valid trigger
                 trigger.addEventListener('click', e => {
-                    e.preventDefault();
+                    if(context.options.isPreventDefault){
+                        e.preventDefault();
+                    }
                     context.toggle(id, 'manual');
                     scrollIntoView({context});
                 });
@@ -72,7 +74,9 @@ function assignTriggerElements(context){
 
 
 function manualTriggerFunction(context, e){
-    e.preventDefault();
+    if(context.options.isPreventDefault){
+        e.preventDefault();
+    }
     e.stopPropagation();
 
     const id = e.target.getAttribute(context.options.triggerAttr) || e.target.closest(context.options.trigger).getAttribute(context.options.triggerAttr);
