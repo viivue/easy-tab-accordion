@@ -16,7 +16,8 @@ export class EasyTabAccordion{
     constructor(options){
         this._class = {
             enabled: 'easy-tab-accordion-enabled',
-            active: 'active'
+            active: 'active',
+            hasAssignedTriggerEvent: 'assigned-trigger-event'
         };
         this._attr = {
             container: 'data-eta',
