@@ -71,7 +71,6 @@ function assignTriggerElements(context){
                         e.preventDefault();
                     }
                     context.toggle(id, 'manual');
-                    scrollIntoView({context});
                 });
             }
         });
