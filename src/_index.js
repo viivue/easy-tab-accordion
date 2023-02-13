@@ -11,7 +11,7 @@ import {
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
-import {scrollIntoView} from "@/animation";
+import {scrollIntoView} from "./animation";
 
 export class EasyTabAccordion{
     constructor(options){

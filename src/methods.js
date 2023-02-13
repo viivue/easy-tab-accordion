@@ -1,5 +1,5 @@
 import {responsive} from "./responsive";
-import {scrollIntoView, setCSS} from "./animation";
+import {setCSS} from "./animation";
 import {getHash} from "./hash";
 
 export function initSetup(context){
