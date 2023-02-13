@@ -41,7 +41,7 @@ export class EasyTabAccordion{
             // animation
             animation: 'slide', // slide, fade
             duration: 450,
-            scrollIntoView: true, // scroll panel into view when open
+            scrollIntoView: false, // scroll panel into view when open
 
             // hash
             hash: false, // update hash URL
