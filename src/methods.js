@@ -13,6 +13,9 @@ export function initSetup(context){
     context.wrapper.querySelectorAll(context.options.trigger).forEach(trigger => {
         // assign click event
         trigger.addEventListener('click', e => manualTriggerFunction(context, e));
+
+        // add a class to check if the trigger has assigned an event
+        trigger.classList.add(context._class.hasAssignedTriggerEvent);
     });
 
     // loop through receivers
@@ -61,6 +64,11 @@ function assignTriggerElements(context){
             if(item.id === id){
                 // valid trigger
                 trigger.addEventListener('click', e => {
+                    // already assigned trigger event
+                    if(trigger.classList.contains(context._class.hasAssignedTriggerEvent)){
+                        return;
+                    }
+
                     if(context.options.isPreventDefault){
                         e.preventDefault();
                     }
