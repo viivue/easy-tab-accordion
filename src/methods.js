@@ -1,5 +1,5 @@
 import {responsive} from "./responsive";
-import {scrollIntoView, setCSS} from "./animation";
+import {setCSS} from "./animation";
 import {getHash} from "./hash";
 
 export function initSetup(context){
@@ -13,6 +13,9 @@ export function initSetup(context){
     context.wrapper.querySelectorAll(context.options.trigger).forEach(trigger => {
         // assign click event
         trigger.addEventListener('click', e => manualTriggerFunction(context, e));
+
+        // add a class to check if the trigger has assigned an event
+        trigger.classList.add(context._class.hasAssignedTriggerEvent);
     });
 
     // loop through receivers
@@ -59,11 +62,15 @@ function assignTriggerElements(context){
 
         context.dataset.forEach(item => {
             if(item.id === id){
+                // already assigned trigger event
+                if(trigger.classList.contains(context._class.hasAssignedTriggerEvent)) return;
+
                 // valid trigger
                 trigger.addEventListener('click', e => {
-                    e.preventDefault();
+                    if(context.options.isPreventDefault){
+                        e.preventDefault();
+                    }
                     context.toggle(id, 'manual');
-                    scrollIntoView({context});
                 });
             }
         });
@@ -72,7 +79,9 @@ function assignTriggerElements(context){
 
 
 function manualTriggerFunction(context, e){
-    e.preventDefault();
+    if(context.options.isPreventDefault){
+        e.preventDefault();
+    }
     e.stopPropagation();
 
     const id = e.target.getAttribute(context.options.triggerAttr) || e.target.closest(context.options.trigger).getAttribute(context.options.triggerAttr);

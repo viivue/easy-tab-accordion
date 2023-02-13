@@ -37,7 +37,7 @@ import "@viivue/easy-tab-accordion";
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.1.3/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@latest/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
@@ -139,10 +139,11 @@ ETA.init({
 
 ### Animation
 
-| Name      | Type   | Default   | Description                                                                                               |
-|-----------|--------|-----------|-----------------------------------------------------------------------------------------------------------|
-| animation | string | `"slide"` | `"slide"` for accordion style (slide up and slide down), `"fade"` for tabbed style (fade in and fade out) |
-| duration  | number | `450`     | Duration of animation in milisecond                                                                       |
+| Name           | Type    | Default   | Description                                                                                               |
+|----------------|---------|-----------|-----------------------------------------------------------------------------------------------------------|
+| animation      | string  | `"slide"` | `"slide"` for accordion style (slide up and slide down), `"fade"` for tabbed style (fade in and fade out) |
+| duration       | number  | `450`     | Duration of animation in millisecond                                                                      |
+| scrollIntoView | boolean | `false`   | Scroll panel into view when open                                                                          |
 
 ### Hash
 
@@ -178,15 +179,21 @@ For instance:
 | allowCollapseAll | boolean | `false` | Allow to collapse all sections at the same time |
 | allowExpandAll   | boolean | `false` | Allow to expand all sections at the same time   |
 
+#### Prevent default option
+
+| Name             | Type    | Default | Description                                                        |
+|------------------|---------|---------|--------------------------------------------------------------------|
+| isPreventDefault | boolean | `true`  | Allow preventing the default behavior when clicking on the trigger |
+
 ### HTML attributes
 
 Add these attributes on the wrapper element.
 
-| Attribute                   | As for option       | 
-|-----------------------------|---------------------|
-| `data-eta-animation="fade"` | `animation: "fade"` |
-| `data-eta-hash`             | `hash: true`        | 
-| `data-eta-hash-scroll`      | `hashScroll: true`  |
+| Attribute                           | As for option             | 
+|-------------------------------------|---------------------------|
+| `data-eta-animation="fade"`         | `animation: "fade"`       |
+| `data-eta-hash`                     | `hash: true`              | 
+| `data-eta-hash-scroll`              | `hashScroll: true`        |
 
 ## Events
 

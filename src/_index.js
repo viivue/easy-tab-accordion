@@ -11,12 +11,14 @@ import {
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
+import {scrollIntoView} from "./animation";
 
 export class EasyTabAccordion{
     constructor(options){
         this._class = {
             enabled: 'easy-tab-accordion-enabled',
-            active: 'active'
+            active: 'active',
+            hasAssignedTriggerEvent: 'assigned-trigger-event'
         };
         this._attr = {
             container: 'data-eta',
@@ -24,7 +26,7 @@ export class EasyTabAccordion{
             receiver: 'data-eta-receiver',
             hash: 'data-eta-hash',
             hashScroll: 'data-eta-hash-scroll',
-            animation: 'data-eta-animation'
+            animation: 'data-eta-animation',
         };
         this.defaultOptions = {
             // selectors
@@ -39,6 +41,7 @@ export class EasyTabAccordion{
             // animation
             animation: 'slide', // slide, fade
             duration: 450,
+            scrollIntoView: false, // scroll panel into view when open
 
             // hash
             hash: false, // update hash URL
@@ -57,6 +60,9 @@ export class EasyTabAccordion{
             activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
             allowCollapseAll: false, // for slide animation only
             allowExpandAll: false, // for slide animation only
+
+            // prevent default when click to trigger element
+            isPreventDefault: true,
 
             // events
             onBeforeInit: (data) => {
@@ -221,6 +227,11 @@ export class EasyTabAccordion{
         // event: on After Open
         const afterOpen = (target) => {
             hashScroll(this);
+
+            // scroll into view
+            if(this.options.scrollIntoView){
+                scrollIntoView({context: this, target});
+            }
 
             this.options.onAfterOpen(this, target);
 
