@@ -62,14 +62,11 @@ function assignTriggerElements(context){
 
         context.dataset.forEach(item => {
             if(item.id === id){
+                // already assigned trigger event
+                if(trigger.classList.contains(context._class.hasAssignedTriggerEvent)) return;
+
                 // valid trigger
                 trigger.addEventListener('click', e => {
-                    // already assigned trigger event
-                    if(trigger.classList.contains(context._class.hasAssignedTriggerEvent)){
-                        scrollIntoView({context});
-                        return;
-                    }
-
                     if(context.options.isPreventDefault){
                         e.preventDefault();
                     }
