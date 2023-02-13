@@ -11,6 +11,7 @@ import {
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
+import {scrollIntoView} from "@/animation";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -40,6 +41,7 @@ export class EasyTabAccordion{
             // animation
             animation: 'slide', // slide, fade
             duration: 450,
+            scrollIntoView: true, // scroll panel into view when open
 
             // hash
             hash: false, // update hash URL
@@ -225,6 +227,11 @@ export class EasyTabAccordion{
         // event: on After Open
         const afterOpen = (target) => {
             hashScroll(this);
+
+            // scroll into view
+            if(this.options.scrollIntoView){
+                scrollIntoView({context: this, target});
+            }
 
             this.options.onAfterOpen(this, target);
 

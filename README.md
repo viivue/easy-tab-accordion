@@ -139,10 +139,11 @@ ETA.init({
 
 ### Animation
 
-| Name      | Type   | Default   | Description                                                                                               |
-|-----------|--------|-----------|-----------------------------------------------------------------------------------------------------------|
-| animation | string | `"slide"` | `"slide"` for accordion style (slide up and slide down), `"fade"` for tabbed style (fade in and fade out) |
-| duration  | number | `450`     | Duration of animation in milisecond                                                                       |
+| Name           | Type    | Default   | Description                                                                                               |
+|----------------|---------|-----------|-----------------------------------------------------------------------------------------------------------|
+| animation      | string  | `"slide"` | `"slide"` for accordion style (slide up and slide down), `"fade"` for tabbed style (fade in and fade out) |
+| duration       | number  | `450`     | Duration of animation in millisecond                                                                      |
+| scrollIntoView | boolean | `false`   | Scroll panel into view when open                                                                          |
 
 ### Hash
 

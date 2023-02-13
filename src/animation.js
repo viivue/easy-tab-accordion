@@ -5,8 +5,18 @@
  * @since 1.0.0
  */
 export function scrollIntoView({context, target}){
+    // skip auto trigger
+    if(context.type === 'auto') return;
+
+    // animation:fade => change target to wrapper
+    if(context.options.animation === 'fade'){
+        target = context.wrapper;
+    }
+
     // scroll to wrapper if target is not set
-    if(!target) target = context.wrapper;
+    if(!target){
+        target = context.wrapper;
+    }
 
     target.scrollIntoView({
         behavior: 'smooth'
