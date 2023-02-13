@@ -66,6 +66,7 @@ function assignTriggerElements(context){
                 trigger.addEventListener('click', e => {
                     // already assigned trigger event
                     if(trigger.classList.contains(context._class.hasAssignedTriggerEvent)){
+                        scrollIntoView({context});
                         return;
                     }
 
