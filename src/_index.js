@@ -207,18 +207,6 @@ export class EasyTabAccordion{
 
             // events
             this.options.onBeforeOpen(this);
-
-            // start animation
-            this.isAnimating = true;
-            log(this, 'log', 'Start animation.');
-
-            // stop animation
-            clearTimeout(this.animationTimeout);
-            this.animationTimeout = setTimeout(() => {
-                // toggle animating status
-                this.isAnimating = false;
-                log(this, 'log', 'Stop animation.');
-            }, this.options.duration + 10);
         };
 
         // event: on Before Open
@@ -232,6 +220,10 @@ export class EasyTabAccordion{
             if(this.options.scrollIntoView){
                 scrollIntoView({context: this, target});
             }
+
+            // toggle animating status
+            this.isAnimating = false;
+            log(this, 'log', 'Stop animation.');
 
             this.options.onAfterOpen(this, target);
 
@@ -277,6 +269,10 @@ export class EasyTabAccordion{
         const afterClose = (target) => {
             this.options.onAfterClose(this, target);
 
+            // toggle animating status
+            this.isAnimating = false;
+            log(this, 'log', 'Stop animation.');
+
             // log
             log(this, 'log', 'after close', id);
         };
@@ -305,6 +301,10 @@ export class EasyTabAccordion{
 
         const toggleState = getToggleState(this, id);
         if(toggleState === 0) return;
+
+        // start animation
+        this.isAnimating = true;
+        log(this, 'log', 'Start animation.');
 
         // update data
         this.type = type;
