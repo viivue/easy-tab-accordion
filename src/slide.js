@@ -1,4 +1,4 @@
-import {setCSS, setTransition, removeTransition, getElementHeight} from "./animation";
+import {setCSS, removeTransition, getElementHeight} from "./animation";
 import {removeActiveClass} from "./helpers";
 
 
@@ -23,7 +23,6 @@ export function slideUp(target, duration = 500, fn){
         boxSizing: 'border-box',
         height
     });
-    setTransition(target, duration);
 
     // animate (set 10ms delay for CSS transition take effect)
     setTimeout(() => {
@@ -67,7 +66,6 @@ export function slideDown(target, duration = 500, fn){
             height: '0px',
             display: 'block'
         });
-        setTransition(target, duration);
     }
 
     // animate (set 10ms delay for CSS transition take effect)
