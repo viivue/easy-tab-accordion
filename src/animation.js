@@ -79,9 +79,6 @@ export function setTransition(target, duration){
  */
 export function removeTransition(target){
     setCSS(target, {
-        overflow: '',
-        transitionProperty: '',
-        transitionDuration: '',
         boxSizing: '',
         paddingTop: '',
         paddingBottom: '',

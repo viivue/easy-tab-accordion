@@ -10,9 +10,6 @@ import {getElementMarginHeight, removeTransition, setCSS, setTransition} from ".
  * @since 1.0.0
  */
 export function fadeOut(target, duration = 500, fn){
-    // before
-    setTransition(target, duration);
-
     // animate
     setCSS(target, {
         opacity: '0',
@@ -38,7 +35,6 @@ export function fadeOut(target, duration = 500, fn){
  */
 export function fadeIn(target, duration = 500, fn){
     // before
-    setTransition(target, duration);
     setTransition(target.parentElement, duration);
 
     // animate

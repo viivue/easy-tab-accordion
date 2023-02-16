@@ -1,5 +1,5 @@
 import {responsive} from "./responsive";
-import {setCSS} from "./animation";
+import {setCSS, setTransition} from "./animation";
 import {getHash} from "./hash";
 
 export function initSetup(context){
@@ -44,6 +44,8 @@ export function initSetup(context){
                 setCSS(el, styleObj);
             }, 1);
         }
+
+        setTransition(el, context.options.duration);
     });
 
     assignTriggerElements(context);
