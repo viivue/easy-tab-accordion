@@ -27,7 +27,7 @@ export function getToggleState(context, id){
     // exit: 0
 
     // check if option is avoid double click
-    if(context.options.avoidDoubleClick){
+    if(context.options.avoidDoubleClick && context.hasActivatedSection){
         if(context.isAnimating){
             log(context, 'warn', `Block [${id}] to avoid double click on animating item.`);
             return 0;
