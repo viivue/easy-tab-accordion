@@ -6,7 +6,7 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getOptions
+    removeActiveClass, addActiveClass, getIdByIndex, log, getOptions
 } from "./helpers";
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
