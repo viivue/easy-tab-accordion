@@ -142,7 +142,7 @@ export class EasyTabAccordion{
         if(!this.enabled && this.hasInitialized) this.destroy();
 
         // activated flag
-        this.hasActivatedSection = false;
+        this.hasInitializedActiveSections = false;
 
         // toggle via hash
         if(this.enabled){
@@ -153,7 +153,7 @@ export class EasyTabAccordion{
             }
         }
 
-        this.hasActivatedSection = true;
+        this.hasInitializedActiveSections = true;
 
         // watch for resize/load events
         window.addEventListener('resize', debounce(e => onResize(this, e), 300));
