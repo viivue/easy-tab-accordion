@@ -1,6 +1,6 @@
 import {slideDown, slideUp, destroySlide, updateSlide} from "./slide";
 import {fadeIn, fadeOut, destroyFade, updateFade} from "./fade";
-import {getHash, isValidHash, hashScroll, updateURL} from "./hash";
+import {hashScroll, updateURL} from "./hash";
 import {
     validID,
     getToggleState,

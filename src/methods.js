@@ -59,11 +59,11 @@ export function initSetup(context){
         }
     }
 
-    // event: onAfterInit
-    context.options.onAfterInit(context);
-
     // initialized flag
     context.hasInitialized = true;
+
+    // event: onAfterInit
+    context.options.onAfterInit(context);
 }
 
 function assignTriggerElements(context){
