@@ -141,20 +141,6 @@ export class EasyTabAccordion{
         if(this.enabled && !this.hasInitialized) initSetup(this);
         if(!this.enabled && this.hasInitialized) this.destroy();
 
-        // activated flag
-        this.hasInitializedActiveSections = false;
-
-        // toggle via hash
-        if(this.enabled){
-            if(isValidHash(this)){
-                this.toggle(getHash().id, 'hash');
-            }else{
-                defaultActiveSections(this);
-            }
-        }
-
-        this.hasInitializedActiveSections = true;
-
         // watch for resize/load events
         window.addEventListener('resize', debounce(e => onResize(this, e), 300));
         window.addEventListener('load', e => onLoad(this, e));
