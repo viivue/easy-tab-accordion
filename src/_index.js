@@ -1,12 +1,12 @@
 import {slideDown, slideUp, destroySlide, updateSlide} from "./slide";
 import {fadeIn, fadeOut, destroyFade, updateFade} from "./fade";
-import {getHash, isValidHash, hashScroll, updateURL} from "./hash";
+import {hashScroll, updateURL} from "./hash";
 import {
     validID,
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getOptions
+    removeActiveClass, addActiveClass, getIdByIndex, log, getOptions
 } from "./helpers";
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
@@ -140,15 +140,6 @@ export class EasyTabAccordion{
         // init
         if(this.enabled && !this.hasInitialized) initSetup(this);
         if(!this.enabled && this.hasInitialized) this.destroy();
-
-        // toggle via hash
-        if(this.enabled){
-            if(isValidHash(this)){
-                this.toggle(getHash().id, 'hash');
-            }else{
-                defaultActiveSections(this);
-            }
-        }
 
         // watch for resize/load events
         window.addEventListener('resize', debounce(e => onResize(this, e), 300));
