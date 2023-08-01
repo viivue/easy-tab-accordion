@@ -2,11 +2,11 @@ import {uniqueId} from './utils'
 
 export const DEFAULTS = {
   // selectors
-  el: document.querySelector(`data-eta`), // DOM element
+  el: document.querySelector('[data-eta]'), // DOM element
   id: uniqueId('eta-'),
-  trigger: `[data-eta-trigger]`, // string selector
+  trigger: '[data-eta-trigger]', // string selector
   triggerAttr: 'data-eta-trigger', // attribute name
-  receiver: `[data-eta-receiver]`, // string selector
+  receiver: '[data-eta-receiver]', // string selector
   receiverAttr: 'data-eta-receiver', // attribute name
   activeClass: 'active',
 
