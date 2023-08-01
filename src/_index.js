@@ -12,6 +12,8 @@ import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
+import {EventsManager} from '@phucbm/os-util'
+import {DEFAULTS} from './configs'
 
 export class EasyTabAccordion{
     constructor(options){
@@ -28,60 +30,12 @@ export class EasyTabAccordion{
             hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation',
         };
-        this.defaultOptions = {
-            // selectors
-            el: document.querySelector(`[${this._attr.container}]`), // DOM element
-            id: uniqueId('eta-'),
-            trigger: `[${this._attr.trigger}]`, // string selector
-            triggerAttr: this._attr.trigger, // attribute name
-            receiver: `[${this._attr.receiver}]`, // string selector
-            receiverAttr: this._attr.receiver, // attribute name
-            activeClass: this._class.active,
 
-            // animation
-            animation: 'slide', // slide, fade
-            duration: 450,
-            scrollIntoView: false, // scroll panel into view when open
+        // init events manager
+        this.events = new EventsManager(this, {
+            names: ['onBeforeInit', 'onAfterInit', 'onBeforeOpen', 'onBeforeClose', 'onAfterOpen', 'onAfterClose', 'onDestroy', 'onUpdate']
+        });
 
-            // hash
-            hash: false, // update hash URL
-            hashScroll: false, // scroll into view when page loaded with a valid hash
-
-            // responsive
-            liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-
-            // avoid double click
-            avoidDoubleClick: true,
-
-            // dev mode => enable console.log
-            dev: false,
-
-            // open/close
-            activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
-            allowCollapseAll: false, // for slide animation only
-            allowExpandAll: false, // for slide animation only
-
-            // prevent default when click to trigger element
-            isPreventDefault: true,
-
-            // events
-            onBeforeInit: (data) => {
-            },
-            onAfterInit: (data) => {
-            },
-            onBeforeOpen: (data, el) => {
-            },
-            onBeforeClose: (data, el) => {
-            },
-            onAfterOpen: (data, el) => {
-            },
-            onAfterClose: (data, el) => {
-            },
-            onDestroy: (data) => {
-            },
-            onUpdate: (data) => {
-            },
-        };
 
         // save options
         this.originalOptions = options;
@@ -94,7 +48,7 @@ export class EasyTabAccordion{
 
     init(){
         // setup
-        this.options = {...this.defaultOptions, ...this.originalOptions};
+        this.options = {...DEFAULTS, ...this.originalOptions};
 
         if(!this.options.el){
             log(this, 'warn', 'ETA Error, target not found!');
@@ -178,7 +132,7 @@ export class EasyTabAccordion{
         }
 
         // event: onDestroy
-        this.options.onDestroy(this);
+        this.events.fire("onDestroy");
     }
 
     update(){
@@ -192,7 +146,7 @@ export class EasyTabAccordion{
         }
 
         // event: onUpdate
-        this.options.onUpdate(this);
+        this.events.fire("onUpdate");
     }
 
     openPanel(id = this.current_id){
@@ -206,7 +160,7 @@ export class EasyTabAccordion{
             updateURL(this, id);
 
             // events
-            this.options.onBeforeOpen(this);
+            this.events.fire("onBeforeOpen");
         };
 
         // event: on Before Open
@@ -225,7 +179,7 @@ export class EasyTabAccordion{
             this.isAnimating = false;
             log(this, 'log', 'Stop animation.');
 
-            this.options.onAfterOpen(this, target);
+            this.events.fire("onAfterOpen", target);
 
             // log
             log(this, 'log', 'after open', id);
@@ -262,12 +216,12 @@ export class EasyTabAccordion{
         if(!validID(this, id)) return;
 
         // event: on Before Close
-        this.options.onBeforeClose(this);
+        this.events.fire("onBeforeClose");
 
         // event: on After Close
         this.dataset[getIndexById(this, id)].active = false;
         const afterClose = (target) => {
-            this.options.onAfterClose(this, target);
+            this.events.fire("onAfterClose", target);
 
             // toggle animating status
             this.isAnimating = false;

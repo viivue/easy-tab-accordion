@@ -4,7 +4,7 @@ import {getHash} from "./hash";
 
 export function initSetup(context){
     // event: onBeforeInit
-    context.options.onBeforeInit(context);
+    context.events.fire("onBeforeInit");
 
     context.hasInitialized = true;
     context.wrapper.classList.add(context._class.enabled);
@@ -51,7 +51,7 @@ export function initSetup(context){
     assignTriggerElements(context);
 
     // event: onAfterInit
-    context.options.onAfterInit(context);
+    context.events.fire("onAfterInit");
 }
 
 function assignTriggerElements(context){
