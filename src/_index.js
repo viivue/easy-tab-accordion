@@ -12,31 +12,19 @@ import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
+import {CLASSES, ATTRS} from './configs'
 
 export class EasyTabAccordion{
     constructor(options){
-        this._class = {
-            enabled: 'easy-tab-accordion-enabled',
-            active: 'active',
-            hasAssignedTriggerEvent: 'assigned-trigger-event'
-        };
-        this._attr = {
-            container: 'data-eta',
-            trigger: 'data-eta-trigger',
-            receiver: 'data-eta-receiver',
-            hash: 'data-eta-hash',
-            hashScroll: 'data-eta-hash-scroll',
-            animation: 'data-eta-animation',
-        };
         this.defaultOptions = {
             // selectors
-            el: document.querySelector(`[${this._attr.container}]`), // DOM element
+            el: document.querySelector(`[${ATTRS.container}]`), // DOM element
             id: uniqueId('eta-'),
-            trigger: `[${this._attr.trigger}]`, // string selector
-            triggerAttr: this._attr.trigger, // attribute name
-            receiver: `[${this._attr.receiver}]`, // string selector
-            receiverAttr: this._attr.receiver, // attribute name
-            activeClass: this._class.active,
+            trigger: `[${ATTRS.trigger}]`, // string selector
+            triggerAttr: ATTRS.trigger, // attribute name
+            receiver: `[${ATTRS.receiver}]`, // string selector
+            receiverAttr: ATTRS.receiver, // attribute name
+            activeClass: CLASSES.active,
 
             // animation
             animation: 'slide', // slide, fade
@@ -111,7 +99,7 @@ export class EasyTabAccordion{
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
         // check if ETA has already initialized
-        if(this.wrapper.classList.contains(this._class.enabled)){
+        if(this.wrapper.classList.contains(CLASSES.enabled)){
             log(this, 'ETA has initialized');
             return;
         }
@@ -120,17 +108,17 @@ export class EasyTabAccordion{
         this.isFirst = true;
 
         // update hash from attribute
-        this.options.hash = this.wrapper.hasAttribute(this._attr.hash) === true ? true : this.options.hash;
-        this.options.hashScroll = this.wrapper.hasAttribute(this._attr.hashScroll) === true ? true : this.options.hashScroll;
+        this.options.hash = this.wrapper.hasAttribute(ATTRS.hash) === true ? true : this.options.hash;
+        this.options.hashScroll = this.wrapper.hasAttribute(ATTRS.hashScroll) === true ? true : this.options.hashScroll;
         // update animation from attribute
-        const animationValue = this.wrapper.getAttribute(this._attr.animation);
+        const animationValue = this.wrapper.getAttribute(ATTRS.animation);
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
 
         // get options init by data attribute (JSON format)
         this.options = getOptions(this);
 
         // assign id to wrapper
-        this.wrapper.setAttribute(this._attr.container, this.id);
+        this.wrapper.setAttribute(ATTRS.container, this.id);
 
         if(this.count < 1){
             log(this, 'warn', 'Quit init due to child panels not found', this);
@@ -157,7 +145,7 @@ export class EasyTabAccordion{
 
     destroy(){
         this.hasInitialized = false;
-        this.wrapper.classList.remove(this._class.enabled);
+        this.wrapper.classList.remove(CLASSES.enabled);
 
         // loop through triggers
         this.wrapper.querySelectorAll(this.options.trigger).forEach(trigger => {
