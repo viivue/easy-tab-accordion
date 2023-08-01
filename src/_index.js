@@ -8,7 +8,7 @@ import {
     getElements,
     removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getOptions
 } from "./helpers";
-import {debounce, uniqueId} from "./utils";
+import {debounce} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
