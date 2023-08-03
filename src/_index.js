@@ -242,7 +242,7 @@ export class EasyTabAccordion{
             this.isAnimating = false;
             log(this, 'log', 'Stop animation.');
 
-            this.events.fire('onAfterOpen', target);
+            this.events.fire('onAfterOpen', {target});
 
             // log
             log(this, 'log', 'after open', id);
@@ -284,7 +284,7 @@ export class EasyTabAccordion{
         // event: on After Close
         this.dataset[getIndexById(this, id)].active = false;
         const afterClose = (target) => {
-            this.events.fire('onAfterClose', target);
+            this.events.fire('onAfterClose', {target});
 
             // toggle animating status
             this.isAnimating = false;
