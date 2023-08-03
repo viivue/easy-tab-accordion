@@ -31,6 +31,16 @@ export class EasyTabAccordion{
         this.isAnimating = false;
     }
 
+    /******************************
+     * EVENTS
+     ******************************/
+    /**
+     * Assign late-events
+     */
+    on(eventName, callback){
+        this.events.add(eventName, callback);
+    };
+
     init(){
         // setup
         this.options = {...DEFAULTS, ...this.originalOptions};
