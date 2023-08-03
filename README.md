@@ -231,7 +231,7 @@ const eta = ETA.get('my-eta');
 eta.update();
 eta.on("open", () => {
     // do something
-})
+});
 ```
 
 ## Deployment

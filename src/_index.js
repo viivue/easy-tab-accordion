@@ -107,7 +107,7 @@ export class EasyTabAccordion{
      */
     on(eventName, callback){
         this.events.add(eventName, callback);
-    }
+    };
 
     init(){
         // setup
