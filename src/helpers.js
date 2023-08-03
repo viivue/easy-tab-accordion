@@ -1,5 +1,5 @@
 import {arrayUnique} from "./utils";
-
+import {CLASSES, ATTRS} from './configs'
 
 /**
  * Has valid id
@@ -166,8 +166,8 @@ export function removeActiveClass(context, id){
     const {current, currentTrigger} = getElements(context, id);
 
     // update classes
-    current.forEach(item => item.classList.remove(context._class.active));
-    currentTrigger.forEach(item => item.classList.remove(context._class.active));
+    current.forEach(item => item.classList.remove(CLASSES.active));
+    currentTrigger.forEach(item => item.classList.remove(CLASSES.active));
 }
 
 
@@ -181,8 +181,8 @@ export function addActiveClass(context, id){
     const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
 
     // update classes
-    if(current) current.forEach(item => item.classList.add(context._class.active));
-    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
+    if(current) current.forEach(item => item.classList.add(CLASSES.active));
+    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(CLASSES.active));
 }
 
 export function log(context, status, ...message){
@@ -207,7 +207,7 @@ export function getOptions(context, defaultOptions){
     const wrapper = context.wrapper;
 
     // options from attribute
-    let dataAttribute = wrapper.getAttribute(context._attr.container);
+    let dataAttribute = wrapper.getAttribute(ATTRS.container);
     let options = {};
 
     // data attribute doesn't exist or not JSON format -> string
