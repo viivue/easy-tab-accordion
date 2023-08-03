@@ -24,10 +24,12 @@ export function getToggleState(context, id){
     if(!validID(context, id)) return false;
     // close: -1
     // open: 1
-    // exit: 0
+    // exit: 0 // prevent open or close
 
-    // check if option is avoid double click
-    if(context.options.avoidDoubleClick){
+    // exit if it is animating, and
+    // when has not initialized, allow to run multiple animation due to possible multiple active sections
+    if(context.hasInitialized && context.options.avoidDoubleClick){
+        // avoid multiple animation at the same time
         if(context.isAnimating){
             log(context, 'warn', `Block [${id}] to avoid double click on animating item.`);
             return 0;

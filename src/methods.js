@@ -1,13 +1,13 @@
 import {responsive} from "./responsive";
 import {setCSS, setTransition} from "./animation";
-import {getHash} from "./hash";
-import {CLASSES} from './configs'
+import {getHash, isValidHash} from "./hash";
+import {defaultActiveSections} from "./helpers";
+import {CLASSES} from './configs';
 
 export function initSetup(context){
     // event: onBeforeInit
     context.events.fire("onBeforeInit");
 
-    context.hasInitialized = true;
     context.wrapper.classList.add(CLASSES.enabled);
 
     // loop through triggers
@@ -50,6 +50,18 @@ export function initSetup(context){
     });
 
     assignTriggerElements(context);
+
+    // toggle via hash
+    if(context.enabled){
+        if(isValidHash(context)){
+            context.toggle(getHash().id, 'hash');
+        }else{
+            defaultActiveSections(context);
+        }
+    }
+
+    // initialized flag
+    context.hasInitialized = true;
 
     // event: onAfterInit
     context.events.fire("onAfterInit");
