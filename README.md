@@ -229,6 +229,9 @@ const eta = ETA.get('my-eta');
 
 // use methods
 eta.update();
+eta.on("open", () => {
+    // do something
+})
 ```
 
 ## Deployment
