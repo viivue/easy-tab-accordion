@@ -8,69 +8,14 @@ import {
     getElements,
     removeActiveClass, addActiveClass, getIdByIndex, defaultActiveSections, log, getOptions
 } from "./helpers";
-import {debounce, uniqueId} from "./utils";
+import {debounce} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
-import {CLASSES, ATTRS} from './configs'
+import {CLASSES, ATTRS, DEFAULTS} from './configs'
 
 export class EasyTabAccordion{
     constructor(options){
-        this.defaultOptions = {
-            // selectors
-            el: document.querySelector(`[${ATTRS.container}]`), // DOM element
-            id: uniqueId('eta-'),
-            trigger: `[${ATTRS.trigger}]`, // string selector
-            triggerAttr: ATTRS.trigger, // attribute name
-            receiver: `[${ATTRS.receiver}]`, // string selector
-            receiverAttr: ATTRS.receiver, // attribute name
-            activeClass: CLASSES.active,
-
-            // animation
-            animation: 'slide', // slide, fade
-            duration: 450,
-            scrollIntoView: false, // scroll panel into view when open
-
-            // hash
-            hash: false, // update hash URL
-            hashScroll: false, // scroll into view when page loaded with a valid hash
-
-            // responsive
-            liveBreakpoint: [], // [1920, 1024] => destroy if window.width if bigger than 1920 or less than 1024
-
-            // avoid double click
-            avoidDoubleClick: true,
-
-            // dev mode => enable console.log
-            dev: false,
-
-            // open/close
-            activeSection: 0, // default opening sections, will be ignored if there's a valid hash, allow array of index [0,1,2] for slide animation only
-            allowCollapseAll: false, // for slide animation only
-            allowExpandAll: false, // for slide animation only
-
-            // prevent default when click to trigger element
-            isPreventDefault: true,
-
-            // events
-            onBeforeInit: (data) => {
-            },
-            onAfterInit: (data) => {
-            },
-            onBeforeOpen: (data, el) => {
-            },
-            onBeforeClose: (data, el) => {
-            },
-            onAfterOpen: (data, el) => {
-            },
-            onAfterClose: (data, el) => {
-            },
-            onDestroy: (data) => {
-            },
-            onUpdate: (data) => {
-            },
-        };
-
         // save options
         this.originalOptions = options;
         // init
@@ -82,7 +27,7 @@ export class EasyTabAccordion{
 
     init(){
         // setup
-        this.options = {...this.defaultOptions, ...this.originalOptions};
+        this.options = {...DEFAULTS, ...this.originalOptions};
 
         if(!this.options.el){
             log(this, 'warn', 'ETA Error, target not found!');
