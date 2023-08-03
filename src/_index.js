@@ -12,7 +12,7 @@ import {debounce} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
-import {CLASSES, ATTRS, DEFAULTS} from './configs'
+import {CLASSES, ATTRS, DEFAULTS} from './configs';
 
 export class EasyTabAccordion{
     constructor(options){
