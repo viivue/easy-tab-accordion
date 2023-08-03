@@ -28,7 +28,7 @@ export class EasyTabAccordion{
             hash: 'data-eta-hash',
             hashScroll: 'data-eta-hash-scroll',
             animation: 'data-eta-animation',
-        }
+        };
 
         // init events manager
         this.events = new EventsManager(this, {
