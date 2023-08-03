@@ -1,13 +1,14 @@
 import {responsive} from "./responsive";
 import {setCSS, setTransition} from "./animation";
 import {getHash} from "./hash";
+import {CLASSES} from './configs'
 
 export function initSetup(context){
     // event: onBeforeInit
     context.events.fire("onBeforeInit");
 
     context.hasInitialized = true;
-    context.wrapper.classList.add(context._class.enabled);
+    context.wrapper.classList.add(CLASSES.enabled);
 
     // loop through triggers
     context.wrapper.querySelectorAll(context.options.trigger).forEach(trigger => {
@@ -15,7 +16,7 @@ export function initSetup(context){
         trigger.addEventListener('click', e => manualTriggerFunction(context, e));
 
         // add a class to check if the trigger has assigned an event
-        trigger.classList.add(context._class.hasAssignedTriggerEvent);
+        trigger.classList.add(CLASSES.hasAssignedTriggerEvent);
     });
 
     // loop through receivers
@@ -65,7 +66,7 @@ function assignTriggerElements(context){
         context.dataset.forEach(item => {
             if(item.id === id){
                 // already assigned trigger event
-                if(trigger.classList.contains(context._class.hasAssignedTriggerEvent)) return;
+                if(trigger.classList.contains(CLASSES.hasAssignedTriggerEvent)) return;
 
                 // valid trigger
                 trigger.addEventListener('click', e => {
