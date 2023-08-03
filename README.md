@@ -217,6 +217,7 @@ Add these attributes on the wrapper element.
 | `destroy`       | `eta.destroy()`            | Remove all style and events |
 | `init`          | `eta.init()`               | Could be use after destroy  |
 | `update`        | `eta.update()`             | Update styling              |
+| `on`            | `eta.on()`                 | Assign events               |
 
 Get the instance with JS init
 
