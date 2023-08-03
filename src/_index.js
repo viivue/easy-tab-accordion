@@ -224,7 +224,7 @@ export class EasyTabAccordion{
 
             // events
             this.events.fire('onBeforeOpen');
-        }
+        };
 
         // event: on Before Open
         beforeOpen();
