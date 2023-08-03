@@ -57,4 +57,4 @@ export const DEFAULTS = {
 
     // prevent default when click to trigger element
     isPreventDefault: true,
-}
+};
