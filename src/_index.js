@@ -24,6 +24,17 @@ export class EasyTabAccordion{
 
         // save options
         this.originalOptions = options;
+
+        // get options init by data attribute (JSON format)
+        this.options
+            = getOptionsFromAttribute({
+            target: this.wrapper,
+            defaultOptions: {...DEFAULTS, ...this.originalOptions},
+            attributeName: ATTRS.container,
+            numericValues: ['duration', 'activeSection'],
+            dev: DEFAULTS.dev
+        });
+
         // init
         this.init();
 
@@ -42,16 +53,6 @@ export class EasyTabAccordion{
     };
 
     init(){
-        // get options init by data attribute (JSON format)
-        this.options
-            = getOptionsFromAttribute({
-            target: this.wrapper,
-            defaultOptions: {...DEFAULTS, ...this.originalOptions},
-            attributeName: ATTRS.container,
-            numericValues: ['duration', 'activeSection'],
-            dev: DEFAULTS.dev
-        });
-
         if(!this.options.el){
             log(this, 'warn', 'ETA Error, target not found!');
             return;
