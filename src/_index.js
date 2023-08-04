@@ -29,7 +29,7 @@ export class EasyTabAccordion{
         this.options
             = getOptionsFromAttribute({
             target: this.wrapper,
-            defaultOptions: {...DEFAULTS, ...this.originalOptions},
+            defaultOptions: {...DEFAULTS, ...options},
             attributeName: ATTRS.container,
             numericValues: ['duration', 'activeSection'],
             dev: DEFAULTS.dev
