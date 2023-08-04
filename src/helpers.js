@@ -1,5 +1,5 @@
 import {arrayUnique} from "./utils";
-
+import {CLASSES, ATTRS} from './configs'
 
 /**
  * Has valid id
@@ -24,10 +24,12 @@ export function getToggleState(context, id){
     if(!validID(context, id)) return false;
     // close: -1
     // open: 1
-    // exit: 0
+    // exit: 0 // prevent open or close
 
-    // check if option is avoid double click
-    if(context.options.avoidDoubleClick){
+    // exit if it is animating, and
+    // when has not initialized, allow to run multiple animation due to possible multiple active sections
+    if(context.hasInitialized && context.options.avoidDoubleClick){
+        // avoid multiple animation at the same time
         if(context.isAnimating){
             log(context, 'warn', `Block [${id}] to avoid double click on animating item.`);
             return 0;
@@ -164,8 +166,8 @@ export function removeActiveClass(context, id){
     const {current, currentTrigger} = getElements(context, id);
 
     // update classes
-    current.forEach(item => item.classList.remove(context._class.active));
-    currentTrigger.forEach(item => item.classList.remove(context._class.active));
+    current.forEach(item => item.classList.remove(CLASSES.active));
+    currentTrigger.forEach(item => item.classList.remove(CLASSES.active));
 }
 
 
@@ -179,8 +181,8 @@ export function addActiveClass(context, id){
     const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
 
     // update classes
-    if(current) current.forEach(item => item.classList.add(context._class.active));
-    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context._class.active));
+    if(current) current.forEach(item => item.classList.add(CLASSES.active));
+    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(CLASSES.active));
 }
 
 export function log(context, status, ...message){
@@ -188,59 +190,6 @@ export function log(context, status, ...message){
         console?.[status](...message);
     }
 }
-
-
-/**
- * Get JSON options
- * ID priority: data-attribute > selector#id > unique id
- * @version 0.0.1
- * @returns {object}
- */
-export function getOptions(context, defaultOptions){
-    if(!defaultOptions){
-        defaultOptions = context.options || context.config || {};
-    }
-
-    const numeric = ['duration', 'activeSection']; // convert these props to float
-    const wrapper = context.wrapper;
-
-    // options from attribute
-    let dataAttribute = wrapper.getAttribute(context._attr.container);
-    let options = {};
-
-    // data attribute doesn't exist or not JSON format -> string
-    const attributeIsNotJSON = !dataAttribute || !isJSON(dataAttribute);
-
-    // data attribute is not json format or string
-    if(attributeIsNotJSON){
-        options = {...defaultOptions};
-
-        // data attribute exist => string
-        if(dataAttribute) options.id = dataAttribute;
-        else options.id = '';
-    }else{
-        options = JSON.parse(dataAttribute);
-
-        for(const [key, value] of Object.entries(options)){
-            // convert boolean string to real boolean
-            if(value === "false") options[key] = false;
-            else if(value === "true") options[key] = true;
-            // convert string to float
-            else if(numeric.includes(key) && typeof value === 'string' && value.length > 0) options[key] = parseFloat(value);
-            else options[key] = value;
-        }
-    }
-
-    // reassign id
-    const id = options.id || wrapper.id || defaultOptions.id;
-    context.id = id;
-    options.id = id;
-
-    options = {...defaultOptions, ...options};
-
-    return options;
-}
-
 
 /**
  * Is JSON string
