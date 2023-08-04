@@ -6,14 +6,14 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, log, getOptions
+    removeActiveClass, addActiveClass, getIdByIndex, log
 } from "./helpers";
 import {debounce} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
 import {CLASSES, ATTRS, DEFAULTS} from './configs';
-import {EventsManager} from "@phucbm/os-util";
+import {EventsManager, getOptionsFromAttribute} from "@phucbm/os-util";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -76,7 +76,14 @@ export class EasyTabAccordion{
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
 
         // get options init by data attribute (JSON format)
-        this.options = getOptions(this);
+        this.options
+            = getOptionsFromAttribute({
+            target: this.wrapper,
+            defaultOptions: this.options,
+            attributeName: ATTRS.container,
+            numericValues: ['duration', 'activeSection'],
+            dev: DEFAULTS.dev
+        });
 
         // assign id to wrapper
         this.wrapper.setAttribute(ATTRS.container, this.id);
