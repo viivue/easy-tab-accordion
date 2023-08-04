@@ -6,14 +6,14 @@ import {
     getToggleState,
     getIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, log, getOptions
+    removeActiveClass, addActiveClass, getIdByIndex, log
 } from "./helpers";
 import {debounce} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
 import {CLASSES, ATTRS, DEFAULTS} from './configs';
-import {EventsManager} from "@phucbm/os-util";
+import {EventsManager, getOptionsFromAttribute} from "@phucbm/os-util";
 
 export class EasyTabAccordion{
     constructor(options){
@@ -24,6 +24,17 @@ export class EasyTabAccordion{
 
         // save options
         this.originalOptions = options;
+
+        // get options init by data attribute (JSON format)
+        this.options
+            = getOptionsFromAttribute({
+            target: this.wrapper,
+            defaultOptions: {...DEFAULTS, ...options},
+            attributeName: ATTRS.container,
+            numericValues: ['duration', 'activeSection'],
+            dev: DEFAULTS.dev
+        });
+
         // init
         this.init();
 
@@ -42,9 +53,6 @@ export class EasyTabAccordion{
     };
 
     init(){
-        // setup
-        this.options = {...DEFAULTS, ...this.originalOptions};
-
         if(!this.options.el){
             log(this, 'warn', 'ETA Error, target not found!');
             return;
@@ -74,9 +82,6 @@ export class EasyTabAccordion{
         // update animation from attribute
         const animationValue = this.wrapper.getAttribute(ATTRS.animation);
         this.options.animation = animationValue !== null ? animationValue : this.options.animation;
-
-        // get options init by data attribute (JSON format)
-        this.options = getOptions(this);
 
         // assign id to wrapper
         this.wrapper.setAttribute(ATTRS.container, this.id);
