@@ -170,7 +170,12 @@ export class EasyTabAccordion{
             this.isAnimating = false;
             log(this, 'log', 'Stop animation.');
 
-            this.events.fire('onAfterOpen', {target});
+            this.events.fire('onAfterOpen', {
+                target,
+                type: this.type,
+                current_id: this.current_id,
+                previous_id: this.previous_id,
+            });
 
             // log
             log(this, 'log', 'after open', id);
