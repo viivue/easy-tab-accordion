@@ -151,7 +151,11 @@ export class EasyTabAccordion{
             updateURL(this, id);
 
             // events
-            this.events.fire('onBeforeOpen');
+            this.events.fire('onBeforeOpen', {
+                type: this.type,
+                current_id: this.current_id,
+                previous_id: this.previous_id,
+            });
         };
 
         // event: on Before Open
@@ -170,7 +174,12 @@ export class EasyTabAccordion{
             this.isAnimating = false;
             log(this, 'log', 'Stop animation.');
 
-            this.events.fire('onAfterOpen', {target});
+            this.events.fire('onAfterOpen', {
+                target,
+                type: this.type,
+                current_id: this.current_id,
+                previous_id: this.previous_id,
+            });
 
             // log
             log(this, 'log', 'after open', id);
@@ -207,7 +216,11 @@ export class EasyTabAccordion{
         if(!validID(this, id)) return;
 
         // event: on Before Close
-        this.events.fire('onBeforeClose');
+        this.events.fire('onBeforeClose', {
+            type: this.type,
+            current_id: this.current_id,
+            previous_id: this.previous_id,
+        });
 
         // event: on After Close
         this.dataset[getIndexById(this, id)].active = false;
