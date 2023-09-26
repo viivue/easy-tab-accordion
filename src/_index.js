@@ -35,6 +35,8 @@ export class EasyTabAccordion{
             dev: DEFAULTS.dev
         });
 
+        this.id = this.options.id;
+
         // init
         this.init();
 
@@ -59,7 +61,6 @@ export class EasyTabAccordion{
         }
 
         this.wrapper = this.options.el;
-        this.id = '';
         this.current_id = '';
         this.previous_id = '';
         this.type = '';
