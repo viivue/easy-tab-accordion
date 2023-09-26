@@ -59,7 +59,7 @@ export class EasyTabAccordion{
         }
 
         this.wrapper = this.options.el;
-        this.id = '';
+        this.id = this.options.id;
         this.current_id = '';
         this.previous_id = '';
         this.type = '';
