@@ -37,7 +37,7 @@ import "@viivue/easy-tab-accordion";
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.2.0/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.0/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
@@ -197,27 +197,29 @@ Add these attributes on the wrapper element.
 
 ## Events
 
-| Name                             | Description | 
-|----------------------------------|-------------|
-| `onBeforeInit: (data) => {}`     |             |
-| `onAfterInit: (data) => {}`      |             |
-| `onBeforeOpen: (data,el) => {}`  |             |
-| `onBeforeClose: (data,el) => {}` |             |
-| `onAfterOpen: (data,el) => {}`   |             |
-| `onAfterClose: (data,el) => {}`  |             |
-| `onDestroy: (data) => {}`        |             |
-| `onUpdate: (data) => {}`         |             |
+| Name                          | Description | 
+|-------------------------------|-------------|
+| `onBeforeInit: (data) => {}`  |             |
+| `onAfterInit: (data) => {}`   |             |
+| `onBeforeOpen: (data) => {}`  |             |
+| `onBeforeClose: (data) => {}` |             |
+| `onAfterOpen: (data) => {}`   |             |
+| `onAfterClose: (data) => {}`  |             |
+| `onDestroy: (data) => {}`     |             |
+| `onUpdate: (data) => {}`      |             |
 
 ## Methods
 
-| Name            | Usage                      | Description                 | 
-|-----------------|----------------------------|-----------------------------|
-| `toggle`        | `eta.toggle(id)`           | Toggle a section by ID      |
-| `toggleByIndex` | `eta.toggleByIndex(index)` | Toggle a section by index   |
-| `destroy`       | `eta.destroy()`            | Remove all style and events |
-| `init`          | `eta.init()`               | Could be use after destroy  |
-| `update`        | `eta.update()`             | Update styling              |
-| `on`            | `eta.on()`                 | Assign events               |
+| Name            | Usage                                     | Description                                                           | 
+|-----------------|-------------------------------------------|-----------------------------------------------------------------------|
+| `toggle`        | `eta.toggle(panelId)`                     | Toggle a panel                                                        |
+| `openPanel`     | `eta.openPanel(panelId, isStrict=false)`  | Open a panel. Turn `isStrict` on to only open is currently closing.   |
+| `closePanel`    | `eta.closePanel(panelId, isStrict=false)` | Close a panel. Turn `isStrict` on to only close is currently opening. |
+| `toggleByIndex` | `eta.toggleByIndex(index)`                | Toggle a section by index                                             |
+| `destroy`       | `eta.destroy()`                           | Remove all style and events                                           |
+| `init`          | `eta.init()`                              | Could be use after destroy                                            |
+| `update`        | `eta.update()`                            | Update styling                                                        |
+| `on`            | `eta.on()`                                | Assign events                                                         |
 
 Get the instance with JS init
 
@@ -246,6 +248,9 @@ npm run prod
 
 # Build dev site (for Netlify only)
 npm run build
+
+# Research replace to set new version
+npm publish
 ```
 
 ## License

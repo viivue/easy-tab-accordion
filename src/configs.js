@@ -1,11 +1,8 @@
-import {uniqueId} from './utils'
-
 /**
  * Classes
  * */
 export const CLASSES = {
     enabled: 'easy-tab-accordion-enabled',
-    active: 'active',
     hasAssignedTriggerEvent: 'assigned-trigger-event',
 };
 /**
@@ -24,8 +21,8 @@ export const ATTRS = {
  * */
 export const DEFAULTS = {
     // selectors
-    el: document.querySelector('[data-eta]'), // DOM element
-    id: uniqueId('eta-'),
+    el: undefined, // DOM element
+    id: undefined,
     trigger: '[data-eta-trigger]', // string selector
     triggerAttr: 'data-eta-trigger', // attribute name
     receiver: '[data-eta-receiver]', // string selector
