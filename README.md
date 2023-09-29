@@ -210,14 +210,16 @@ Add these attributes on the wrapper element.
 
 ## Methods
 
-| Name            | Usage                      | Description                 | 
-|-----------------|----------------------------|-----------------------------|
-| `toggle`        | `eta.toggle(id)`           | Toggle a section by ID      |
-| `toggleByIndex` | `eta.toggleByIndex(index)` | Toggle a section by index   |
-| `destroy`       | `eta.destroy()`            | Remove all style and events |
-| `init`          | `eta.init()`               | Could be use after destroy  |
-| `update`        | `eta.update()`             | Update styling              |
-| `on`            | `eta.on()`                 | Assign events               |
+| Name            | Usage                                     | Description                                                           | 
+|-----------------|-------------------------------------------|-----------------------------------------------------------------------|
+| `toggle`        | `eta.toggle(panelId)`                     | Toggle a panel                                                        |
+| `openPanel`     | `eta.openPanel(panelId, isStrict=false)`  | Open a panel. Turn `isStrict` on to only open is currently closing.   |
+| `closePanel`    | `eta.closePanel(panelId, isStrict=false)` | Close a panel. Turn `isStrict` on to only close is currently opening. |
+| `toggleByIndex` | `eta.toggleByIndex(index)`                | Toggle a section by index                                             |
+| `destroy`       | `eta.destroy()`                           | Remove all style and events                                           |
+| `init`          | `eta.init()`                              | Could be use after destroy                                            |
+| `update`        | `eta.update()`                            | Update styling                                                        |
+| `on`            | `eta.on()`                                | Assign events                                                         |
 
 Get the instance with JS init
 
