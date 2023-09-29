@@ -36,7 +36,7 @@ export function getToggleState(context, id){
         }
     }
 
-    const open = context.dataset[getIndexById(context, id)].active;
+    const open = context.dataset[getPanelIndexById(context, id)].active;
     const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
     // is open and allow collapse all => close
@@ -133,19 +133,19 @@ export function getElements(context, id){
 
 
 /**
- * Get index by ID
+ * Get panel index by panel ID
  * @param context
- * @param id
+ * @param panelId
  * @returns {number}
  * @since 2.0.0
  */
-export function getIndexById(context, id){
-    return context.dataset.findIndex(x => x.id === id);
+export function getPanelIndexById(context, panelId){
+    return context.dataset.findIndex(x => x.id === panelId);
 }
 
 
 /**
- * Get ID by index
+ * Get panel ID by panel index
  * @param context
  * @param index
  * @returns {*}

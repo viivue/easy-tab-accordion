@@ -4,7 +4,7 @@ import {hashScroll, updateURL} from "./hash";
 import {
     validID,
     getToggleState,
-    getIndexById,
+    getPanelIndexById,
     getElements,
     removeActiveClass, addActiveClass, getIdByIndex, log
 } from "./helpers";
@@ -30,7 +30,7 @@ export class EasyTabAccordion{
             defaultOptions: this.options,
             attributeName: ATTRS.container,
             numericValues: ['duration', 'activeSection'],
-            dev: true,// DEFAULTS.dev
+            dev: DEFAULTS.dev
         });
 
         // init events manager
@@ -98,6 +98,9 @@ export class EasyTabAccordion{
         window.addEventListener('load', e => onLoad(this, e));
     }
 
+    /******************************
+     * Methods: ETA
+     ******************************/
     destroy(){
         this.hasInitialized = false;
         this.wrapper.classList.remove(CLASSES.enabled);
@@ -138,15 +141,27 @@ export class EasyTabAccordion{
         this.events.fire('onUpdate');
     }
 
-    openPanel(id = this.current_id){
-        if(!validID(this, id)) return;
+
+    /******************************
+     * Methods: Panel
+     ******************************/
+    openPanel(panelId = this.current_id, isStrict = false){
+        if(!validID(this, panelId)) return;
+        const panel = this.getPanelByID(panelId);
+
+        // only open when is currently closing
+        if(isStrict && panel.active){
+            console.warn(`openPanel(${panelId}) does not run as the panel is already opened!`);
+            return;
+        }
 
         const beforeOpen = () => {
             // update section status
-            this.dataset[getIndexById(this, id)].active = true;
+            //this.dataset[getPanelIndexById(this, id)].active = true;
+            this.getPanelByID(panelId).active = true;
 
             // update URL
-            updateURL(this, id);
+            updateURL(this, panelId);
 
             // events
             this.events.fire('onBeforeOpen', {
@@ -180,11 +195,11 @@ export class EasyTabAccordion{
             });
 
             // log
-            log(this, 'log', 'after open', id);
+            log(this, 'log', 'after open', panelId);
         };
 
         // open
-        const {current} = getElements(this, id);
+        const {current} = getElements(this, panelId);
         switch(this.options.animation){
             case 'slide':
                 current.forEach(el => slideDown(el, this.options.duration, () => afterOpen(el)));
@@ -195,11 +210,11 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        addActiveClass(this, id);
+        addActiveClass(this, panelId);
 
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
-        if(closeAllOthers) this.dataset.filter(x => x.id !== id).forEach(item => {
+        if(closeAllOthers) this.dataset.filter(x => x.id !== panelId).forEach(item => {
             if(item.active || this.isFirst){
                 this.closePanel(item.id);
             }
@@ -210,8 +225,15 @@ export class EasyTabAccordion{
         }
     }
 
-    closePanel(id = this.current_id){
-        if(!validID(this, id)) return;
+    closePanel(panelId = this.current_id, isStrict = false){
+        if(!validID(this, panelId)) return;
+        const panel = this.getPanelByID(panelId);
+
+        // only open when is currently closing
+        if(isStrict && !panel.active){
+            console.warn(`closePanel(${panelId}) does not run as the panel is already closed!`);
+            return;
+        }
 
         // event: on Before Close
         this.events.fire('onBeforeClose', {
@@ -221,7 +243,8 @@ export class EasyTabAccordion{
         });
 
         // event: on After Close
-        this.dataset[getIndexById(this, id)].active = false;
+        //this.dataset[getPanelIndexById(this, id)].active = false;
+        this.getPanelByID(panelId).active = false;
         const afterClose = (target) => {
             this.events.fire('onAfterClose', {target});
 
@@ -230,11 +253,11 @@ export class EasyTabAccordion{
             log(this, 'log', 'Stop animation.');
 
             // log
-            log(this, 'log', 'after close', id);
+            log(this, 'log', 'after close', panelId);
         };
 
         // close animation
-        const {current} = getElements(this, id);
+        const {current} = getElements(this, panelId);
         switch(this.options.animation){
             case 'slide':
                 current.forEach(el => slideUp(el, this.options.duration, () => afterClose(el)));
@@ -245,7 +268,11 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        removeActiveClass(this, id);
+        removeActiveClass(this, panelId);
+    }
+
+    getPanelByID(panelId){
+        return this.dataset[getPanelIndexById(this, panelId)];
     }
 
     toggle(id, type = 'undefined', force = false){
