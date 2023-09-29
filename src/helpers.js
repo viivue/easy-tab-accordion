@@ -1,5 +1,4 @@
 import {arrayUnique} from "./utils";
-import {CLASSES, ATTRS} from './configs'
 
 /**
  * Has valid id
@@ -166,8 +165,8 @@ export function removeActiveClass(context, id){
     const {current, currentTrigger} = getElements(context, id);
 
     // update classes
-    current.forEach(item => item.classList.remove(CLASSES.active));
-    currentTrigger.forEach(item => item.classList.remove(CLASSES.active));
+    current.forEach(item => item.classList.remove(context.options.activeClass));
+    currentTrigger.forEach(item => item.classList.remove(context.options.activeClass));
 }
 
 
@@ -181,8 +180,8 @@ export function addActiveClass(context, id){
     const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
 
     // update classes
-    if(current) current.forEach(item => item.classList.add(CLASSES.active));
-    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(CLASSES.active));
+    if(current) current.forEach(item => item.classList.add(context.options.activeClass));
+    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context.options.activeClass));
 }
 
 export function log(context, status, ...message){
