@@ -8,7 +8,7 @@ import {
     getElements,
     removeActiveClass, addActiveClass, getIdByIndex, log
 } from "./helpers";
-import {debounce} from "./utils";
+import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
@@ -17,22 +17,25 @@ import {EventsManager, getOptionsFromAttribute} from "@phucbm/os-util";
 
 export class EasyTabAccordion{
     constructor(options){
+        // update options
+        this.options = {...DEFAULTS, id: uniqueId('eta-'), ...options};
+        if(!this.options.el){
+            log(this, 'warn', 'ETA Error, target not found!');
+            return;
+        }
+
+        // get options init by data attribute (JSON format)
+        this.options = getOptionsFromAttribute({
+            target: this.options.el,
+            defaultOptions: this.options,
+            attributeName: ATTRS.container,
+            numericValues: ['duration', 'activeSection'],
+            dev: true,// DEFAULTS.dev
+        });
+
         // init events manager
         this.events = new EventsManager(this, {
             names: ['onBeforeInit', 'onAfterInit', 'onBeforeOpen', 'onBeforeClose', 'onAfterOpen', 'onAfterClose', 'onDestroy', 'onUpdate'],
-        })
-
-        // save options
-        this.originalOptions = options;
-
-        // get options init by data attribute (JSON format)
-        this.options
-            = getOptionsFromAttribute({
-            target: this.wrapper,
-            defaultOptions: {...DEFAULTS, ...options},
-            attributeName: ATTRS.container,
-            numericValues: ['duration', 'activeSection'],
-            dev: DEFAULTS.dev
         });
 
         // init
@@ -53,11 +56,6 @@ export class EasyTabAccordion{
     };
 
     init(){
-        if(!this.options.el){
-            log(this, 'warn', 'ETA Error, target not found!');
-            return;
-        }
-
         this.wrapper = this.options.el;
         this.id = this.options.id;
         this.current_id = '';
