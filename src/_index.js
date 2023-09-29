@@ -151,7 +151,7 @@ export class EasyTabAccordion{
 
         // only open when is currently closing
         if(isStrict && panel.active){
-            console.warn(`openPanel(${panelId}) does not run as the panel is already opened!`);
+            log(this, 'warn', `openPanel(${panelId}) does not run as the panel is already opened!`);
             return;
         }
 

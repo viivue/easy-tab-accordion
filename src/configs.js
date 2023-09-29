@@ -1,11 +1,8 @@
-import {uniqueId} from './utils'
-
 /**
  * Classes
  * */
 export const CLASSES = {
     enabled: 'easy-tab-accordion-enabled',
-    active: 'active',
     hasAssignedTriggerEvent: 'assigned-trigger-event',
 };
 /**
