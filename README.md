@@ -37,7 +37,7 @@ import "@viivue/easy-tab-accordion";
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.0/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.1/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
