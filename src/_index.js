@@ -146,6 +146,7 @@ export class EasyTabAccordion{
      * Methods: Panel
      ******************************/
     openPanel(panelId = this.current_id, isStrict = false){
+        panelId = `${panelId}`;
         if(!validID(this, panelId)) return;
         const panel = this.getPanelByID(panelId);
 
