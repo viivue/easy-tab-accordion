@@ -348,6 +348,12 @@ window.ETA = {
             });
         }
 
+        // check duplicated ID
+        const isExistInstanceId = window.ETAController.instances.some(el => el.id === options?.id);
+        if(isExistInstanceId){
+            console.error("Duplicated ID", options);
+        }
+
         window.ETAController.add(new EasyTabAccordion(options));
     },
     // Get instance object by ID
