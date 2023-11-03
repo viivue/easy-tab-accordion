@@ -123,6 +123,9 @@ export class EasyTabAccordion{
                 break;
         }
 
+        // Remove instance
+        ETAController.instances = ETAController.instances.filter(instance => instance.id !== this.id);
+
         // event: onDestroy
         this.events.fire('onDestroy');
     }
