@@ -351,7 +351,7 @@ window.ETA = {
         // check duplicated ID
         const isExistInstanceId = window.ETAController.instances.some(el => el.id === options?.id);
         if(isExistInstanceId){
-            console.error("Something went wrong. \n There are some duplicate ID after initialization");
+            console.error("Something went wrong \n There are some duplicate ID after initialization");
         }
 
         window.ETAController.add(new EasyTabAccordion(options));
