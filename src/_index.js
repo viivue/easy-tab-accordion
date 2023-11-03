@@ -38,12 +38,6 @@ export class EasyTabAccordion{
             names: ['onBeforeInit', 'onAfterInit', 'onBeforeOpen', 'onBeforeClose', 'onAfterOpen', 'onAfterClose', 'onDestroy', 'onUpdate'],
         });
 
-        // check duplicated ID
-        const isExistInstanceId = window.ETAController.get(this.options?.id);
-        if(isExistInstanceId){
-            log(this, 'warn', "Something went wrong: There are some duplicated ID after initialization");
-        }
-
         // init
         this.init();
 
@@ -70,6 +64,12 @@ export class EasyTabAccordion{
         this.hasInitialized = false;
         this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
+
+        // check duplicated ID
+        const isDuplicatedID = !!window.ETAController.get(this.id);
+        if(isDuplicatedID){
+            console.warn(`Found duplicated ID: "${this.id}", the ID should be unique.`)
+        }
 
         // check if ETA has already initialized
         if(this.wrapper.classList.contains(CLASSES.enabled)){
