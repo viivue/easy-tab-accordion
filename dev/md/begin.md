@@ -18,9 +18,6 @@ npm i @viivue/easy-tab-accordion
 Import
 
 ```js
-// style
-import "@viivue/easy-tab-accordion/dist/easy-tab-accordion.min.css"
-
 // script
 import "@viivue/easy-tab-accordion";
 ```
@@ -31,7 +28,5 @@ View package at [@viivue/easy-tab-accordion](https://www.npmjs.com/package/@viiv
 
 ```html
 <!-- Easy Tab Accordion -->
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.1/dist/easy-tab-accordion.min.css">
 <script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.0/dist/easy-tab-accordion.min.js"></script>
 ```
