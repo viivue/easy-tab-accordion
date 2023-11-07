@@ -1,10 +1,8 @@
 // public styles
 import '@viivue/atomic-css';
-import 'honcau';
 
 // private style
 import {EasyTabAccordion} from "@/_index";
-import './style.scss';
 import 'github-markdown-css/github-markdown-light.css'
 import {highlightCodeSyntax} from "@phucbm/gfm";
 import mdBegin from "./md/begin.md";
