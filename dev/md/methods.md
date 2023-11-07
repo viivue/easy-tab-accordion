@@ -50,7 +50,6 @@ eta.on("destroy", () => {
             </div>
         <div class="btn-group">
             <button class="btn red" data-btn="destroy-accordion">Destroy</button>
-            <button class="btn green hidden" data-btn="init-accordion">Init</button>
         </div>
 </div>
 
@@ -78,7 +77,6 @@ Assume that we have the HTML below
     </div>
     <div class="btn-group">
         <button class="btn red" data-btn="destroy-accordion">Destroy</button>
-        <button class="btn green hidden" data-btn="init-accordion">Init</button>
     </div>
 </div>
 ```
