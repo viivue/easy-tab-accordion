@@ -7,7 +7,7 @@
 
 ## Install
 
-### with `npm`
+### With `npm`
 
 Install NPM package
 
