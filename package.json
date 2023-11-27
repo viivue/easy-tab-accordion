@@ -3,7 +3,7 @@
   "filename": "easy-tab-accordion",
   "prettyName": "Easy Tabs & Accordion",
   "version": "2.3.1",
-  "description": "Javascript library to create tabs or accordion.",
+  "description": "Super light-weight JavaScript library to create a simple tab or accordion",
   "homepage": "https://github.com/viivue/easy-tab-accordion",
   "repository": {
     "type": "git",
@@ -44,7 +44,6 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.4.0",
     "css-minimizer-webpack-plugin": "^3.1.1",
-    "honcau": "^0.0.2",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.4.2",
@@ -60,6 +59,9 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@phucbm/os-util": "^0.0.4"
+    "@phucbm/gfm": "^0.0.1",
+    "@phucbm/os-util": "^0.0.4",
+    "github-markdown-css": "^5.4.0",
+    "markdown-loader": "^8.0.0"
   }
 }
