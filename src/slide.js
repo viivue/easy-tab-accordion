@@ -1,5 +1,5 @@
 import {setCSS, removeTransition, getElementHeight} from "./animation";
-import {removeActiveClass} from "./helpers";
+import {removeActiveClass, updateActiveClassByDataset} from "./helpers";
 
 
 /**
@@ -105,7 +105,7 @@ export function destroySlide(context){
         removeTransition(target);
     });
 
-    removeActiveClass(context);
+    updateActiveClassByDataset(context);
 }
 
 

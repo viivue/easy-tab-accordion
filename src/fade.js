@@ -1,4 +1,4 @@
-import {removeActiveClass} from "./helpers";
+import {removeActiveClass, updateActiveClassByDataset} from "./helpers";
 import {getElementMarginHeight, removeTransition, setCSS, setTransition} from "./animation";
 
 
@@ -77,7 +77,7 @@ export function destroyFade(context){
         removeTransition(target.parentElement);
     });
 
-    removeActiveClass(context);
+    updateActiveClassByDataset(context);
 }
 
 

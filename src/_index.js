@@ -6,7 +6,7 @@ import {
     getToggleState,
     getPanelIndexById,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, log
+    removeActiveClass, addActiveClass, getIdByIndex, log, updateActiveClassByDataset
 } from "./helpers";
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
@@ -217,7 +217,9 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        addActiveClass(this, panelId);
+        //addActiveClass(this, panelId);
+        updateActiveClassByDataset(this);
+
 
         // close all others
         const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
@@ -275,7 +277,9 @@ export class EasyTabAccordion{
         }
 
         // update classes
-        removeActiveClass(this, panelId);
+        //removeActiveClass(this, panelId);
+        updateActiveClassByDataset(this);
+
     }
 
     getPanelByID(panelId){

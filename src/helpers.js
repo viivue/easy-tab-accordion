@@ -184,6 +184,26 @@ export function addActiveClass(context, id){
     if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context.options.activeClass));
 }
 
+
+/**
+ * update active class
+ */
+export function updateActiveClassByDataset(context){
+    for(let i = 0; i < context.dataset.length; i++){
+        const id = context.dataset[i].id;
+        const isActive = context.dataset[i].active;
+        const {current, currentTrigger} = getElements(context, id ? id : context.current_id);
+
+        if (isActive) {
+            if(current) current.forEach(item => item.classList.add(context.options.activeClass));
+            if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context.options.activeClass));
+        } else {
+            current.forEach(item => item.classList.remove(context.options.activeClass));
+            currentTrigger.forEach(item => item.classList.remove(context.options.activeClass));
+        }
+    }
+}
+
 export function log(context, status, ...message){
     if(context.options.dev){
         console?.[status](...message);
