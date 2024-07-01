@@ -37,7 +37,7 @@ import "@viivue/easy-tab-accordion";
 
 ```html
 <!-- JS (10KB) -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.0/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.1/dist/easy-tab-accordion.min.js"></script>
 ```
 
 ## Initialize
@@ -53,7 +53,7 @@ To initialize an ETA script, always remember three things:
 Using these HTML attributes to initialize without JavaScript.
 
 ```html
-<!-- No Js init -->
+<!-- Accordion - No Js init -->
 <div data-eta>
     <!-- section 1 -->
     <div>
@@ -69,22 +69,29 @@ Using these HTML attributes to initialize without JavaScript.
 </div>
 ```
 
+```html
+<!-- Tabs - No Js init -->
+<div data-eta data-eta-animation="fade">
+    <!-- section 1 -->
+    <div>
+        <button data-eta-trigger="section-1">Section 1</button>
+        <button data-eta-trigger="section-2">Section 2</button>
+    </div>
+
+    <!-- section 2 -->
+    <div>
+        <div data-eta-receiver="section-1">Content</div>
+        <div data-eta-receiver="section-2">Content</div>
+    </div>
+</div>
+```
+
 Or using data-attributes (with JSON format) to initialize.
 
 ```html
 
 <div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":"100"}'>
-    <!-- section 1 -->
-    <div>
-        <button data-eta-trigger="section-1">Section 1</button>
-        <div data-eta-receiver="section-1">Content</div>
-    </div>
-
-    <!-- section 2 -->
-    <div>
-        <button data-eta-trigger="section-2">Section 2</button>
-        <div data-eta-receiver="section-2">Content</div>
-    </div>
+    <!-- inner HTML here -->
 </div>
 ```
 
@@ -97,17 +104,7 @@ Assume that we have the HTML like below
 ```html
 <!-- Custom HTML -->
 <div class="my-accordion">
-    <!-- section 1 -->
-    <div>
-        <button data-trigger="section-1">Section 1</button>
-        <div class="content" id="section-1">Content</div>
-    </div>
-
-    <!-- section 2 -->
-    <div>
-        <button data-trigger="section-2">Section 2</button>
-        <div class="content" id="section-2">Content</div>
-    </div>
+    <!-- inner HTML here -->
 </div>
 ```
 
