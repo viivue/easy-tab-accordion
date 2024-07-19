@@ -11,5 +11,6 @@ export function testInit(root){
         triggerAttr: 'data-trigger', // attribute name
         receiver: '.content', // CSS selector
         receiverAttr: 'id', // attribute name
+        scrollIntoView: true
     });
 }
