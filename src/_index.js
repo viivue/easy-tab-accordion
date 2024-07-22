@@ -1,18 +1,21 @@
-import {slideDown, slideUp, destroySlide, updateSlide} from "./slide";
-import {fadeIn, fadeOut, destroyFade, updateFade} from "./fade";
+import {destroySlide, slideDown, slideUp, updateSlide} from "./slide";
+import {destroyFade, fadeIn, fadeOut, updateFade} from "./fade";
 import {hashScroll, updateURL} from "./hash";
 import {
-    validID,
-    getToggleState,
-    getPanelIndexById,
+    addActiveClass,
     getElements,
-    removeActiveClass, addActiveClass, getIdByIndex, log
+    getIdByIndex,
+    getPanelIndexById,
+    getToggleState,
+    log,
+    removeActiveClass,
+    validID
 } from "./helpers";
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
-import {CLASSES, ATTRS, DEFAULTS} from './configs';
+import {ATTRS, CLASSES, DEFAULTS} from './configs';
 import {EventsManager, getOptionsFromAttribute} from "@phucbm/os-util";
 
 export class EasyTabAccordion{
@@ -326,6 +329,14 @@ class Controller{
 
     get(id){
         return this.instances.filter(instance => instance.id === id)[0];
+    }
+
+    remove(id){
+        const instance = this.get(id);
+        if(instance){
+            instance.destroy();
+            this.instances = this.instances.filter(instance => instance.id !== id);
+        }
     }
 }
 
