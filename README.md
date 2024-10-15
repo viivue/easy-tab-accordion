@@ -125,6 +125,7 @@ ETA.init({
 
 | Name         | Type        | Default               | Required | Description                                |
 |--------------|-------------|-----------------------|----------|--------------------------------------------|
+| id           | string      | `random UUID`         | ❌        | ID of this instance                        |
 | el           | DOM element | `[data-eta]`          | ✅        | Wrapper element                            |
 | trigger      | string      | `[data-eta-trigger]`  | ✅        | CSS selector for trigger elements          |
 | triggerAttr  | string      | `data-eta-trigger`    | ✅        | Attribute name of trigger elements         |
@@ -229,8 +230,9 @@ const eta = ETA.get('my-eta');
 
 // use methods
 eta.update();
-eta.on("open", () => {
+eta.on("onAfterOpen", (data) => {
     // do something
+    console.log(data);
 });
 ```
 
