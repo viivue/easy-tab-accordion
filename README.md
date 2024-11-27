@@ -72,13 +72,13 @@ Using these HTML attributes to initialize without JavaScript.
 ```html
 <!-- Tabs - No Js init -->
 <div data-eta data-eta-animation="fade">
-    <!-- section 1 -->
+    <!-- Navigations -->
     <div>
         <button data-eta-trigger="section-1">Section 1</button>
         <button data-eta-trigger="section-2">Section 2</button>
     </div>
 
-    <!-- section 2 -->
+    <!-- Content -->
     <div>
         <div data-eta-receiver="section-1">Content</div>
         <div data-eta-receiver="section-2">Content</div>
