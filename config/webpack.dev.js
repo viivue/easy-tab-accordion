@@ -65,6 +65,6 @@ module.exports = merge(server, {
         open: true,
         compress: true,
         hot: true,
-        port: port,
+        // port: port,
     },
 });

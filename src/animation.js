@@ -5,6 +5,8 @@
  * @since 1.0.0
  */
 export function scrollIntoView({context, target}){
+    const parentTarget = target.parentNode;
+
     // skip auto trigger
     if(context.type === 'auto') return;
 
@@ -18,9 +20,16 @@ export function scrollIntoView({context, target}){
         target = context.wrapper;
     }
 
-    target.scrollIntoView({
-        behavior: 'smooth'
-    });
+    if(typeof jQuery !== 'undefined'){
+        jQuery('html,body').animate({
+            scrollTop: parentTarget.offsetTop
+        });
+    }else{
+        window.scrollTo({
+            top: parentTarget.offsetTop,
+            behavior: 'smooth'
+        });
+    }
 }
 
 

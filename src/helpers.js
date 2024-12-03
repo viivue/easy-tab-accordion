@@ -42,7 +42,7 @@ export function getToggleState(context, id){
     if(open && allowCollapseAll) return -1;
 
     // is open and not allow collapse all => close
-    if(open && !allowCollapseAll) return 0;
+    if(open && !allowCollapseAll) return -1;
 
     // is close and allow collapse all => open
     if(!open && allowCollapseAll) return 1;
