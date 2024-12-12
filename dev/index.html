@@ -1,237 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
-    <link rel="stylesheet" href="style.scss">
+    <script crossorigin="anonymous"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            referrerpolicy="no-referrer"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Easy Tab Accordion</title>
+    <style>
+        body {box-sizing:border-box;}
+        .container {
+            min-width:300px;
+            max-width:980px;
+            margin-right:auto;
+            margin-left:auto;
+            padding:45px;
+        }
 
-    <title>Webpack Library Boilerplate</title>
+        @media (max-width:767px) {
+            .container {
+                padding:15px;
+            }
+        }
+    </style>
 </head>
-
-<body>
-
+<body class="markdown-body">
 <div class="container">
-    <h1 data-title>Webpack Library Boilerplate</h1>
+    <h1 data-title="">Easy Tab Accordion</h1>
     <p data-description></p>
 
-    <h2 class="heading-separator"><span>Accordion</span></h2>
-
-    <div>
-        <div data-accordion class="mb">
-            <!-- section 1 -->
-            <div>
-                <button data-accordion-trigger="section-1">Section 1</button>
-                <div data-accordion-receiver="section-1">
-
-                    <p>Fusce quisque nam ac tortor sagittis. Nullam habitasse integer
-                        magnis adipiscing dictumst eu efficitur. Auctor quam imperdiet congue vel sodales ac. Taciti
-                        lectus
-                        aliquam potenti magnis conubia nisl tincidunt non nascetur molestie dignissim.</p>
-
-                    <img src="https://picsum.photos/seed/seed1/500/300" width="500" height="300" alt="picsum.photos">
-
-                    <p>Senectus nunc purus tempus eu platea eget mauris porta. Per vel magna eros cursus penatibus
-                        elementum
-                        interdum imperdiet. Inceptos purus interdum sapien ridiculus nascetur dui eleifend nisl ex
-                        facilisi
-                        quisque. Curabitur potenti maximus sodales volutpat aptent dictum consectetur nam quam donec.
-                        Taciti
-                        sapien justo finibus lectus amet. Aliquam pharetra ante ultricies condimentum viverra non
-                        ultrices
-                        pellentesque faucibus lectus. Scelerisque cursus magnis imperdiet nec consectetur dis dictum
-                        placerat
-                        odio.</p>
-
-                </div>
-            </div>
-
-            <!-- section 2 -->
-            <div>
-                <button data-accordion-trigger="section-2">Section 2</button>
-                <div data-accordion-receiver="section-2">
-                    <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta congue tincidunt consectetuer
-                        lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
-                        sollicitudin tempor sodales bibendum convallis nec neque. Ornare magnis efficitur proin facilisi
-                        vestibulum tempor nascetur convallis felis. Natoque molestie parturient vel mi scelerisque diam
-                        semper nascetur a. Et vestibulum dui magna sapien etiam scelerisque quis id ut. Pede facilisi
-                        sagittis a convallis facilisis.</p>
-
-                    <img src="https://picsum.photos/seed/seed2/500/300" width="500" height="300" alt="picsum.photos">
-                </div>
-            </div>
-
-            <!-- section 3 -->
-            <div>
-                <button data-accordion-trigger="section-3">Section 3</button>
-                <div data-accordion-receiver="section-3">
-                    <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta
-                        congue tincidunt consectetuer
-                        lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
-                        sollicitudin tempor sodales bibendum convallis nec neque. Ornare magnis efficitur proin facilisi
-                        vestibulum tempor nascetur convallis felis. Natoque molestie parturient vel mi scelerisque diam
-                        semper nascetur a. Et vestibulum dui magna sapien etiam scelerisque quis id ut. Pede facilisi
-                        sagittis a convallis facilisis.</p>
-
-                    <img src="https://picsum.photos/seed/seed3/500/300" width="500" height="300" alt="picsum.photos">
-
-                    <p>Vivamus cursus scelerisque montes platea morbi.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn red" data-btn="destroy-accordion">Destroy</button>
-            <button class="btn green hidden" data-btn="init-accordion">Init</button>
-        </div>
-    </div>
-
-
-    <h2 class="heading-separator"><span>Tab</span></h2>
-
-    <div class="mb">
-        <div data-tabs class="mb">
-
-            <div>
-                <button data-tabs-trigger="tab-1">Tab 1</button>
-                <button data-tabs-trigger="tab-2">Tab 2</button>
-                <button data-tabs-trigger="tab-3">Tab 3</button>
-            </div>
-
-            <div class="tabs-content">
-                <div>
-                    <div data-tabs-receiver="tab-1">
-                        <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta congue
-                            tincidunt consectetuer
-                            lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
-                            sollicitudin tempor sodales bibendum convallis nec neque. Ornare magnis efficitur proin
-                            facilisi
-                            vestibulum tempor nascetur convallis felis. Natoque molestie parturient vel mi scelerisque
-                            diam
-                            semper nascetur a. Et vestibulum dui magna sapien etiam scelerisque quis id ut. Pede
-                            facilisi
-                            sagittis a convallis facilisis.</p>
-
-                        <img src="https://picsum.photos/seed/tab1/500/300" alt="picsum.photos">
-
-                        <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta
-                            congue tincidunt consectetuer
-                            lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
-                            sollicitudin tempor sodales bibendum convallis nec neque. Ornare magnis efficitur proin
-                            facilisi
-                            vestibulum tempor nascetur convallis felis. Natoque molestie parturient vel mi scelerisque
-                            diam
-                            semper nascetur a. Et vestibulum dui magna sapien etiam scelerisque quis id ut. Pede
-                            facilisi
-                            sagittis a convallis facilisis.</p>
-                    </div>
-                    <div data-tabs-receiver="tab-2">
-                        <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta
-                            congue tincidunt consectetuer
-                            lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
-                            sollicitudin tempor sodales bibendum convallis nec neque. Ornare magnis efficitur proin
-                            facilisi
-                            vestibulum tempor nascetur convallis felis. Natoque molestie parturient vel mi scelerisque
-                            diam
-                            semper nascetur a. Et vestibulum dui magna sapien etiam scelerisque quis id ut. Pede
-                            facilisi
-                            sagittis a convallis facilisis.</p>
-
-                        <img src="https://picsum.photos/seed/tab2/500/300" alt="picsum.photos">
-
-                        <p>Vivamus cursus scelerisque montes platea morbi.</p>
-                    </div>
-                    <div data-tabs-receiver="tab-3">
-
-                        <img src="https://picsum.photos/seed/tab3/500/300" alt="picsum.photos">
-
-                        <p>Senectus nunc purus tempus eu platea eget mauris porta. Per vel magna eros cursus penatibus
-                            elementum
-                            interdum imperdiet. Inceptos purus interdum sapien ridiculus nascetur dui eleifend nisl ex
-                            facilisi
-                            quisque. Curabitur potenti maximus sodales volutpat aptent dictum consectetur nam quam
-                            donec.
-                            Taciti
-                            sapien justo finibus lectus amet. Aliquam pharetra ante ultricies condimentum viverra non
-                            ultrices
-                            pellentesque faucibus lectus. Scelerisque cursus magnis imperdiet nec consectetur dis dictum
-                            placerat
-                            odio.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="btn-group">
-            <button class="btn red" data-btn="destroy-tab">Destroy</button>
-            <button class="btn green hidden" data-btn="init-tab">Init</button>
-        </div>
-
-    </div>
-
-    <h2 class="heading-separator"><span>Accordion initialize with JSON format</span></h2>
-
-    <div data-eta='{ "id":"init-with-json", "animation":"slide", "hash":"false", "duration":"1000", "isPreventDefault": "true"}'>
-        <!-- section 1 -->
-        <div>
-            <a href="https://github.com" target="_blank" data-eta-trigger="section-1">Section 1</a>
-            <div data-eta-receiver="section-1">
-
-                <p>Fusce quisque nam ac tortor sagittis. Nullam habitasse integer
-                    magnis adipiscing dictumst eu efficitur. Auctor quam imperdiet congue vel sodales ac. Taciti
-                    lectus
-                    aliquam potenti magnis conubia nisl tincidunt non nascetur molestie dignissim.</p>
-
-                <p>Senectus nunc purus tempus eu platea eget mauris porta. Per vel magna eros cursus penatibus
-                    elementum
-                    interdum imperdiet. Inceptos purus interdum sapien ridiculus nascetur dui eleifend nisl ex
-                    facilisi
-                    quisque. Curabitur potenti maximus sodales volutpat aptent dictum consectetur nam quam donec.
-                    Taciti
-                    sapien justo finibus lectus amet. Aliquam pharetra ante ultricies condimentum viverra non
-                    ultrices
-                    pellentesque faucibus lectus. Scelerisque cursus magnis imperdiet nec consectetur dis dictum
-                    placerat
-                    odio.</p>
-
-            </div>
-        </div>
-
-        <!-- section 2 -->
-        <div>
-            <a href="https://google.com" target="_blank" data-eta-trigger="section-2">Section 2</a>
-            <div data-eta-receiver="section-2">
-                <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta congue tincidunt consectetuer
-                    lacinia molestie quis justo. Auctor aliquam aptent nulla conubia enim ornare si. Est
-                    sollicitudin tempor sodales bibendum convallis nec neque. Ornare magnis efficitur proin facilisi
-                    vestibulum tempor nascetur convallis felis. Natoque molestie parturient vel mi scelerisque diam
-                    semper nascetur a. Et vestibulum dui magna sapien etiam scelerisque quis id ut. Pede facilisi
-                    sagittis a convallis facilisis.</p>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!--Footer -->
-    <footer class="footer ta-center mb">
-        <hr class="mb bold">
-        <p>
-            <a href="https://github.com/viivue/easy-tab-accordion" target="_blank">
-                <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32"
-                     data-view-component="true"
-                     class="octicon octicon-mark-github v-align-middle">
-                    <path fill-rule="evenodd"
-                          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-                </svg>
-            </a>
-        </p>
-        <p>ViiVue</p>
-    </footer>
-
+    <div id="content"></div>
 </div>
-
 </body>
-
 </html>

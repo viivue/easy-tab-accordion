@@ -68,6 +68,12 @@ export class EasyTabAccordion{
         this.enabled = validBreakpoints(this) ? isLive(this) : true;
         this.count = this.wrapper.querySelectorAll(this.options.trigger).length;
 
+        // check duplicated ID
+        const isDuplicatedID = !!window.ETAController.get(this.id);
+        if(isDuplicatedID){
+            console.warn(`Found duplicated ID: "${this.id}", the ID should be unique.`)
+        }
+
         // check if ETA has already initialized
         if(this.wrapper.classList.contains(CLASSES.enabled)){
             log(this, 'ETA has initialized');
