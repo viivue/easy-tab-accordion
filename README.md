@@ -24,7 +24,7 @@ npm run prod
 # Build dev site (for Netlify only)
 npm run build
 
-# Research replace to set new version
+# Publish to npm
 npm publish
 ```
 

@@ -1,19 +1,3 @@
-## Deployment
-
-```shell
-# Start dev server
-npm run dev
-
-# Distribute production files (set new version in `package.json` first)
-npm run prod
-
-# Build dev site (for Netlify only)
-npm run build
-
-# Research replace to set new version
-npm publish
-```
-
 ## License
 
 [MIT License](https://github.com/viivue/easy-tab-accordion/blob/main/LICENSE)
