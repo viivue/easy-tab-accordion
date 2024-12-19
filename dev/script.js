@@ -11,6 +11,7 @@ import {testInit} from "./js/test-init";
 import {testOptions} from "./js/test-options";
 import {testMethods} from "./js/test-methods";
 import {testEnd} from "./js/test-end";
+import {testDemos} from "./js/test-demos";
 
 // import package info
 const packageInfo = require('../package.json');
@@ -28,6 +29,7 @@ document.querySelector('[data-description]').innerHTML = packageInfo.description
 const root = document.querySelector('#content');
 root.insertAdjacentHTML('beforeend', mdBegin);
 
+testDemos(root);
 testInit(root);
 testOptions(root);
 testMethods(root);
