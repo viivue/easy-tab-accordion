@@ -25,6 +25,10 @@ Using these HTML attributes to initialize without JavaScript.
     </div>
 </div>
 
+
+<details>
+<summary>View code</summary>
+
 ```html
 <!-- No Js init -->
 <div data-eta>
@@ -41,6 +45,8 @@ Using these HTML attributes to initialize without JavaScript.
     </div>
 </div>
 ```
+
+</details>
 
 ---
 
@@ -67,6 +73,10 @@ Using these HTML attributes to initialize without JavaScript.
 
 Using data-attributes (with JSON format) to initialize.
 
+
+<details>
+<summary>View code</summary>
+
 ```html
 
 <div data-eta='{ "id":"my-id", "animation":"slide", "hash":"false", "duration":"100"}'>
@@ -83,6 +93,8 @@ Using data-attributes (with JSON format) to initialize.
     </div>
 </div>
 ```
+
+</details>
 
 > ⚠️ Notice that value of data-eta-trigger and data-eta-receiver must be the same.
 

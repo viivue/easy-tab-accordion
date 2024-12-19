@@ -55,6 +55,9 @@ eta.on("destroy", () => {
 
 Assume that we have the HTML below
 
+<details>
+<summary>View code</summary>
+
 ```html
 
 <div data-accordion>
@@ -109,5 +112,7 @@ document.querySelectorAll('[data-btn]').forEach(btn => {
     })
 });
 ```
+
+</details>
 
 ---

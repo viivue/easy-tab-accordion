@@ -28,5 +28,5 @@ View package at [@viivue/easy-tab-accordion](https://www.npmjs.com/package/@viiv
 
 ```html
 <!-- Easy Tab Accordion -->
-<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@1.0.0/dist/easy-tab-accordion.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/viivue/easy-tab-accordion@2.3.1/dist/easy-tab-accordion.min.js"></script>
 ```
