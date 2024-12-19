@@ -74,7 +74,7 @@ export function setCSS(target, props){
  */
 export function setTransition(target, duration){
     setCSS(target, {
-        transitionProperty: "height, margin, padding, opacity",
+        transitionProperty: "all",
         transitionDuration: duration + 'ms',
         overflow: 'hidden'
     });
