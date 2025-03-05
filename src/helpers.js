@@ -36,7 +36,10 @@ export function getToggleState(context, id){
     }
 
     const open = context.dataset[getPanelIndexById(context, id)].active;
-    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
+    let allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
+
+    // is open and is fade => do nothing
+    if(open && context.options.animation === 'fade') return 0;
 
     // is open and allow collapse all => close
     if(open && allowCollapseAll) return -1;
