@@ -226,7 +226,9 @@ export class EasyTabAccordion{
         addActiveClass(this, panelId);
 
         // close all others
-        const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
+        const closeAllOthers = this.options.animation === 'fade' ||
+          this.options.animation === 'slide' &&
+          !this.options.allowExpandAll;
         if(closeAllOthers) this.dataset.filter(x => x.id !== panelId).forEach(item => {
             if(item.active || this.isFirst){
                 this.closePanel(item.id);
@@ -305,14 +307,24 @@ export class EasyTabAccordion{
         // update data
         this.type = type;
         this.previous_id = this.current_id ? this.current_id : getIdByIndex(this, 0);
+        this.current_id = id;
         if(toggleState === 1){
             // open
-            this.current_id = id;
             this.openPanel(this.current_id);
         }else{
             // close
             this.closePanel(id);
         }
+    }
+
+    expandAll() {
+        // only allow to expand all when allow to expand all
+        if (!this.options.allowExpandAll) return;
+        this.dataset.forEach(({active, id}) => {
+            if(!active) {
+                this.openPanel(id, null);
+            }
+        });
     }
 
     toggleByIndex(index){
@@ -362,6 +374,7 @@ window.ETA = {
             document.querySelectorAll('[data-eta]').forEach(el => {
                 window.ETAController.add(new EasyTabAccordion({el, ...options}));
             });
+            return;
         }
 
         window.ETAController.add(new EasyTabAccordion(options));
