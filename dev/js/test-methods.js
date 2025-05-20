@@ -3,7 +3,7 @@ import md from "../md/methods.md";
 export function testMethods(root){
     root.insertAdjacentHTML('beforeend', md);
 
-    ETA.init();
+    // ETA.init();
 
     ETA.init({
         el: document.querySelector('[data-accordion]'),
@@ -13,8 +13,21 @@ export function testMethods(root){
         receiver: '[data-accordion-receiver]',
         receiverAttr: 'data-accordion-receiver',
         allowCollapseAll: false,
-        //allowExpandAll: true,
-        //liveBreakpoint: [1920, 1024]
+        allowExpandAll: true,
+        liveBreakpoint: [1500, 1024],
+        onBeforeOpen: (obj) => {
+            console.log("onBeforeOpen: ", obj);
+        },
+        onAfterOpen: (obj) => {
+            console.log("onAfterOpen: ", obj);
+        },
+        onBeforeClose: (obj) => {
+            console.log("onBeforeClose: ", obj);
+        },
+        onAfterClose: (obj) => {
+            console.log("onAfterClose: ", obj);
+        },
+
         //hash: true
     });
     const accordion = ETA.get('accordion');

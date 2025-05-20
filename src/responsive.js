@@ -11,8 +11,10 @@ export function responsive(context, event){
 
         if(context.enabled){
             context.init();
+            ETAController.add(context);
         }else{
             context.destroy();
+            ETAController.remove(context.id);
         }
     }
 }
