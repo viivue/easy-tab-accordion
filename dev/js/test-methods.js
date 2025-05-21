@@ -14,20 +14,7 @@ export function testMethods(root){
         receiverAttr: 'data-accordion-receiver',
         allowCollapseAll: false,
         allowExpandAll: true,
-        liveBreakpoint: [1500, 1024],
-        onBeforeOpen: (obj) => {
-            console.log("onBeforeOpen: ", obj);
-        },
-        onAfterOpen: (obj) => {
-            console.log("onAfterOpen: ", obj);
-        },
-        onBeforeClose: (obj) => {
-            console.log("onBeforeClose: ", obj);
-        },
-        onAfterClose: (obj) => {
-            console.log("onAfterClose: ", obj);
-        },
-
+        // liveBreakpoint: [1920, 1024],
         //hash: true
     });
     const accordion = ETA.get('accordion');
