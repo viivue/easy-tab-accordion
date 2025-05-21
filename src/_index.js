@@ -105,6 +105,8 @@ export class EasyTabAccordion{
         // watch for resize/load events
         window.addEventListener('resize', debounce(e => onResize(this, e), 300));
         window.addEventListener('load', e => onLoad(this, e));
+
+        ETAController.add(this);
     }
 
     /******************************
@@ -133,7 +135,7 @@ export class EasyTabAccordion{
         }
 
         // Remove instance
-        // ETAController.instances = ETAController.instances.filter(instance => instance.id !== this.id);
+        ETAController.remove(this.id);
 
         // event: onDestroy
         this.events.fire('onDestroy');
@@ -322,7 +324,7 @@ export class EasyTabAccordion{
         if (!this.options.allowExpandAll) return;
         this.dataset.forEach(({active, id}) => {
             if(!active) {
-                this.openPanel(id, null);
+                this.openPanel(id);
             }
         });
     }
@@ -342,6 +344,7 @@ class Controller{
     }
 
     add(instance){
+        if (this.instances.find(ins => ins.id === instance.id)) return;
         this.instances.push(instance);
     }
 

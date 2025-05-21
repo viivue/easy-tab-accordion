@@ -53,6 +53,33 @@ eta.on("destroy", () => {
         </div>
 </div>
 
+
+### expandAll() method
+
+<div data-expandall>
+            <div>   
+                  <button data-accordion-trigger="section-3">Section 3</button>
+                 <div data-accordion-receiver="section-3">
+                    <p>Fusce quisque nam ac tortor sagittis. Nullam habitasse integer
+                        aliquam potenti magnis conubia nisl tincidunt non nascetur molestie dignissim.
+                        pellentesque faucibus lectus. Scelerisque cursus magnis imperdiet nec consectetur dis dictum
+                        odio.</p>
+                 </div>
+            </div>
+            <div>
+                <button data-accordion-trigger="section-4">Section 4</button>
+                <div data-accordion-receiver="section-4">
+                    <p>Mauris leo rutrum auctor si massa. Nibh parturient nam porta congue tincidunt consectetuer
+                        sagittis a convallis facilisis. Nibh parturient nam porta congue tincidunt consectetuer
+                        sagittis a convallis facilisis.
+                    </p>
+                </div>
+            </div>
+        <div class="btn-group">
+            <button class="btn red" data-btn="expandAll-accordion">Expand All</button>
+        </div>
+</div>
+
 Assume that we have the HTML below
 
 <details>

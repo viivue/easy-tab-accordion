@@ -3,7 +3,7 @@ import md from "../md/methods.md";
 export function testMethods(root){
     root.insertAdjacentHTML('beforeend', md);
 
-    // ETA.init();
+    ETA.init();
 
     ETA.init({
         el: document.querySelector('[data-accordion]'),
@@ -32,6 +32,18 @@ export function testMethods(root){
     });
     const accordion = ETA.get('accordion');
 
+    ETA.init({
+        el: document.querySelector('[data-expandall]'),
+        id: 'expandAll-accordion',
+        trigger: '[data-accordion-trigger]',
+        triggerAttr: 'data-accordion-trigger',
+        receiver: '[data-accordion-receiver]',
+        receiverAttr: 'data-accordion-receiver',
+        allowExpandAll: true,
+    });
+
+    const expandAll = ETA.get('expandAll-accordion');
+
     /**
      * Button click
      */
@@ -40,6 +52,9 @@ export function testMethods(root){
             switch(e.target.dataset.btn){
                 case 'destroy-accordion':
                     accordion.destroy();
+                    break;
+                case 'expandAll-accordion':
+                    expandAll.expandAll();
                     break;
             }
         })
