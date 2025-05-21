@@ -102,6 +102,8 @@ export class EasyTabAccordion{
         // watch for resize/load events
         window.addEventListener('resize', debounce(e => onResize(this, e), 300));
         window.addEventListener('load', e => onLoad(this, e));
+
+        window.ETAController.add(this);
     }
 
     /******************************
@@ -128,6 +130,9 @@ export class EasyTabAccordion{
                 destroyFade(this);
                 break;
         }
+
+        // Remove instance
+        window.ETAController.remove(this.id);
 
         // event: onDestroy
         this.events.fire('onDestroy');
@@ -299,14 +304,24 @@ export class EasyTabAccordion{
         // update data
         this.type = type;
         this.previous_id = this.current_id ? this.current_id : getIdByIndex(this, 0);
+        this.current_id = id;
         if(toggleState === 1){
             // open
-            this.current_id = id;
             this.openPanel(this.current_id);
         }else{
             // close
             this.closePanel(id);
         }
+    }
+
+    expandAll(){
+        // only allow to expand all when allow to expand all
+        if(!this.options.allowExpandAll) return;
+        this.dataset.forEach(({active, id}) => {
+            if(!active){
+                this.openPanel(id);
+            }
+        });
     }
 
     toggleByIndex(index){
@@ -324,11 +339,20 @@ class Controller{
     }
 
     add(instance){
+        if(this.instances.filter(item => item.id === instance.id).length > 0) return;
         this.instances.push(instance);
     }
 
     get(id){
         return this.instances.filter(instance => instance.id === id)[0];
+    }
+
+    remove(id){
+        this.instances = this.instances.filter(instance => {
+            if(instance.id !== id) return true;
+            if(instance.hasInitialized) instance.destroy();
+            return false;
+        });
     }
 }
 
@@ -350,11 +374,12 @@ window.ETA = {
         if(typeof options === 'undefined'){
             // init with attribute
             document.querySelectorAll('[data-eta]').forEach(el => {
-                window.ETAController.add(new EasyTabAccordion({el, ...options}));
+                new EasyTabAccordion({el, ...options});
             });
+            return;
         }
 
-        window.ETAController.add(new EasyTabAccordion(options));
+        new EasyTabAccordion(options);
     },
     // Get instance object by ID
     get: id => window.ETAController.get(id)
