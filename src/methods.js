@@ -1,5 +1,5 @@
 import {responsive} from "./responsive";
-import {setCSS, setTransition} from "./animation";
+import {scrollIntoView, setCSS, setTransition} from "./animation";
 import {getHash, isValidHash} from "./hash";
 import {defaultActiveSections} from "./helpers";
 import {CLASSES} from './configs';
@@ -85,6 +85,12 @@ function assignTriggerElements(context){
                     if(context.options.isPreventDefault){
                         e.preventDefault();
                     }
+
+                    // scroll on manual click even if the panel is opened or not
+                    if(context.options.scrollIntoView){
+                        scrollIntoView({context});
+                    }
+
                     context.toggle(id, 'manual');
                 });
             }
