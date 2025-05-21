@@ -374,12 +374,12 @@ window.ETA = {
         if(typeof options === 'undefined'){
             // init with attribute
             document.querySelectorAll('[data-eta]').forEach(el => {
-                new EasyTabAccordion({el, ...options})
+                new EasyTabAccordion({el, ...options});
             });
             return;
         }
 
-        new EasyTabAccordion(options)
+        new EasyTabAccordion(options);
     },
     // Get instance object by ID
     get: id => window.ETAController.get(id)
