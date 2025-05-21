@@ -106,7 +106,7 @@ export class EasyTabAccordion{
         window.addEventListener('resize', debounce(e => onResize(this, e), 300));
         window.addEventListener('load', e => onLoad(this, e));
 
-        ETAController.add(this);
+        window.ETAController.add(this);
     }
 
     /******************************
@@ -135,7 +135,7 @@ export class EasyTabAccordion{
         }
 
         // Remove instance
-        ETAController.remove(this.id);
+        window.ETAController.remove(this.id);
 
         // event: onDestroy
         this.events.fire('onDestroy');
