@@ -33,8 +33,8 @@ export function testMethods(root){
     const accordion = ETA.get('accordion');
 
     ETA.init({
-        el: document.querySelector('[data-expandall]'),
-        id: 'expandAll-accordion',
+        el: document.querySelector('[data-expand-all]'),
+        id: 'expand-all-accordion',
         trigger: '[data-accordion-trigger]',
         triggerAttr: 'data-accordion-trigger',
         receiver: '[data-accordion-receiver]',
@@ -42,7 +42,7 @@ export function testMethods(root){
         allowExpandAll: true,
     });
 
-    const expandAll = ETA.get('expandAll-accordion');
+    const expandAll = ETA.get('expand-all-accordion');
 
     /**
      * Button click
@@ -53,7 +53,7 @@ export function testMethods(root){
                 case 'destroy-accordion':
                     accordion.destroy();
                     break;
-                case 'expandAll-accordion':
+                case 'expand-all-accordion':
                     expandAll.expandAll();
                     break;
             }

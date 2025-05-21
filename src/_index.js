@@ -1,21 +1,18 @@
-import {destroySlide, slideDown, slideUp, updateSlide} from "./slide";
-import {destroyFade, fadeIn, fadeOut, updateFade} from "./fade";
+import {slideDown, slideUp, destroySlide, updateSlide} from "./slide";
+import {fadeIn, fadeOut, destroyFade, updateFade} from "./fade";
 import {hashScroll, updateURL} from "./hash";
 import {
-    addActiveClass,
-    getElements,
-    getIdByIndex,
-    getPanelIndexById,
+    validID,
     getToggleState,
-    log,
-    removeActiveClass,
-    validID
+    getPanelIndexById,
+    getElements,
+    removeActiveClass, addActiveClass, getIdByIndex, log
 } from "./helpers";
 import {debounce, uniqueId} from "./utils";
 import {initSetup, onLoad, onResize} from "./methods";
 import {isLive, validBreakpoints} from "./responsive";
 import {scrollIntoView} from "./animation";
-import {ATTRS, CLASSES, DEFAULTS} from './configs';
+import {CLASSES, ATTRS, DEFAULTS} from './configs';
 import {EventsManager, getOptionsFromAttribute} from "@phucbm/os-util";
 
 export class EasyTabAccordion{
@@ -228,9 +225,7 @@ export class EasyTabAccordion{
         addActiveClass(this, panelId);
 
         // close all others
-        const closeAllOthers = this.options.animation === 'fade' ||
-          this.options.animation === 'slide' &&
-          !this.options.allowExpandAll;
+        const closeAllOthers = this.options.animation === 'fade' || this.options.animation === 'slide' && !this.options.allowExpandAll;
         if(closeAllOthers) this.dataset.filter(x => x.id !== panelId).forEach(item => {
             if(item.active || this.isFirst){
                 this.closePanel(item.id);
@@ -344,7 +339,7 @@ class Controller{
     }
 
     add(instance){
-        if (this.instances.find(ins => ins.id === instance.id)) return;
+        if (this.instances.filter(item => item.id === instance.id).length > 0) return;
         this.instances.push(instance);
     }
 
