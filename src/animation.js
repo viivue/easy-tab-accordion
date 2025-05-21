@@ -6,7 +6,10 @@ export function scrollIntoView({context, offset}){
     const target = context.wrapper;
 
     // skip auto trigger
-    if(context.type === 'auto') return;
+    if(context.type === 'auto'){
+        if(context.options.dev) console.log(`Skip scrollIntoView for auto trigger.`);
+        return;
+    }
 
     // animation:fade => change target to wrapper
     // if(context.options.animation === 'fade'){

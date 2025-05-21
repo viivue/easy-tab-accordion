@@ -73,18 +73,27 @@ function assignTriggerElements(context){
         const href = trigger.getAttribute('href');
         const id = href[0] === '#' ? href.slice(1) : getHash(href).id;
 
-        if(!id) return;
+        if(!id){
+            if(context.options.dev) console.log(`Invalid trigger href: ${href}`);
+            return;
+        }
 
         context.dataset.forEach(item => {
             if(item.id === id){
                 // already assigned trigger event
-                if(trigger.classList.contains(CLASSES.hasAssignedTriggerEvent)) return;
+                if(trigger.classList.contains(CLASSES.hasAssignedTriggerEvent)){
+                    console.log(`Trigger href: ${href} is already assigned an event.`);
+                    return;
+                }
 
                 // valid trigger
                 trigger.addEventListener('click', e => {
                     if(context.options.isPreventDefault){
                         e.preventDefault();
                     }
+
+                    // set type manual
+                    context.type = 'manual';
 
                     // scroll on manual click even if the panel is opened or not
                     if(context.options.scrollIntoView){
@@ -93,6 +102,9 @@ function assignTriggerElements(context){
 
                     context.toggle(id, 'manual');
                 });
+
+                // add class
+                trigger.classList.add(CLASSES.hasAssignedTriggerEvent);
             }
         });
     });
