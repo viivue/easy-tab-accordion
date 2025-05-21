@@ -314,11 +314,11 @@ export class EasyTabAccordion{
         }
     }
 
-    expandAll() {
+    expandAll(){
         // only allow to expand all when allow to expand all
-        if (!this.options.allowExpandAll) return;
+        if(!this.options.allowExpandAll) return;
         this.dataset.forEach(({active, id}) => {
-            if(!active) {
+            if(!active){
                 this.openPanel(id);
             }
         });
@@ -339,7 +339,7 @@ class Controller{
     }
 
     add(instance){
-        if (this.instances.filter(item => item.id === instance.id).length > 0) return;
+        if(this.instances.filter(item => item.id === instance.id).length > 0) return;
         this.instances.push(instance);
     }
 
@@ -348,7 +348,11 @@ class Controller{
     }
 
     remove(id){
-            this.instances = this.instances.filter(instance => instance.id !== id);
+        this.instances = this.instances.filter(instance => {
+            if(instance.id !== id) return true;
+            if(instance.hasInitialized) instance.destroy();
+            return false;
+        });
     }
 }
 
@@ -370,12 +374,12 @@ window.ETA = {
         if(typeof options === 'undefined'){
             // init with attribute
             document.querySelectorAll('[data-eta]').forEach(el => {
-                window.ETAController.add(new EasyTabAccordion({el, ...options}));
+                new EasyTabAccordion({el, ...options})
             });
             return;
         }
 
-        window.ETAController.add(new EasyTabAccordion(options));
+        new EasyTabAccordion(options)
     },
     // Get instance object by ID
     get: id => window.ETAController.get(id)
