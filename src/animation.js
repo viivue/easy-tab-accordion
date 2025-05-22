@@ -1,32 +1,39 @@
 /**
  * Scroll into view
- * @param context
- * @param target
  * @since 1.0.0
  */
-export function scrollIntoView({context, target}){
-    const parentTarget = target.parentNode;
+export function scrollIntoView({context, offset}){
+    const target = context.wrapper;
 
     // skip auto trigger
-    if(context.type === 'auto') return;
+    if(context.type === 'auto'){
+        if(context.options.dev) console.log(`Skip scrollIntoView for auto trigger.`);
+        return;
+    }
 
     // animation:fade => change target to wrapper
-    if(context.options.animation === 'fade'){
-        target = context.wrapper;
-    }
+    // if(context.options.animation === 'fade'){
+    //     target = context.wrapper;
+    // }
 
     // scroll to wrapper if target is not set
-    if(!target){
-        target = context.wrapper;
-    }
+    // if(!target){
+    //     target = context.wrapper;
+    // }
 
+    // Calculate the true distance from the top of the document
+    offset = offset ? offset : parseInt(context.options.scrollOffset) || 0;
+    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+    // Use jQuery if available
     if(typeof jQuery !== 'undefined'){
-        jQuery('html,body').animate({
-            scrollTop: parentTarget.offsetTop
-        });
+        jQuery('html, body').animate({
+            scrollTop: targetPosition
+        }, 500); // 500ms animation duration
     }else{
+        // Use native smooth scrolling (modern browsers)
         window.scrollTo({
-            top: parentTarget.offsetTop,
+            top: targetPosition,
             behavior: 'smooth'
         });
     }

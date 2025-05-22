@@ -32,4 +32,4 @@ npm publish
 
 [MIT License](https://github.com/viivue/easy-tab-accordion/blob/main/LICENSE)
 
-Copyright (c) 2024 ViiVue
+Copyright (c) 2025 ViiVue

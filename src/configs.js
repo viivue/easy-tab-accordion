@@ -33,6 +33,7 @@ export const DEFAULTS = {
     animation: 'slide', // slide, fade
     duration: 450,
     scrollIntoView: false, // scroll panel into view when open
+    scrollOffset: 30, // scroll offset
 
     // hash
     hash: false, // update hash URL
