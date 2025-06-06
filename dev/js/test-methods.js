@@ -32,8 +32,8 @@ export function testMethods(root){
     const expandAll = ETA.get('expand-all-accordion');
 
     ETA.init({
-        el: document.querySelector('[data-accordion-keyboard]'),
-        id: 'data-accordion-keyboard',
+        el: document.querySelector('[data-accordion-accessibility]'),
+        id: 'data-accordion-accessibility',
         trigger: '[data-accordion-trigger]',
         triggerAttr: 'data-accordion-trigger',
         receiver: '[data-accordion-receiver]',

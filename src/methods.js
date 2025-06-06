@@ -3,6 +3,7 @@ import {scrollIntoView, setCSS, setTransition} from "./animation";
 import {getHash, isValidHash} from "./hash";
 import {defaultActiveSections} from "./helpers";
 import {CLASSES} from './configs';
+import {addAccessibilitySupport} from "./a11y";
 
 export function initSetup(context){
     // event: onBeforeInit
@@ -16,18 +17,8 @@ export function initSetup(context){
         trigger.addEventListener('click', e => manualTriggerFunction(context, e));
         // add a class to check if the trigger has assigned an event
         trigger.classList.add(CLASSES.hasAssignedTriggerEvent);
-        if (context.options.a11ySupport) {
-            // add tabindex for keyboard navigation
-            trigger.setAttribute('tabindex', '0');
-            // add keydown event for keyboard navigation
-            trigger.addEventListener('keydown', e => {
-                if(e.key !== " " && e.key !== "Enter"){
-                    return;
-                }
-                // if the key is Enter or Space then trigger.
-                manualTriggerFunction(context, e);
-            });
-        }
+        // add accessibility support
+        addAccessibilitySupport(context, trigger);
     });
 
     // loop through receivers
@@ -122,7 +113,7 @@ function assignTriggerElements(context){
 }
 
 
-function manualTriggerFunction(context, e){
+export function manualTriggerFunction(context, e){
     if(context.options.isPreventDefault){
         e.preventDefault();
     }

@@ -142,9 +142,9 @@ document.querySelectorAll('[data-btn]').forEach(btn => {
 
 </details>
 
-## Keyboard Accessibility
+## Accessibility Support
 
-EasyTabAccordion supports keyboard navigation by default to ensure accessibility compliance.
+EasyTabAccordion provides built-in support for accessible interaction with triggers and panels.
 
 | Key                | Behavior                              |
 |--------------------|---------------------------------------|
@@ -152,12 +152,12 @@ EasyTabAccordion supports keyboard navigation by default to ensure accessibility
 | `Shift + Tab`      | Move focus backward between triggers  |
 | `Enter` or `Space` | Toggle the currently focused panel    |
 
-You can use keyboard to navigate between accordion headers and activate panels just like you would with a mouse.
+Users can interact with accordion headers using standard input methods such as keyboard or assistive technologies, ensuring a more inclusive experience.
 
 ### Example
 
 
-<div data-accordion-keyboard style="margin-bottom:10px">
+<div data-accordion-accessibility style="margin-bottom:10px">
     <div>
         <p data-accordion-trigger="panel-1" style="margin-bottom:10px">Section 1</p>
         <div data-accordion-receiver="panel-1">
