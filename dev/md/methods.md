@@ -142,4 +142,37 @@ document.querySelectorAll('[data-btn]').forEach(btn => {
 
 </details>
 
+## Keyboard Accessibility
+
+EasyTabAccordion supports keyboard navigation by default to ensure accessibility compliance.
+
+| Key                | Behavior                              |
+|--------------------|---------------------------------------|
+| `Tab`              | Move focus between accordion triggers |
+| `Shift + Tab`      | Move focus backward between triggers  |
+| `Enter` or `Space` | Toggle the currently focused panel    |
+
+You can use keyboard to navigate between accordion headers and activate panels just like you would with a mouse.
+
+### Example
+
+
+<div data-accordion-keyboard style="margin-bottom:10px">
+    <div>
+        <p data-accordion-trigger="panel-1" style="margin-bottom:10px">Section 1</p>
+        <div data-accordion-receiver="panel-1">
+            <p>Fusce quisque nam ac tortor sagittis. Nullam habitasse integer
+                aliquam potenti magnis conubia nisl tincidunt non nascetur molestie dignissim.
+                pellentesque faucibus lectus. Scelerisque cursus magnis imperdiet nec consectetur dis dictum
+                odio.</p>
+            <p>Fusce quisque nam ac tortor sagittis. Nullam habitasse integer
+                aliquam potenti magnis conubia nisl tincidunt non nascetur molestie dignissim.
+                pellentesque faucibus lectus. Scelerisque cursus magnis imperdiet nec consectetur dis dictum
+                odio.</p>
+        </div>
+    </div>
+</div>
+
+When focused on `Section 1`, pressing **Enter** or **Space** will toggle the associated panel.
+
 ---

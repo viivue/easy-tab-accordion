@@ -55,4 +55,7 @@ export const DEFAULTS = {
 
     // prevent default when click to trigger element
     isPreventDefault: true,
+
+    // keypress support
+    a11ySupport:true,
 };

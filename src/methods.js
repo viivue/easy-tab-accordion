@@ -14,9 +14,20 @@ export function initSetup(context){
     context.wrapper.querySelectorAll(context.options.trigger).forEach(trigger => {
         // assign click event
         trigger.addEventListener('click', e => manualTriggerFunction(context, e));
-
         // add a class to check if the trigger has assigned an event
         trigger.classList.add(CLASSES.hasAssignedTriggerEvent);
+        if (context.options.a11ySupport) {
+            // add tabindex for keyboard navigation
+            trigger.setAttribute('tabindex', '0');
+            // add keydown event for keyboard navigation
+            trigger.addEventListener('keydown', e => {
+                if(e.key !== " " && e.key !== "Enter"){
+                    return;
+                }
+                // if the key is Enter or Space then trigger.
+                manualTriggerFunction(context, e);
+            });
+        }
     });
 
     // loop through receivers
