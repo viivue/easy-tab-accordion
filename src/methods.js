@@ -3,6 +3,7 @@ import {scrollIntoView, setCSS, setTransition} from "./animation";
 import {getHash, isValidHash} from "./hash";
 import {defaultActiveSections} from "./helpers";
 import {CLASSES} from './configs';
+import {addAccessibilitySupport} from "./a11y";
 
 export function initSetup(context){
     // event: onBeforeInit
@@ -14,9 +15,10 @@ export function initSetup(context){
     context.wrapper.querySelectorAll(context.options.trigger).forEach(trigger => {
         // assign click event
         trigger.addEventListener('click', e => manualTriggerFunction(context, e));
-
         // add a class to check if the trigger has assigned an event
         trigger.classList.add(CLASSES.hasAssignedTriggerEvent);
+        // add accessibility support
+        addAccessibilitySupport(context, trigger);
     });
 
     // loop through receivers
@@ -111,7 +113,7 @@ function assignTriggerElements(context){
 }
 
 
-function manualTriggerFunction(context, e){
+export function manualTriggerFunction(context, e){
     if(context.options.isPreventDefault){
         e.preventDefault();
     }

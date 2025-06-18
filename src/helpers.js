@@ -169,7 +169,10 @@ export function removeActiveClass(context, id){
 
     // update classes
     current.forEach(item => item.classList.remove(context.options.activeClass));
-    currentTrigger.forEach(item => item.classList.remove(context.options.activeClass));
+    currentTrigger.forEach(item => {
+        item.setAttribute('aria-expanded', 'false');
+        item.classList.remove(context.options.activeClass);
+    });
 }
 
 
@@ -184,7 +187,10 @@ export function addActiveClass(context, id){
 
     // update classes
     if(current) current.forEach(item => item.classList.add(context.options.activeClass));
-    if(currentTrigger) currentTrigger.forEach(item => item.classList.add(context.options.activeClass));
+    if(currentTrigger) currentTrigger.forEach(item => {
+        item.setAttribute('aria-expanded', 'true');
+        item.classList.add(context.options.activeClass)
+    });
 }
 
 export function log(context, status, ...message){
