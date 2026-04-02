@@ -297,6 +297,11 @@ export class EasyTabAccordion{
         const toggleState = getToggleState(this, id);
         if(toggleState === 0) return;
 
+        // check can close all.
+        const countOtherOpen = this.dataset.reduce((c, item) => (item.active && item.id !== id ? ++c : c), 0);
+        const allowCloseAll = this.options.animation === 'slide' && this.options.allowCollapseAll;
+        if (toggleState === -1 && countOtherOpen <= 0 && !allowCloseAll) return;
+
         // start animation
         this.isAnimating = true;
         log(this, 'log', 'Start animation.');
