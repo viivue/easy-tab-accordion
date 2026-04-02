@@ -36,24 +36,12 @@ export function getToggleState(context, id){
     }
 
     const open = context.dataset[getPanelIndexById(context, id)].active;
-    const allowCollapseAll = context.options.animation === 'slide' ? context.options.allowCollapseAll : false;
 
     // is open and is fade => do nothing
     if(open && context.options.animation === 'fade') return 0;
 
-    // is open and allow collapse all => close
-    if(open && allowCollapseAll) return -1;
-
-    // is open and not allow collapse all => close
-    if(open && !allowCollapseAll) return -1;
-
-    // is close and allow collapse all => open
-    if(!open && allowCollapseAll) return 1;
-
-    // is close and not allow collapse all => open
-    if(!open && !allowCollapseAll) return 1;
-
-    return open ? 1 : -1;
+    // return -1 if open, 1 if close, (return next state base on current state)
+    return open ? -1 : 1;
 }
 
 
